@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Redesign directions · pick one</title>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#111214;--panel:#1A1C1F;--ink:#F2F0EC;--ink-2:#A7ABB2;--line:#2C2F34;--go:#7FD1C1}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Spectral',Georgia,serif;
+  font-size:17px;line-height:1.6}
+.wrap{max-width:1100px;margin:0 auto;padding:56px 24px 80px}
+h1{font-size:2.4rem;font-weight:400;letter-spacing:-0.02em;margin:0 0 12px;line-height:1.1}
+.sub{color:var(--ink-2);max-width:62ch;margin:0 0 48px}
+.mono{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.1em;
+  text-transform:uppercase;color:var(--ink-2)}
+.grid{display:grid;gap:20px}
+@media(min-width:860px){.grid{grid-template-columns:repeat(3,1fr)}}
+.card{background:var(--panel);border:1px solid var(--line);padding:26px;display:flex;
+  flex-direction:column;gap:14px}
+.card h2{font-size:1.35rem;font-weight:500;margin:0;letter-spacing:-0.01em}
+.card p{margin:0;color:var(--ink-2);font-size:0.95rem;line-height:1.6}
+.card ul{margin:0;padding-left:18px;color:var(--ink-2);font-size:0.9rem;line-height:1.7}
+.card a{margin-top:auto;display:inline-block;text-align:center;background:var(--go);
+  color:#0C1614;text-decoration:none;font-family:'IBM Plex Mono',monospace;font-size:12px;
+  letter-spacing:0.06em;text-transform:uppercase;padding:13px 18px}
+.card a:hover{background:#A5E3D6}
+.note{margin-top:44px;padding-top:22px;border-top:1px solid var(--line);color:var(--ink-2);font-size:0.95rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="mono">Redesign · three directions</p>
+  <h1>Same words. Three different worlds.</h1>
+  <p class="sub">Every sample uses the spec's copy verbatim and keeps the same structure. Only the visual world changes. Each one deliberately avoids the signatures the audit flagged: no tracked-caps eyebrow above the headline, no Inter, no rounded icon tiles, no left-border cards, no hairline-plus-wide-shadow.</p>
+
+  <div class="grid">
+    <div class="card">
+      <p class="mono">Direction A</p>
+      <h2>Editorial document</h2>
+      <p>A printed report, not a landing page. Numbered sections, a margin column carrying annotations, rules instead of boxes.</p>
+      <ul><li>Spectral, all-serif</li><li>Margin apparatus</li><li>Square ink buttons</li><li>Zero cards</li></ul>
+      <a href="a-editorial.html">Open sample A</a>
+    </div>
+
+    <div class="card">
+      <p class="mono">Direction B</p>
+      <h2>Swiss instrument</h2>
+      <p>Precision as the metaphor. A visible 12-column grid, hairlines, monospace readouts, the offer stated as instrument output.</p>
+      <ul><li>Archivo + IBM Plex Mono</li><li>Visible grid lines</li><li>Tabular readout panel</li><li>No shadows, no radius</li></ul>
+      <a href="b-instrument.html">Open sample B</a>
+    </div>
+
+    <div class="card">
+      <p class="mono">Direction C</p>
+      <h2>Warm human counsel</h2>
+      <p>Leans on trust rather than analysis. Large italic display type, cream paper, clay accent, a real portrait, lots of air.</p>
+      <ul><li>Instrument Serif + Work Sans</li><li>Cream and clay</li><li>Portrait slot</li><li>Conversational rhythm</li></ul>
+      <a href="c-counsel.html">Open sample C</a>
+    </div>
+  </div>
+
+  <p class="note">These are light-mode only and cover the home page's opening through the CTA. Whichever you pick, I'll build it across all five pages with dark mode, the GSAP moments, the Three.js field where it still fits, and the audit fixes folded in.</p>
+</div>
+</body>
+</html>

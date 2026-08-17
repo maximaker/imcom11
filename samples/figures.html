@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Figure concepts · pick one</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Schibsted+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sand-50:#FDFBF7; --sand-100:#FAF7F2; --sand-200:#F4EFE6;
+  --sand-300:#EBE3D6; --sand-400:#DCD2C1; --sand-500:#C4B9A5;
+  --ink:#1E1B18; --ink-2:#544C43; --ink-3:#6B6259;
+  --clay-400:#C4633C; --clay-500:#9A4526; --clay-600:#7E3719; --clay-wash:#F7EBE4;
+  --sage-500:#4F6558; --sage-wash:#E9EFEA;
+  --display:'Bricolage Grotesque',system-ui,sans-serif;
+  --body:'Schibsted Grotesk',system-ui,sans-serif;
+  --ease-out:cubic-bezier(.22,.68,.24,1);
+  --ease-spring:cubic-bezier(.16,1.02,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--sand-100);color:var(--ink);font-family:var(--body);
+  font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+h1,h2{margin:0;font-family:var(--display);font-weight:600;letter-spacing:-0.024em;line-height:1.08}
+.wrap{max-width:1000px;margin:0 auto;padding:0 26px}
+header.page{padding:72px 0 40px}
+h1{font-size:clamp(2.2rem,5vw,3.2rem);max-width:20ch;margin-bottom:18px}
+.sub{color:var(--ink-2);max-width:60ch;margin:0}
+
+.concept{padding:60px 0;border-top:1px solid var(--sand-300)}
+.chead{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:8px}
+.tagn{font-family:var(--display);font-size:12px;font-weight:600;color:var(--clay-500)}
+.concept h2{font-size:1.6rem}
+.claim{color:var(--ink-2);max-width:62ch;margin:10px 0 30px}
+.fig{margin:0}
+.fig svg{width:100%;height:auto;display:block;overflow:visible}
+figcaption{margin-top:20px;font-size:14px;color:var(--ink-3);max-width:60ch}
+figcaption b{font-family:var(--display);font-weight:600;color:var(--clay-500)}
+.verdict{margin-top:16px;font-size:14px;color:var(--ink-3);max-width:60ch;
+  padding-left:14px;border-left:2px solid var(--sand-400)}
+.verdict b{color:var(--ink);font-weight:600}
+
+/* Shared figure language */
+.hair{fill:none;stroke:var(--sand-400);stroke-width:1}
+.lbl{font-family:var(--body);font-size:13.5px;fill:var(--ink-3)}
+.lbl.mid{text-anchor:middle}
+.lbl.end{text-anchor:end}
+.lbl.key{fill:var(--clay-500);font-weight:600}
+.draw{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);
+  transition:stroke-dashoffset 1500ms var(--ease-out)}
+[data-in="true"] .draw{stroke-dashoffset:0}
+.pop{opacity:0;transform:scale(.5);transform-box:fill-box;transform-origin:center;
+  transition:opacity 420ms var(--ease-out),transform 560ms var(--ease-spring)}
+[data-in="true"] .pop{opacity:1;transform:scale(1)}
+.fade{opacity:0;transition:opacity 700ms var(--ease-out)}
+[data-in="true"] .fade{opacity:1}
+.dim{opacity:0;transition:opacity 900ms var(--ease-out)}
+[data-in="true"] .dim{opacity:.5}
+
+/* A — sieve */
+.sieve .d{fill:var(--sand-500)}
+.sieve .gate{stroke:var(--sand-400);stroke-width:1;stroke-dasharray:3 5}
+.sieve .final{fill:var(--clay-500)}
+.sieve .halo{fill:none;stroke:var(--clay-400);stroke-width:1;transform-box:fill-box;
+  transform-origin:center;opacity:0}
+[data-in="true"] .sieve .halo{animation:ping 4.6s var(--ease-out) infinite 2.2s}
+@keyframes ping{0%{opacity:.6;transform:scale(.45)}70%{opacity:0;transform:scale(1.3)}100%{opacity:0;transform:scale(1.3)}}
+
+/* B — cost curve */
+.curve .axis{stroke:var(--sand-400);stroke-width:1}
+.curve .blind{fill:none;stroke:var(--sand-500);stroke-width:2;stroke-dasharray:6 6}
+.curve .sprint{fill:none;stroke:var(--clay-500);stroke-width:2.6;stroke-linecap:round}
+.curve .saved{fill:var(--sage-wash);opacity:0;transition:opacity 900ms var(--ease-out) 900ms}
+[data-in="true"] .curve .saved{opacity:1}
+.curve .mark{stroke:var(--clay-400);stroke-width:1;stroke-dasharray:3 4}
+.curve .cap{fill:var(--clay-500)}
+.curve .open{fill:var(--sand-100);stroke:var(--sand-500);stroke-width:1.6}
+
+/* C — load-bearing */
+.stack .bar{fill:var(--sand-300)}
+.stack .bar.key{fill:var(--clay-500)}
+.stack .barwrap{opacity:0;transform:translateX(-14px);
+  transition:opacity 520ms var(--ease-out),transform 620ms var(--ease-out)}
+[data-in="true"] .stack .barwrap{opacity:1;transform:none}
+.stack .probe{stroke:var(--clay-500);stroke-width:1.5;stroke-dasharray:4 4}
+.stack .ptip{fill:var(--sand-100);stroke:var(--clay-600);stroke-width:2}
+.stack .crack{fill:none;stroke:var(--clay-600);stroke-width:1.5;stroke-linecap:round}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms !important;transition-duration:.001ms !important}
+  .fade,.pop,.dim,.saved{opacity:1;transform:none}
+  .draw{stroke-dashoffset:0}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="page">
+    <h1>Four ways to draw the same argument.</h1>
+    <p class="sub">All in the existing language: line art, sand and clay, one accent, calm motion. The question is which argument the hero should make.</p>
+  </header>
+</div>
+
+<div class="wrap">
+
+  <!-- CURRENT -->
+  <section class="concept" data-fig="fan">
+    <div class="chead"><span class="tagn">Current</span><h2>The fan</h2></div>
+    <p class="claim">Many directions, one tested. Argues that the sprint <em>chooses</em>.</p>
+    <figure class="fig fan">
+      <svg viewBox="0 0 720 400" role="img" aria-label="Fourteen directions fan out from one idea; one continues to a decision">
+        <g class="fanlines"></g>
+        <path class="sprintline" d="M52 200 C 190 201, 330 205, 452 208 S 600 212, 646 214"
+              fill="none" stroke="var(--clay-500)" stroke-width="2.6" stroke-linecap="round"/>
+        <circle class="pop" cx="52" cy="200" r="7" fill="var(--ink)"/>
+        <text class="lbl fade" x="52" y="234">Your idea</text>
+        <circle class="pop" cx="250" cy="203" r="10" fill="var(--sand-100)" stroke="var(--clay-500)" stroke-width="1.5"/>
+        <text class="lbl mid fade" x="250" y="238">Worth building?</text>
+        <circle class="pop" cx="452" cy="208" r="10" fill="var(--sand-100)" stroke="var(--clay-500)" stroke-width="1.5"/>
+        <text class="lbl mid fade" x="452" y="243">Built and tested</text>
+        <circle class="pop" cx="646" cy="214" r="9" fill="var(--clay-500)"/>
+        <text class="lbl mid key fade" x="646" y="250">Go, adjust, or stop</text>
+      </svg>
+      <figcaption>Fourteen directions your idea could go. The sprint builds and tests <b>the one that decides it</b>.</figcaption>
+      <p class="verdict"><b>Reads as:</b> selection. Strong, but the fan is the part that catches the eye, and the fan is the thing you're arguing against.</p>
+    </figure>
+  </section>
+
+  <!-- A — SIEVE -->
+  <section class="concept" data-fig="sieve">
+    <div class="chead"><span class="tagn">Concept A</span><h2>The sieve</h2></div>
+    <p class="claim">Everything you could build, filtered down in stages until one thing is left. Argues that the sprint <em>removes</em>.</p>
+    <figure class="fig sieve">
+      <svg viewBox="0 0 720 400" role="img" aria-label="A field of possibilities narrowing through three gates to a single answer">
+        <g class="cols"></g>
+        <line class="gate draw" x1="196" y1="46" x2="196" y2="322"/>
+        <line class="gate draw" x1="386" y1="76" x2="386" y2="292"/>
+        <line class="gate draw" x1="556" y1="118" x2="556" y2="250"/>
+        <text class="lbl mid fade" x="96"  y="356">Everything you could build</text>
+        <text class="lbl mid fade" x="291" y="356">Plausible</text>
+        <text class="lbl mid fade" x="471" y="356">Worth testing</text>
+        <circle class="halo" cx="648" cy="184" r="24"/>
+        <circle class="final pop" cx="648" cy="184" r="10"/>
+        <text class="lbl mid key fade" x="648" y="356">The one</text>
+      </svg>
+      <figcaption>Forty things you could build. Three gates. <b>One thing left standing</b>, and a reason for every cut.</figcaption>
+      <p class="verdict"><b>Reads as:</b> rigour and subtraction. Closest to "knowing what to cut," which is the stated position. Quietest of the four.</p>
+    </figure>
+  </section>
+
+  <!-- B — COST CURVE -->
+  <section class="concept" data-fig="curve">
+    <div class="chead"><span class="tagn">Concept B</span><h2>The divergence</h2></div>
+    <p class="claim">What you commit before you know. Argues about the <em>stakes</em>, not the method.</p>
+    <figure class="fig curve">
+      <svg viewBox="0 0 720 400" role="img" aria-label="Two paths of money committed over time; building first rises steeply, the sprint stops early at a decision">
+        <path class="saved" d="M60 330 C 200 322, 340 250, 470 160 S 620 66, 664 52 L 664 330 Z"/>
+        <line class="axis draw" x1="60" y1="330" x2="686" y2="330"/>
+        <line class="axis draw" x1="60" y1="330" x2="60" y2="44"/>
+        <text class="lbl end fade" x="52" y="52">Money committed</text>
+        <text class="lbl fade" x="612" y="356">Time</text>
+
+        <path class="blind draw" d="M60 330 C 200 322, 340 250, 470 160 S 620 66, 664 52"/>
+        <circle class="open pop" cx="664" cy="52" r="7"/>
+        <text class="lbl end fade" x="656" y="40">Build first, still guessing</text>
+
+        <path class="sprint draw" d="M60 330 C 110 326, 158 314, 196 300"/>
+        <line class="mark draw" x1="196" y1="300" x2="196" y2="342"/>
+        <text class="lbl mid fade" x="196" y="362">Two weeks</text>
+        <circle class="cap pop" cx="196" cy="300" r="8"/>
+        <text class="lbl key fade" x="214" y="288">You know. Spend or stop.</text>
+
+        <text class="lbl mid fade" x="430" y="300" style="fill:var(--sage-500)">what you didn't spend</text>
+      </svg>
+      <figcaption>Every week before the answer is money committed on a guess. The sprint <b>stops the curve at two weeks</b>.</figcaption>
+      <p class="verdict"><b>Reads as:</b> risk and money. The most persuasive to a nervous buyer, but it is a chart, and a chart implies data you don't have yet.</p>
+    </figure>
+  </section>
+
+  <!-- C — LOAD-BEARING -->
+  <section class="concept" data-fig="stack">
+    <div class="chead"><span class="tagn">Concept C</span><h2>The load-bearing assumption</h2></div>
+    <p class="claim">Your idea rests on several beliefs. One holds up the rest. Argues that the sprint <em>finds the risk</em>.</p>
+    <figure class="fig stack">
+      <svg viewBox="0 0 720 400" role="img" aria-label="Five stacked assumptions; the load-bearing one is highlighted and tested first">
+        <g class="bars"></g>
+        <line class="probe draw" x1="588" y1="46" x2="588" y2="103"/>
+        <circle class="ptip pop" cx="588" cy="126" r="7"/>
+        <text class="lbl mid key fade" x="588" y="36">Test this one first</text>
+      </svg>
+      <figcaption>Five things have to be true. <b>One of them holds up the other four</b>, and it is rarely the exciting one. That is what gets built and tested.</figcaption>
+      <p class="verdict"><b>Reads as:</b> diagnosis. Explains step one better than anything else here, and sets up "the riskiest assumption" language used throughout the site.</p>
+    </figure>
+  </section>
+
+</div>
+
+<div class="wrap" style="padding:20px 26px 90px">
+  <p style="color:var(--ink-3);font-size:14px;max-width:60ch">Each figure is line art on the existing palette, animates once on scroll, and holds still afterwards. All respect reduced motion.</p>
+</div>
+
+<script>
+(function(){
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- Build the repetitive geometry in code ---- */
+
+  // Fan (current)
+  var fan = document.querySelector('.fanlines');
+  if (fan){
+    for (var i=0;i<13;i++){
+      var t=(i/12)-0.5;
+      var d='M52 200 C '+(212)+' '+(200+t*30).toFixed(1)+', '+(402)+' '+(200+t*225).toFixed(1)+
+            ', '+(646-Math.abs(t)*104).toFixed(1)+' '+(200+t*350).toFixed(1);
+      var p=document.createElementNS('http://www.w3.org/2000/svg','path');
+      p.setAttribute('d',d); p.setAttribute('class','hair draw');
+      fan.appendChild(p);
+    }
+  }
+
+  // Sieve columns: 40 → 12 → 4 → 1
+  var cols = document.querySelector('.sieve .cols');
+  if (cols){
+    var spec=[{x:96,n:40,cols:5,spread:270},{x:291,n:12,cols:3,spread:200},{x:471,n:4,cols:2,spread:110}];
+    spec.forEach(function(c,ci){
+      var rows=Math.ceil(c.n/c.cols);
+      for(var i=0;i<c.n;i++){
+        var col=i%c.cols, row=Math.floor(i/c.cols);
+        var t=rows===1?0:(row/(rows-1))-0.5;
+        var jitter=((i*37)%7-3)*0.9;
+        var cx=c.x+(col-(c.cols-1)/2)*15;
+        var cy=184+t*c.spread+jitter;
+        var el=document.createElementNS('http://www.w3.org/2000/svg','circle');
+        el.setAttribute('cx',cx.toFixed(1)); el.setAttribute('cy',cy.toFixed(1));
+        el.setAttribute('r', ci===2?4.5:3.2);
+        el.setAttribute('class','d pop');
+        el.style.transitionDelay=(ci*0.34 + i*0.012)+'s';
+        cols.appendChild(el);
+      }
+    });
+  }
+
+  // Stack bars
+  var bars=document.querySelector('.stack .bars');
+  if (bars){
+    var rows=[
+      {t:'People really have this problem',key:false},
+      {t:'They would pay to solve it',key:true},
+      {t:'You can reach them',key:false},
+      {t:'They will change how they work',key:false},
+      {t:'It can be built for the money',key:false}
+    ];
+    var NS='http://www.w3.org/2000/svg';
+    rows.forEach(function(r,i){
+      var y=64+i*62, h=r.key?38:26, w=r.key?470:390;
+      var g=document.createElementNS(NS,'g');
+      g.setAttribute('class','barwrap');
+      g.style.transitionDelay=(i*0.13)+'s';
+
+      var rect=document.createElementNS(NS,'rect');
+      rect.setAttribute('x',150); rect.setAttribute('y',y-h/2);
+      rect.setAttribute('width',w); rect.setAttribute('height',h);
+      rect.setAttribute('rx',3);
+      rect.setAttribute('class','bar'+(r.key?' key':''));
+      g.appendChild(rect);
+
+      var tx=document.createElementNS(NS,'text');
+      tx.setAttribute('x',138); tx.setAttribute('y',y+5);
+      tx.setAttribute('class','lbl end'+(r.key?' key':''));
+      tx.textContent=r.t;
+      g.appendChild(tx);
+      bars.appendChild(g);
+    });
+  }
+
+  /* ---- Measure every drawable path so dashes are exact ---- */
+  document.querySelectorAll('.draw').forEach(function(el,i){
+    var len = el.getTotalLength ? el.getTotalLength() : 400;
+    el.style.setProperty('--len', len.toFixed(1));
+    el.style.transitionDelay = (0.15 + (i%14)*0.06)+'s';
+  });
+
+  /* ---- Reveal ---- */
+  var figs=document.querySelectorAll('.concept');
+  if (reduce || !('IntersectionObserver' in window)){
+    figs.forEach(function(f){f.setAttribute('data-in','true');});
+  } else {
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(!e.isIntersecting) return;
+        e.target.setAttribute('data-in','true');
+        io.unobserve(e.target);
+      });
+    },{threshold:.2});
+    figs.forEach(function(f){io.observe(f);});
+  }
+})();
+</script>
+</body>
+</html>

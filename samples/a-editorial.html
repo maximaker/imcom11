@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sample A · Editorial document</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FCFBF8; --ink:#171512; --ink-2:#4A453D; --ink-3:#6E6759;
+  --rule:#D8D2C6; --rule-2:#B9B1A1; --accent:#7A2E1E;
+  --serif:'Spectral',Georgia,serif; --mono:'IBM Plex Mono',monospace;
+  --col:1fr; --gutter:32px;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);
+  font-size:19px;line-height:1.62;font-weight:400;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-weight:400;letter-spacing:-0.012em;margin:0}
+p{margin:0 0 1.1em;max-width:62ch}
+p:last-child{margin-bottom:0}
+a{color:var(--accent)}
+
+/* Document frame: a wide margin column carries the apparatus. */
+.doc{max-width:1180px;margin:0 auto;padding:0 28px}
+.band{display:grid;grid-template-columns:1fr;gap:20px;
+  padding:64px 0;border-top:1px solid var(--rule)}
+.band:first-of-type{border-top:0}
+@media(min-width:900px){
+  .band{grid-template-columns:150px minmax(0,1fr);gap:56px;padding:80px 0}
+}
+/* The margin column: section number, then an annotation. Never a chip. */
+.margin{font-family:var(--mono);font-size:12px;line-height:1.6;color:var(--ink-3)}
+.margin b{display:block;color:var(--ink);font-weight:500;margin-bottom:6px}
+.margin em{display:block;font-family:var(--serif);font-style:italic;font-size:15px;
+  color:var(--ink-3);margin-top:14px;padding-top:12px;border-top:1px solid var(--rule)}
+
+/* Masthead */
+.masthead{display:flex;justify-content:space-between;align-items:baseline;
+  gap:24px;padding:22px 0;border-bottom:2px solid var(--ink);flex-wrap:wrap}
+.masthead strong{font-size:19px;font-weight:500;letter-spacing:-0.01em}
+.masthead nav{display:flex;gap:22px;font-family:var(--mono);font-size:12px}
+.masthead nav a{color:var(--ink-2);text-decoration:none}
+.masthead nav a:hover{color:var(--accent);text-decoration:underline}
+
+/* Opening: the headline is the entrance. No kicker above it. */
+.open{padding:76px 0 68px}
+.open h1{font-size:clamp(2.6rem,6.4vw,4.6rem);line-height:1.04;letter-spacing:-0.028em;
+  max-width:17ch;margin-bottom:34px;font-weight:400}
+.open .deck{font-size:clamp(1.15rem,2vw,1.35rem);line-height:1.5;color:var(--ink-2);
+  max-width:44ch;margin-bottom:40px}
+.open .deck b{font-weight:500;color:var(--ink)}
+
+/* A square-cornered ink block. No pill, no gradient, no glow. */
+.act{display:inline-block;background:var(--ink);color:var(--paper);
+  font-family:var(--mono);font-size:13px;letter-spacing:0.04em;
+  padding:15px 26px;text-decoration:none;border:1px solid var(--ink);
+  transition:background 160ms ease,color 160ms ease}
+.act:hover{background:var(--accent);border-color:var(--accent);color:var(--paper)}
+.act-note{font-family:var(--mono);font-size:12px;color:var(--ink-3);margin-top:14px}
+
+h2{font-size:clamp(1.5rem,3vw,2.05rem);line-height:1.16;max-width:20ch;margin-bottom:24px}
+.lede{font-size:1.08rem;color:var(--ink-2)}
+
+/* Steps: numbered prose columns divided by rules, not cards. */
+.steps{display:grid;gap:0}
+@media(min-width:820px){.steps{grid-template-columns:repeat(3,1fr);gap:0}}
+.step{padding:26px 0;border-top:1px solid var(--rule-2)}
+@media(min-width:820px){
+  .step{padding:0 26px;border-top:0;border-left:1px solid var(--rule-2)}
+  .step:first-child{padding-left:0;border-left:0}
+  .step:last-child{padding-right:0}
+}
+.step .n{font-family:var(--mono);font-size:12px;color:var(--accent);display:block;margin-bottom:10px}
+.step h3{font-size:1.12rem;font-weight:500;margin-bottom:10px;letter-spacing:-0.008em}
+.step p{font-size:0.95rem;color:var(--ink-2);margin:0}
+
+/* Assets: a definition list with hanging labels. */
+.assets{border-top:1px solid var(--rule)}
+.asset{display:grid;gap:6px;padding:24px 0;border-bottom:1px solid var(--rule)}
+@media(min-width:760px){.asset{grid-template-columns:230px minmax(0,1fr);gap:40px}}
+.asset dt{font-size:1.15rem;font-weight:500;letter-spacing:-0.01em}
+.asset dd{margin:0;color:var(--ink-2);font-size:1rem}
+
+/* Pull statement, set as a display quote in the margin style. */
+.pull{font-size:clamp(1.4rem,3.2vw,2.1rem);line-height:1.26;letter-spacing:-0.02em;
+  max-width:24ch;font-style:italic;font-weight:300;color:var(--ink)}
+
+.close{padding:84px 0 96px;border-top:2px solid var(--ink);text-align:left}
+.close h2{max-width:22ch;margin-bottom:18px}
+.colophon{font-family:var(--mono);font-size:11px;color:var(--ink-3);
+  padding:18px 0 40px;border-top:1px solid var(--rule);display:flex;
+  justify-content:space-between;gap:16px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <header class="masthead">
+    <strong>The discovery sprint</strong>
+    <nav>
+      <a href="#">How it works</a><a href="#">What I've built</a><a href="#">About</a><a href="#">Start</a>
+    </nav>
+  </header>
+
+  <section class="open">
+    <h1>Know whether your idea is worth building, before you spend months finding out.</h1>
+    <p class="deck">In two weeks you own <b>a working version of the one part that matters most</b>, evidence from real users, and a straight answer: keep going, or stop.</p>
+    <a class="act" href="#">Book a free intro call</a>
+    <p class="act-note">A short, no-pressure call about your idea and whether this fits.</p>
+  </section>
+
+  <section class="band">
+    <div class="margin">
+      <b>§ 01</b>
+      The bind
+      <em>Most ideas die of the wrong question, not the wrong code.</em>
+    </div>
+    <div>
+      <h2>The scary part isn't building it. It's building the wrong thing.</h2>
+      <p class="lede">Your idea has probably been sitting in a doc for a while. Not because you're lazy, but because committing real money to it feels like a leap and you can't quite see where you'd land.</p>
+      <p class="lede">That instinct is right. Most ideas don't fail because nobody could build them. They fail because someone spent months and a pile of money before finding out that nobody wanted the thing that got built.</p>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="margin">
+      <b>§ 02</b>
+      Method
+      <em>Three steps. The first one can end the project, cheaply.</em>
+    </div>
+    <div>
+      <h2>Three steps, start to answer</h2>
+      <div class="steps">
+        <div class="step">
+          <span class="n">Step one</span>
+          <h3>Find out if it's worth building.</h3>
+          <p>You bring the idea. Together you find the one thing that has to be true for it to work, and you get a straight call.</p>
+        </div>
+        <div class="step">
+          <span class="n">Step two</span>
+          <h3>Get a real version of the part that matters.</h3>
+          <p>One working flow that real people can actually use. Not a mockup. Something you can put in front of users.</p>
+        </div>
+        <div class="step">
+          <span class="n">Step three</span>
+          <h3>Test it and decide, with a clear rule.</h3>
+          <p>Before testing, you agree what means go, adjust, or stop. Then you decide with evidence instead of a gut feeling.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="margin">
+      <b>§ 03</b>
+      Deliverables
+      <em>Named things. Yours to keep, extend, or hand to any team.</em>
+    </div>
+    <div>
+      <h2>What you own at the end</h2>
+      <dl class="assets">
+        <div class="asset"><dt>The working build</dt><dd>One real flow through the core of your idea, usable on a phone. Yours to keep, extend, or hand to any team.</dd></div>
+        <div class="asset"><dt>The decision brief</dt><dd>What the riskiest assumption was, what the testing showed, and a straight call: go, adjust, or stop.</dd></div>
+        <div class="asset"><dt>The testing playbook</dt><dd>How to find the right people, how to run sessions so politeness doesn't pollute the results, and what to watch for. Reusable on every idea you have after this one.</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="margin">
+      <b>§ 04</b>
+      Terms
+      <em>The unusual promise.</em>
+    </div>
+    <div>
+      <p class="pull">The goal is that you don't need me again.</p>
+      <p class="lede" style="margin-top:28px">The sprint is built so that when it ends, you can read your own evidence, make your own call, and either move forward or walk away without another opinion. You keep the build, the brief, and the method.</p>
+    </div>
+  </section>
+
+  <section class="close">
+    <h2>Let's find out if your idea is real</h2>
+    <p class="lede" style="margin-bottom:30px">One call. You talk through your idea, you hear honestly whether this fits. No pitch, no pressure.</p>
+    <a class="act" href="#">Book a free intro call</a>
+  </section>
+
+  <div class="colophon"><span>Sample A · Editorial document</span><span>Spectral · IBM Plex Mono</span></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sample D · Warm editorial, grotesque</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..700&family=Schibsted+Grotesk:wght@400;500;600;700&family=Familjen+Grotesk:wght@400;500;600;700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Calm warm paper. Less orange than the cream sample, so it reads settled rather than cosy. */
+  --paper:#FAF7F2;
+  --paper-2:#F2EDE4;
+  --ink:#1E1B18;
+  --ink-2:#544C43;   /* 8.0:1 on paper */
+  --ink-3:#6B6259;   /* verified >=4.5:1 on both paper tones */
+  --rule:#E3DCD0;
+  --rule-2:#C9C0B1;
+  --clay:#9A4526;    /* calm, desaturated. >=6:1 on paper */
+  --clay-ink:#7E3719;
+
+  --display:'Bricolage Grotesque',system-ui,sans-serif;
+  --body:'Schibsted Grotesk',system-ui,sans-serif;
+}
+html[data-face="schibsted"]{--display:'Schibsted Grotesk',system-ui,sans-serif}
+html[data-face="familjen"]{--display:'Familjen Grotesk',system-ui,sans-serif}
+html[data-face="instrument"]{--display:'Instrument Sans',system-ui,sans-serif}
+
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);
+  font-size:18px;line-height:1.68;-webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0;font-family:var(--display);font-weight:600;letter-spacing:-0.022em;line-height:1.06}
+p{margin:0 0 1.1em;max-width:60ch}
+p:last-child{margin-bottom:0}
+a{color:var(--clay)}
+
+.doc{max-width:1140px;margin:0 auto;padding:0 26px}
+
+/* Masthead: quiet, no chip, no pill. */
+.top{display:flex;justify-content:space-between;align-items:baseline;gap:22px;
+  padding:26px 0;border-bottom:1px solid var(--rule);flex-wrap:wrap}
+.top .name{font-family:var(--display);font-size:19px;font-weight:600;letter-spacing:-0.015em}
+.top nav{display:flex;gap:26px}
+.top nav a{font-size:15px;color:var(--ink-2);text-decoration:none}
+.top nav a:hover{color:var(--clay);text-decoration:underline;text-underline-offset:4px}
+
+/* Airy opening. The headline is the entrance; nothing sits above it. */
+.open{padding:96px 0 92px}
+@media(max-width:760px){.open{padding:64px 0 58px}}
+.open h1{font-size:clamp(2.7rem,6.6vw,4.7rem);line-height:1.0;letter-spacing:-0.032em;
+  max-width:16ch;margin-bottom:34px;font-weight:600}
+.open .deck{font-size:clamp(1.12rem,2vw,1.32rem);line-height:1.58;color:var(--ink-2);
+  max-width:41ch;margin-bottom:40px}
+.open .deck b{font-weight:600;color:var(--ink)}
+
+.act{display:inline-block;background:var(--clay);color:#fff;text-decoration:none;
+  font-family:var(--body);font-size:16px;font-weight:600;letter-spacing:0.002em;
+  padding:16px 30px;border-radius:3px;transition:background 170ms ease}
+.act:hover{background:var(--clay-ink);color:#fff}
+.act-note{font-size:15px;color:var(--ink-3);margin-top:15px}
+
+/* Banded sections with a margin column, but with air instead of density. */
+.band{display:grid;grid-template-columns:1fr;gap:22px;padding:80px 0;border-top:1px solid var(--rule)}
+@media(min-width:920px){.band{grid-template-columns:168px minmax(0,1fr);gap:64px;padding:104px 0}}
+.margin{font-size:13px;line-height:1.62;color:var(--ink-3)}
+.margin b{display:block;font-family:var(--display);font-size:13px;font-weight:600;
+  letter-spacing:0.01em;color:var(--clay);margin-bottom:5px}
+.margin em{display:block;font-style:normal;margin-top:14px;padding-top:13px;
+  border-top:1px solid var(--rule);color:var(--ink-3)}
+
+h2{font-size:clamp(1.72rem,3.5vw,2.5rem);line-height:1.1;max-width:19ch;margin-bottom:26px}
+.lede{font-size:1.06rem;color:var(--ink-2)}
+
+/* Steps: airy columns, hairline above each. No cards, no boxes. */
+.steps{display:grid;gap:36px}
+@media(min-width:840px){.steps{grid-template-columns:repeat(3,1fr);gap:40px}}
+.step{padding-top:18px;border-top:2px solid var(--rule-2)}
+.step .n{display:block;font-family:var(--display);font-size:13px;font-weight:600;
+  color:var(--clay);margin-bottom:12px}
+.step h3{font-size:1.18rem;font-weight:600;margin-bottom:10px;line-height:1.22}
+.step p{font-size:0.97rem;color:var(--ink-2);margin:0}
+
+/* Deliverables: hanging names, hairlines, generous vertical rhythm. */
+.assets{margin-top:6px}
+.asset{display:grid;gap:8px;padding:30px 0;border-top:1px solid var(--rule)}
+.asset:last-child{border-bottom:1px solid var(--rule)}
+@media(min-width:780px){.asset{grid-template-columns:250px minmax(0,1fr);gap:44px}}
+.asset dt{font-family:var(--display);font-size:1.28rem;font-weight:600;letter-spacing:-0.018em}
+.asset dd{margin:0;color:var(--ink-2);font-size:1.02rem}
+
+.warm{background:var(--paper-2)}
+.warm .band{border-top-color:var(--rule-2)}
+
+.promise{font-family:var(--display);font-size:clamp(1.8rem,4.2vw,2.9rem);line-height:1.1;
+  letter-spacing:-0.028em;max-width:19ch;font-weight:600;margin-bottom:26px}
+
+.close{padding:104px 0 118px;border-top:1px solid var(--rule)}
+@media(max-width:760px){.close{padding:72px 0 84px}}
+.close h2{max-width:20ch;margin-bottom:20px}
+.colo{padding:22px 0 44px;border-top:1px solid var(--rule);display:flex;
+  justify-content:space-between;gap:16px;font-size:13px;color:var(--ink-3);flex-wrap:wrap}
+
+/* Preview-only control. Not part of the design. */
+.faces{position:fixed;right:16px;bottom:16px;z-index:50;background:var(--ink);
+  color:var(--paper);border-radius:6px;padding:10px 12px;display:flex;gap:6px;
+  align-items:center;flex-wrap:wrap;box-shadow:0 8px 30px rgba(0,0,0,.22);max-width:calc(100vw - 32px)}
+.faces span{font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.65;margin-right:4px}
+.faces button{font-family:var(--body);font-size:12px;font-weight:500;cursor:pointer;
+  background:transparent;color:var(--paper);border:1px solid rgba(255,255,255,.28);
+  border-radius:4px;padding:7px 10px;min-height:34px}
+.faces button:hover{border-color:rgba(255,255,255,.6)}
+.faces button[aria-pressed="true"]{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <header class="top">
+    <span class="name">The discovery sprint</span>
+    <nav><a href="#">How it works</a><a href="#">What I've built</a><a href="#">About</a><a href="#">Start</a></nav>
+  </header>
+
+  <section class="open">
+    <h1>Know whether your idea is worth building, before you spend months finding out.</h1>
+    <p class="deck">In two weeks you own <b>a working version of the one part that matters most</b>, evidence from real users, and a straight answer: keep going, or stop.</p>
+    <a class="act" href="#">Book a free intro call</a>
+    <p class="act-note">A short, no-pressure call about your idea and whether this fits.</p>
+  </section>
+</div>
+
+<div class="warm">
+  <div class="doc">
+    <section class="band">
+      <div class="margin">
+        <b>One</b>
+        The bind
+        <em>Most ideas die of the wrong question, not the wrong code.</em>
+      </div>
+      <div>
+        <h2>The scary part isn't building it. It's building the wrong thing.</h2>
+        <p class="lede">Your idea has probably been sitting in a doc for a while. Not because you're lazy, but because committing real money to it feels like a leap and you can't quite see where you'd land.</p>
+        <p class="lede">That instinct is right. Most ideas don't fail because nobody could build them. They fail because someone spent months and a pile of money before finding out that nobody wanted the thing that got built.</p>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="doc">
+  <section class="band" style="border-top:0">
+    <div class="margin">
+      <b>Two</b>
+      Method
+      <em>Three steps. The first one can end the project, cheaply.</em>
+    </div>
+    <div>
+      <h2>Three steps, start to answer</h2>
+      <div class="steps">
+        <div class="step">
+          <span class="n">Step one</span>
+          <h3>Find out if it's worth building.</h3>
+          <p>You bring the idea. Together you find the one thing that has to be true for it to work, and you get a straight call. If there's a fatal flaw, you find it here, cheaply.</p>
+        </div>
+        <div class="step">
+          <span class="n">Step two</span>
+          <h3>Get a real version of the part that matters.</h3>
+          <p>One working flow that real people can actually use. Not a mockup. Something you can put in front of users.</p>
+        </div>
+        <div class="step">
+          <span class="n">Step three</span>
+          <h3>Test it and decide, with a clear rule.</h3>
+          <p>Before testing, you agree what means go, adjust, or stop. Then you decide with evidence instead of a gut feeling.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="margin">
+      <b>Three</b>
+      Deliverables
+      <em>Named things. Yours to keep, extend, or hand to any team.</em>
+    </div>
+    <div>
+      <h2>What you own at the end</h2>
+      <dl class="assets">
+        <div class="asset"><dt>The working build</dt><dd>One real flow through the core of your idea, usable on a phone. Yours to keep, extend, or hand to any team.</dd></div>
+        <div class="asset"><dt>The decision brief</dt><dd>What the riskiest assumption was, what the testing showed, and a straight call: go, adjust, or stop.</dd></div>
+        <div class="asset"><dt>The testing playbook</dt><dd>How to find the right people, how to run sessions so politeness doesn't pollute the results, and what to watch for. Reusable on every idea you have after this one.</dd></div>
+      </dl>
+    </div>
+  </section>
+</div>
+
+<div class="warm">
+  <div class="doc">
+    <section class="band">
+      <div class="margin">
+        <b>Four</b>
+        Terms
+        <em>The unusual promise.</em>
+      </div>
+      <div>
+        <p class="promise">The goal is that you don't need me again.</p>
+        <p class="lede">Plenty of people in this business are quietly hoping you'll stay. This works the other way round. When the sprint ends, you can read your own evidence, make your own call, and either move forward or walk away without another opinion. You keep the build, the brief, and the method.</p>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="doc">
+  <section class="close">
+    <h2>Let's find out if your idea is real</h2>
+    <p class="lede" style="margin-bottom:32px">One call. You talk through your idea, you hear honestly whether this fits. No pitch, no pressure.</p>
+    <a class="act" href="#">Book a free intro call</a>
+  </section>
+  <div class="colo"><span>Sample D · Warm editorial, grotesque titles</span><span id="facelabel">Bricolage Grotesque · Schibsted Grotesk</span></div>
+</div>
+
+<div class="faces" role="group" aria-label="Preview: title typeface">
+  <span>Titles</span>
+  <button type="button" data-face="bricolage" aria-pressed="true">Bricolage</button>
+  <button type="button" data-face="schibsted" aria-pressed="false">Schibsted</button>
+  <button type="button" data-face="familjen" aria-pressed="false">Familjen</button>
+  <button type="button" data-face="instrument" aria-pressed="false">Instrument</button>
+</div>
+
+<script>
+(function(){
+  var names={bricolage:'Bricolage Grotesque',schibsted:'Schibsted Grotesk',
+             familjen:'Familjen Grotesk',instrument:'Instrument Sans'};
+  var btns=document.querySelectorAll('.faces button');
+  var label=document.getElementById('facelabel');
+  btns.forEach(function(b){
+    b.addEventListener('click',function(){
+      var f=b.dataset.face;
+      document.documentElement.setAttribute('data-face',f);
+      btns.forEach(function(o){o.setAttribute('aria-pressed', String(o===b));});
+      label.textContent=names[f]+' · Schibsted Grotesk';
+    });
+  });
+})();
+</script>
+</body>
+</html>

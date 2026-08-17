@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sample E · Warm editorial, in motion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..700&family=Schibsted+Grotesk:wght@400;500;600;700&family=Familjen+Grotesk:wght@400;500;600;700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* ---- Tonal system: a real warm ramp, not one cream and one accent. ---- */
+  --sand-50:#FDFBF7;
+  --sand-100:#FAF7F2;
+  --sand-200:#F4EFE6;
+  --sand-300:#EBE3D6;
+  --sand-400:#DCD2C1;
+  --sand-500:#C4B9A5;
+
+  --ink:#1E1B18;
+  --ink-2:#544C43;
+  --ink-3:#6B6259;
+
+  /* Primary warm accent plus a cool counterpoint, so the page has tonal range. */
+  --clay-400:#C4633C;
+  --clay-500:#9A4526;
+  --clay-600:#7E3719;
+  --clay-wash:#F7EBE4;
+
+  --sage-500:#4F6558;   /* cool counterpoint, verified >=4.5:1 on sand */
+  --sage-wash:#E9EFEA;
+
+  --display:'Bricolage Grotesque',system-ui,sans-serif;
+  --body:'Schibsted Grotesk',system-ui,sans-serif;
+
+  /* One motion language for the whole page. */
+  --ease-out:cubic-bezier(.22,.68,.24,1);
+  --ease-spring:cubic-bezier(.16,1.02,.3,1);
+  --t-fast:180ms; --t-mid:320ms; --t-slow:620ms;
+}
+html[data-face="schibsted"]{--display:'Schibsted Grotesk',system-ui,sans-serif}
+html[data-face="familjen"]{--display:'Familjen Grotesk',system-ui,sans-serif}
+html[data-face="instrument"]{--display:'Instrument Sans',system-ui,sans-serif}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--sand-100);color:var(--ink);font-family:var(--body);
+  font-size:18px;line-height:1.68;-webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0;font-family:var(--display);font-weight:600;letter-spacing:-0.022em;line-height:1.06}
+p{margin:0 0 1.1em;max-width:60ch}
+p:last-child{margin-bottom:0}
+a{color:var(--clay-500)}
+:focus-visible{outline:2.5px solid var(--clay-500);outline-offset:3px;border-radius:3px}
+
+.doc{max-width:1140px;margin:0 auto;padding:0 26px}
+
+/* ---- Masthead with sliding underlines ---- */
+.top{position:sticky;top:0;z-index:30;display:flex;justify-content:space-between;
+  align-items:baseline;gap:22px;padding:22px 26px;flex-wrap:wrap;
+  max-width:1140px;margin:0 auto;
+  background:color-mix(in srgb,var(--sand-100) 82%,transparent);
+  backdrop-filter:blur(12px) saturate(1.3);-webkit-backdrop-filter:blur(12px) saturate(1.3);
+  transition:border-color var(--t-mid) var(--ease-out);
+  border-bottom:1px solid transparent}
+.top[data-stuck="true"]{border-bottom-color:var(--sand-300)}
+.top .name{font-family:var(--display);font-size:19px;font-weight:600;letter-spacing:-0.015em}
+.top nav{display:flex;gap:26px}
+.top nav a{position:relative;font-size:15px;color:var(--ink-2);text-decoration:none;
+  transition:color var(--t-fast) var(--ease-out)}
+.top nav a::after{content:'';position:absolute;left:0;right:0;bottom:-4px;height:1.5px;
+  background:var(--clay-500);transform:scaleX(0);transform-origin:right;
+  transition:transform var(--t-mid) var(--ease-out)}
+.top nav a:hover{color:var(--clay-500)}
+.top nav a:hover::after{transform:scaleX(1);transform-origin:left}
+
+/* ---- Hero with a slow tonal bloom. Warm only, no purple, no hard edges. ---- */
+/* Clip the bloom here rather than leaning on overflow-x:hidden at the body. */
+.open{position:relative;padding:104px 0 96px;isolation:isolate;overflow:hidden}
+@media(max-width:760px){.open{padding:64px 0 58px}}
+.bloom{position:absolute;inset:-20% -10% -30% -20%;z-index:-1;pointer-events:none;overflow:hidden}
+.bloom i{position:absolute;display:block;border-radius:50%;filter:blur(70px);opacity:.55}
+.bloom i:nth-child(1){width:52vw;height:52vw;max-width:680px;max-height:680px;
+  left:38%;top:-18%;background:radial-gradient(circle,#F0D9C6,transparent 68%);
+  animation:drift1 26s var(--ease-out) infinite alternate}
+.bloom i:nth-child(2){width:40vw;height:40vw;max-width:520px;max-height:520px;
+  left:58%;top:26%;background:radial-gradient(circle,#E7DFCB,transparent 66%);
+  animation:drift2 34s var(--ease-out) infinite alternate}
+.bloom i:nth-child(3){width:30vw;height:30vw;max-width:400px;max-height:400px;
+  left:30%;top:52%;background:radial-gradient(circle,#DCE6DD,transparent 66%);
+  animation:drift3 30s var(--ease-out) infinite alternate}
+@keyframes drift1{to{transform:translate3d(-7%,6%,0) scale(1.12)}}
+@keyframes drift2{to{transform:translate3d(6%,-8%,0) scale(1.08)}}
+@keyframes drift3{to{transform:translate3d(-5%,-6%,0) scale(1.15)}}
+
+.open h1{font-size:clamp(2.7rem,6.6vw,4.7rem);line-height:1.0;letter-spacing:-0.032em;
+  max-width:none;margin-bottom:34px;font-weight:600}
+.open .deck{font-size:clamp(1.12rem,2vw,1.32rem);line-height:1.58;color:var(--ink-2);
+  max-width:41ch;margin-bottom:40px}
+.open .deck b{font-weight:600;color:var(--ink)}
+
+/* Words rise on load. */
+/* Each masked line is its own row, so breaks are deliberate rather than accidental. */
+.rise{display:block;overflow:hidden;padding-bottom:0.04em}
+.rise>span{display:inline-block;transform:translateY(105%);
+  transition:transform var(--t-slow) var(--ease-spring)}
+body[data-ready="true"] .rise>span{transform:translateY(0)}
+
+/* ---- Buttons that answer the pointer ---- */
+.act{position:relative;display:inline-flex;align-items:center;gap:10px;overflow:hidden;
+  background:var(--clay-500);color:#fff;text-decoration:none;font-family:var(--body);
+  font-size:16px;font-weight:600;padding:16px 30px;border-radius:4px;min-height:52px;
+  box-shadow:0 1px 2px rgba(122,55,25,.16);
+  transition:transform var(--t-mid) var(--ease-spring),box-shadow var(--t-mid) var(--ease-out),
+             background var(--t-fast) var(--ease-out)}
+.act::before{content:'';position:absolute;inset:0;background:var(--clay-600);
+  transform:translateY(101%);transition:transform var(--t-mid) var(--ease-out);z-index:0}
+.act span,.act svg{position:relative;z-index:1}
+.act:hover{color:#fff;transform:translateY(-2px);box-shadow:0 10px 24px rgba(122,55,25,.22)}
+.act:hover::before{transform:translateY(0)}
+.act:active{transform:translateY(0) scale(.985)}
+.act svg{transition:transform var(--t-mid) var(--ease-spring)}
+.act:hover svg{transform:translateX(4px)}
+.act-note{font-size:15px;color:var(--ink-3);margin-top:15px}
+
+/* ---- Bands ---- */
+.band{display:grid;grid-template-columns:1fr;gap:22px;padding:80px 0}
+@media(min-width:920px){.band{grid-template-columns:168px minmax(0,1fr);gap:64px;padding:104px 0}}
+.tinted{background:var(--sand-200);position:relative}
+.tinted::before,.tinted::after{content:'';position:absolute;left:0;right:0;height:1px;background:var(--sand-300)}
+.tinted::before{top:0}.tinted::after{bottom:0}
+
+/* Margin column sticks and stays with you through the band. */
+.margin{font-size:13px;line-height:1.62;color:var(--ink-3)}
+@media(min-width:920px){.margin{position:sticky;top:104px;align-self:start}}
+.margin b{display:block;font-family:var(--display);font-size:13px;font-weight:600;
+  color:var(--clay-500);margin-bottom:5px}
+.margin em{display:block;font-style:normal;margin-top:14px;padding-top:13px;
+  border-top:1px solid var(--sand-400);color:var(--ink-3)}
+.margin .tick{display:block;height:2px;background:var(--sand-400);margin-top:16px;
+  transform:scaleX(0);transform-origin:left;transition:transform 900ms var(--ease-out)}
+.margin[data-in="true"] .tick{transform:scaleX(1);background:var(--clay-400)}
+
+h2{font-size:clamp(1.72rem,3.5vw,2.5rem);line-height:1.1;max-width:19ch;margin-bottom:26px}
+.lede{font-size:1.06rem;color:var(--ink-2)}
+
+/* ---- Steps: rules draw themselves, tone answers hover ---- */
+.steps{display:grid;gap:36px}
+@media(min-width:840px){.steps{grid-template-columns:repeat(3,1fr);gap:40px}}
+.step{position:relative;padding:20px 16px 18px;margin:0 -16px;border-radius:6px;
+  transition:background var(--t-mid) var(--ease-out),transform var(--t-mid) var(--ease-out)}
+.step::before{content:'';position:absolute;top:0;left:16px;right:16px;height:2px;
+  background:var(--sand-400);transform:scaleX(0);transform-origin:left;
+  transition:transform 800ms var(--ease-out)}
+.step[data-in="true"]::before{transform:scaleX(1)}
+.step:hover{background:var(--sand-50);transform:translateY(-3px)}
+.tinted .step:hover{background:var(--sand-100)}
+.step .n{display:block;font-family:var(--display);font-size:13px;font-weight:600;
+  color:var(--clay-500);margin-bottom:12px}
+.step h3{font-size:1.18rem;font-weight:600;margin-bottom:10px;line-height:1.22}
+.step p{font-size:0.97rem;color:var(--ink-2);margin:0}
+
+/* ---- Deliverables: rows that respond ---- */
+.assets{margin-top:6px}
+.asset{position:relative;display:grid;gap:8px;padding:30px 18px;margin:0 -18px;
+  border-top:1px solid var(--sand-300);border-radius:6px;
+  transition:background var(--t-mid) var(--ease-out)}
+.asset:last-child{border-bottom:1px solid var(--sand-300)}
+@media(min-width:780px){.asset{grid-template-columns:250px minmax(0,1fr);gap:44px}}
+.asset:hover{background:var(--clay-wash)}
+.asset dt{position:relative;font-family:var(--display);font-size:1.28rem;font-weight:600;
+  letter-spacing:-0.018em;transition:transform var(--t-mid) var(--ease-spring)}
+.asset:hover dt{transform:translateX(6px)}
+.asset dd{margin:0;color:var(--ink-2);font-size:1.02rem}
+
+/* ---- Scroll reveal, one language everywhere ---- */
+.rev{opacity:0;transform:translateY(18px);
+  transition:opacity var(--t-slow) var(--ease-out),transform var(--t-slow) var(--ease-out)}
+.rev[data-in="true"]{opacity:1;transform:none}
+
+.promise{font-family:var(--display);font-size:clamp(1.8rem,4.2vw,2.9rem);line-height:1.1;
+  letter-spacing:-0.028em;max-width:19ch;font-weight:600;margin-bottom:26px}
+.promise mark{background:linear-gradient(to top,var(--sage-wash) 42%,transparent 42%);
+  color:inherit;padding:0 2px}
+
+.close{padding:104px 0 118px;position:relative}
+@media(max-width:760px){.close{padding:72px 0 84px}}
+.close h2{max-width:20ch;margin-bottom:20px}
+.colo{padding:22px 0 44px;border-top:1px solid var(--sand-300);display:flex;
+  justify-content:space-between;gap:16px;font-size:13px;color:var(--ink-3);flex-wrap:wrap}
+
+/* Reading progress: a hairline, not a loud bar. */
+.prog{position:fixed;top:0;left:0;height:2px;width:100%;transform:scaleX(0);
+  transform-origin:left;background:var(--clay-400);z-index:40}
+
+.faces{position:fixed;right:16px;bottom:16px;z-index:50;background:var(--ink);
+  color:var(--sand-100);border-radius:8px;padding:10px 12px;display:flex;gap:6px;
+  align-items:center;flex-wrap:wrap;box-shadow:0 10px 34px rgba(0,0,0,.24);max-width:calc(100vw - 32px)}
+.faces span{font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.65;margin-right:4px}
+.faces button{font-family:var(--body);font-size:12px;font-weight:500;cursor:pointer;
+  background:transparent;color:var(--sand-100);border:1px solid rgba(255,255,255,.28);
+  border-radius:5px;padding:7px 10px;min-height:34px;transition:all var(--t-fast) var(--ease-out)}
+.faces button:hover{border-color:rgba(255,255,255,.65)}
+.faces button[aria-pressed="true"]{background:var(--sand-100);color:var(--ink);border-color:var(--sand-100)}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms !important;transition-duration:.001ms !important}
+  .rev{opacity:1;transform:none}
+  .rise>span{transform:none}
+  .bloom i{animation:none}
+}
+</style>
+</head>
+<body>
+<div class="prog" id="prog" aria-hidden="true"></div>
+
+<header class="top" id="top">
+  <span class="name">The discovery sprint</span>
+  <nav><a href="#">How it works</a><a href="#">What I've built</a><a href="#">About</a><a href="#">Start</a></nav>
+</header>
+
+<div class="doc">
+  <section class="open">
+    <div class="bloom" aria-hidden="true"><i></i><i></i><i></i></div>
+    <h1>
+      <span class="rise"><span>Know whether your idea</span></span>
+      <span class="rise"><span>is worth building,</span></span>
+      <span class="rise"><span>before you spend</span></span>
+      <span class="rise"><span>months finding out.</span></span>
+    </h1>
+    <p class="deck rev">In two weeks you own <b>a working version of the one part that matters most</b>, evidence from real users, and a straight answer: keep going, or stop.</p>
+    <p class="rev" style="margin-bottom:0">
+      <a class="act" href="#"><span>Book a free intro call</span>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13m0 0l-5.5-5.5M18 12l-5.5 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </p>
+    <p class="act-note rev">A short, no-pressure call about your idea and whether this fits.</p>
+  </section>
+</div>
+
+<div class="tinted">
+  <div class="doc">
+    <section class="band">
+      <div class="margin"><b>One</b>The bind<em>Most ideas die of the wrong question, not the wrong code.</em><i class="tick"></i></div>
+      <div class="rev">
+        <h2>The scary part isn't building it. It's building the wrong thing.</h2>
+        <p class="lede">Your idea has probably been sitting in a doc for a while. Not because you're lazy, but because committing real money to it feels like a leap and you can't quite see where you'd land.</p>
+        <p class="lede">That instinct is right. Most ideas don't fail because nobody could build them. They fail because someone spent months and a pile of money before finding out that nobody wanted the thing that got built.</p>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="doc">
+  <section class="band">
+    <div class="margin"><b>Two</b>Method<em>Three steps. The first one can end the project, cheaply.</em><i class="tick"></i></div>
+    <div>
+      <h2 class="rev">Three steps, start to answer</h2>
+      <div class="steps">
+        <div class="step">
+          <span class="n">Step one</span>
+          <h3>Find out if it's worth building.</h3>
+          <p>You bring the idea. Together you find the one thing that has to be true for it to work, and you get a straight call. If there's a fatal flaw, you find it here, cheaply.</p>
+        </div>
+        <div class="step">
+          <span class="n">Step two</span>
+          <h3>Get a real version of the part that matters.</h3>
+          <p>One working flow that real people can actually use. Not a mockup. Something you can put in front of users.</p>
+        </div>
+        <div class="step">
+          <span class="n">Step three</span>
+          <h3>Test it and decide, with a clear rule.</h3>
+          <p>Before testing, you agree what means go, adjust, or stop. Then you decide with evidence instead of a gut feeling.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="tinted">
+  <div class="doc">
+    <section class="band">
+      <div class="margin"><b>Three</b>Deliverables<em>Named things. Yours to keep, extend, or hand to any team.</em><i class="tick"></i></div>
+      <div>
+        <h2 class="rev">What you own at the end</h2>
+        <dl class="assets">
+          <div class="asset rev"><dt>The working build</dt><dd>One real flow through the core of your idea, usable on a phone. Yours to keep, extend, or hand to any team.</dd></div>
+          <div class="asset rev"><dt>The decision brief</dt><dd>What the riskiest assumption was, what the testing showed, and a straight call: go, adjust, or stop.</dd></div>
+          <div class="asset rev"><dt>The testing playbook</dt><dd>How to find the right people, how to run sessions so politeness doesn't pollute the results, and what to watch for. Reusable on every idea you have after this one.</dd></div>
+        </dl>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="doc">
+  <section class="band">
+    <div class="margin"><b>Four</b>Terms<em>The unusual promise.</em><i class="tick"></i></div>
+    <div class="rev">
+      <p class="promise">The goal is that you <mark>don't need me again</mark>.</p>
+      <p class="lede">Plenty of people in this business are quietly hoping you'll stay. This works the other way round. When the sprint ends, you can read your own evidence, make your own call, and either move forward or walk away without another opinion. You keep the build, the brief, and the method.</p>
+    </div>
+  </section>
+
+  <section class="close rev">
+    <h2>Let's find out if your idea is real</h2>
+    <p class="lede" style="margin-bottom:32px">One call. You talk through your idea, you hear honestly whether this fits. No pitch, no pressure.</p>
+    <a class="act" href="#"><span>Book a free intro call</span>
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13m0 0l-5.5-5.5M18 12l-5.5 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </section>
+
+  <div class="colo"><span>Sample E · Warm editorial, in motion</span><span id="facelabel">Bricolage Grotesque · Schibsted Grotesk</span></div>
+</div>
+
+<div class="faces" role="group" aria-label="Preview: title typeface">
+  <span>Titles</span>
+  <button type="button" data-face="bricolage" aria-pressed="true">Bricolage</button>
+  <button type="button" data-face="schibsted" aria-pressed="false">Schibsted</button>
+  <button type="button" data-face="familjen" aria-pressed="false">Familjen</button>
+  <button type="button" data-face="instrument" aria-pressed="false">Instrument</button>
+</div>
+
+<script>
+(function(){
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Entrance
+  requestAnimationFrame(function(){ document.body.setAttribute('data-ready','true'); });
+
+  // Stagger the hero lines without per-element markup.
+  document.querySelectorAll('.rise > span').forEach(function(s,i){
+    s.style.transitionDelay = (0.06 + i*0.075) + 's';
+  });
+
+  // One observer drives every reveal, tick and rule.
+  var targets = document.querySelectorAll('.rev,.step,.margin');
+  if (reduce || !('IntersectionObserver' in window)) {
+    targets.forEach(function(t){ t.setAttribute('data-in','true'); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        e.target.setAttribute('data-in','true');
+        io.unobserve(e.target);
+      });
+    },{rootMargin:'0px 0px -8% 0px',threshold:.12});
+    targets.forEach(function(t){ io.observe(t); });
+
+    // Steps stagger as a group.
+    document.querySelectorAll('.steps').forEach(function(g){
+      g.querySelectorAll('.step').forEach(function(s,i){
+        s.style.transitionDelay = (i*0.09)+'s';
+        s.querySelector; // no-op
+      });
+    });
+    // Assets stagger too.
+    document.querySelectorAll('.assets').forEach(function(g){
+      g.querySelectorAll('.asset').forEach(function(a,i){ a.style.transitionDelay=(i*0.07)+'s'; });
+    });
+  }
+
+  // Reading progress + sticky header state, one rAF-batched scroll handler.
+  var prog=document.getElementById('prog'), top=document.getElementById('top'), tick=false;
+  function onScroll(){
+    if(tick) return; tick=true;
+    requestAnimationFrame(function(){
+      var h=document.documentElement.scrollHeight-window.innerHeight;
+      var p=h>0?Math.min(window.scrollY/h,1):0;
+      prog.style.transform='scaleX('+p+')';
+      top.setAttribute('data-stuck', window.scrollY>10 ? 'true':'false');
+      tick=false;
+    });
+  }
+  addEventListener('scroll',onScroll,{passive:true}); onScroll();
+
+  // Face switcher (preview only)
+  var names={bricolage:'Bricolage Grotesque',schibsted:'Schibsted Grotesk',
+             familjen:'Familjen Grotesk',instrument:'Instrument Sans'};
+  var btns=document.querySelectorAll('.faces button'), label=document.getElementById('facelabel');
+  btns.forEach(function(b){
+    b.addEventListener('click',function(){
+      document.documentElement.setAttribute('data-face',b.dataset.face);
+      btns.forEach(function(o){o.setAttribute('aria-pressed',String(o===b));});
+      label.textContent=names[b.dataset.face]+' · Schibsted Grotesk';
+    });
+  });
+})();
+</script>
+</body>
+</html>

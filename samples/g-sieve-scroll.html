@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The sieve · scroll-driven</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Schibsted+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sand-50:#FDFBF7; --sand-100:#FAF7F2; --sand-200:#F4EFE6;
+  --sand-300:#EBE3D6; --sand-400:#DCD2C1; --sand-500:#C4B9A5;
+  --ink:#1E1B18; --ink-2:#544C43; --ink-3:#6B6259;
+  --clay-400:#C4633C; --clay-500:#9A4526; --clay-600:#7E3719;
+  --sage-500:#4F6558;
+  --display:'Bricolage Grotesque',system-ui,sans-serif;
+  --body:'Schibsted Grotesk',system-ui,sans-serif;
+  --ease-out:cubic-bezier(.22,.68,.24,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--sand-100);color:var(--ink);font-family:var(--body);
+  font-size:18px;line-height:1.68;-webkit-font-smoothing:antialiased}
+h1,h2{margin:0;font-family:var(--display);font-weight:600;letter-spacing:-0.024em;line-height:1.08}
+.wrap{max-width:1000px;margin:0 auto;padding:0 26px}
+.intro{padding:20vh 0 14vh}
+.intro h1{font-size:clamp(2.3rem,5.4vw,3.4rem);max-width:18ch;margin-bottom:20px}
+.intro p{color:var(--ink-2);max-width:56ch;margin:0}
+.after{padding:16vh 0 24vh}
+.after h2{font-size:clamp(1.7rem,3.4vw,2.3rem);max-width:20ch;margin-bottom:16px}
+.after p{color:var(--ink-2);max-width:58ch}
+
+/* ── The pinned scene. Outer section supplies the scroll distance; the inner
+   ── panel stays put so attention never leaves the figure. ── */
+.scene{position:relative;height:420vh}
+.pin{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:28px;overflow:hidden}
+
+.stagewrap{width:min(1000px,100% - 52px);margin:0 auto}
+.scene svg{width:100%;height:auto;display:block;overflow:visible}
+.scene .d{fill:var(--sand-500)}
+.scene .d.final{fill:var(--clay-500)}
+.scene .halo{fill:none;stroke:var(--clay-400);stroke-width:1;opacity:0;
+  transform-box:fill-box;transform-origin:center}
+.scene .halo.on{animation:ping 4s var(--ease-out) infinite}
+@keyframes ping{0%{opacity:.6;transform:scale(.4)}70%{opacity:0;transform:scale(1.35)}100%{opacity:0;transform:scale(1.35)}}
+
+/* Caption: one line at a time, crossfading with the stage. */
+.caption{height:96px;position:relative;width:min(1000px,100% - 52px);margin:0 auto;
+  text-align:center}
+.caption span{position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:flex-start;gap:6px;
+  opacity:0;transform:translateY(8px);
+  transition:opacity 420ms var(--ease-out),transform 520ms var(--ease-out)}
+.caption span[data-on="true"]{opacity:1;transform:none}
+.caption b{font-family:var(--display);font-size:clamp(1.3rem,2.6vw,1.85rem);
+  font-weight:600;letter-spacing:-0.02em}
+.caption i{font-style:normal;font-size:15px;color:var(--ink-3);max-width:44ch}
+.caption span[data-key="true"] b{color:var(--clay-500)}
+
+/* Stage rail: four ticks, filling as you go. */
+.ticks{display:flex;gap:10px;align-items:center}
+.ticks i{display:block;width:44px;height:2px;background:var(--sand-400);position:relative;
+  overflow:hidden}
+.ticks i::after{content:'';position:absolute;inset:0;background:var(--clay-500);
+  transform:scaleX(0);transform-origin:left;transition:transform 220ms linear}
+.ticks i[data-fill="true"]::after{transform:scaleX(1)}
+.counter{font-family:var(--display);font-size:13px;font-weight:600;color:var(--ink-3);
+  min-width:104px;text-align:right;font-variant-numeric:tabular-nums}
+
+@media (prefers-reduced-motion: reduce){
+  .scene{height:auto}
+  .pin{position:static;height:auto;padding:80px 0}
+  .caption{height:auto;margin-bottom:20px}
+  .caption span{position:static;opacity:1;transform:none}
+  .caption span:not([data-final="true"]){display:none}
+  .halo.on{animation:none}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap intro">
+  <h1>Know whether your idea is worth building.</h1>
+  <p>Scroll. This is the whole argument in one movement: everything you could build, narrowed to the one thing that decides it.</p>
+</div>
+
+<section class="scene" id="scene">
+  <div class="pin">
+    <div class="stagewrap">
+      <svg viewBox="0 0 1000 460" role="img" aria-label="Forty possible things to build narrow in stages to the single one worth testing">
+        <g id="dots"></g>
+        <circle class="halo" id="halo" cx="500" cy="230" r="34"/>
+      </svg>
+    </div>
+
+    <div class="caption" id="caption">
+      <span data-i="0"><b>Everything you could build</b><i>Every feature, every version, every direction the idea could take.</i></span>
+      <span data-i="1"><b>Plausible</b><i>The ones that survive a hard look at the customer and the money.</i></span>
+      <span data-i="2"><b>Worth testing</b><i>Few enough to actually put in front of real people in two weeks.</i></span>
+      <span data-i="3" data-key="true" data-final="true"><b>The one that decides it</b><i>Built for real, tested against a bar you set in advance.</i></span>
+    </div>
+
+    <div class="ticks" aria-hidden="true">
+      <i data-k="0"></i><i data-k="1"></i><i data-k="2"></i><i data-k="3"></i>
+      <span class="counter" id="counter">40 possible</span>
+    </div>
+  </div>
+</section>
+
+<div class="wrap after">
+  <h2>That is the whole service.</h2>
+  <p>Not building faster. Knowing what deserves to exist, and being able to make it real before the money is gone.</p>
+</div>
+
+<script>
+(function(){
+  var NS='http://www.w3.org/2000/svg';
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var N = 40;
+
+  var scene   = document.getElementById('scene');
+  var pin     = scene.querySelector('.pin');
+  var gDots   = document.getElementById('dots');
+  var halo    = document.getElementById('halo');
+  var caption = document.getElementById('caption');
+  var counter = document.getElementById('counter');
+  var ticks   = [].slice.call(document.querySelectorAll('.ticks i'));
+  var caps    = [].slice.call(caption.querySelectorAll('span'));
+
+  /* Deterministic pseudo-random, so the scatter is identical on every load
+     and never re-rolls mid-scroll. */
+  function rnd(i,salt){
+    var x = Math.sin((i+1) * 12.9898 + salt * 78.233) * 43758.5453;
+    return x - Math.floor(x);
+  }
+
+  /* Survivors are spread through the field rather than clustered, so the
+     narrowing reads as selection and not as "the left half won". */
+  function pick(from, count){
+    var out=[], step=from.length/count;
+    for(var i=0;i<count;i++) out.push(from[Math.floor(i*step + step/2)]);
+    return out;
+  }
+
+  var all=[]; for(var i=0;i<N;i++) all.push(i);
+  var keep12 = pick(all, 12);
+  var keep4  = pick(keep12, 4);
+  var keep1  = keep4[2];
+
+  function gridPos(idx, count, cols, cx, cy, dx, dy){
+    var rows=Math.ceil(count/cols);
+    var col=idx%cols, row=Math.floor(idx/cols);
+    return { x: cx + (col-(cols-1)/2)*dx, y: cy + (row-(rows-1)/2)*dy };
+  }
+
+  var dots = all.map(function(i){
+    var el=document.createElementNS(NS,'circle');
+    el.setAttribute('class','d');
+    el.setAttribute('r', 4.6);
+    el.setAttribute('cx', 0); el.setAttribute('cy', 0);
+    gDots.appendChild(el);
+
+    var k12 = keep12.indexOf(i), k4 = keep4.indexOf(i);
+    return {
+      el: el,
+      scatter: { x: 90 + rnd(i,1)*820, y: 40 + rnd(i,2)*380 },
+      p0: gridPos(i, N, 5, 500, 230, 46, 44),
+      p1: k12 >= 0 ? gridPos(k12, 12, 3, 500, 230, 62, 62) : null,
+      p2: k4  >= 0 ? gridPos(k4,  4,  2, 500, 230, 86, 80) : null,
+      p3: i === keep1 ? { x: 500, y: 230 } : null,
+      seed: rnd(i,3)
+    };
+  });
+
+  /* The viewBox is fixed at 1000 units wide, so on a 320px screen a 4.6-unit
+     dot renders at about 1.5px. Scale the marks up as the frame shrinks. */
+  var dotScale = 1;
+  function measureScale(){
+    var w = document.querySelector('.scene svg').getBoundingClientRect().width || 1000;
+    dotScale = w < 620 ? Math.min(2.6, 1000 / Math.max(w, 260)) : 1;
+  }
+
+  function clamp(v){ return v<0?0:v>1?1:v; }
+  function smooth(t){ t=clamp(t); return t*t*(3-2*t); }
+  function seg(p,a,b){ return smooth((p-a)/(b-a)); }
+  function lerp(a,b,t){ return a+(b-a)*t; }
+
+  /* Stage boundaries across the pinned scroll. */
+  var A=[0.00,0.16],   // chaos holds, dots fade in
+      B=[0.16,0.36],   // chaos resolves into an ordered field
+      C=[0.36,0.54],   // 40 → 12
+      D=[0.54,0.70],   // 12 → 4
+      E=[0.70,0.86];   // 4 → 1
+  // 0.86 → 1.00 is deliberately empty: the answer holds still for a beat
+  // before the section releases, instead of resolving and vanishing.
+
+  function render(p){
+    var tB=seg(p,B[0],B[1]), tC=seg(p,C[0],C[1]),
+        tD=seg(p,D[0],D[1]), tE=seg(p,E[0],E[1]);
+
+    dots.forEach(function(d,i){
+      // Position: scatter → field → col2 → col3 → final
+      var x=d.scatter.x, y=d.scatter.y;
+      var stagger = clamp(tB*1.35 - d.seed*0.35);
+      x=lerp(x,d.p0.x,stagger); y=lerp(y,d.p0.y,stagger);
+
+      var alive=1, r=4.6*dotScale;
+
+      if(d.p1){ x=lerp(x,d.p1.x,tC); y=lerp(y,d.p1.y,tC); }
+      else if(tC>0){ alive=1-tC; y+=tC*26; }
+
+      if(d.p2){ x=lerp(x,d.p2.x,tD); y=lerp(y,d.p2.y,tD); }
+      else if(d.p1 && tD>0){ alive=1-tD; y+=tD*26; }
+
+      if(d.p3){
+        x=lerp(x,d.p3.x,tE); y=lerp(y,d.p3.y,tE);
+        r=lerp(4.6*dotScale, 13*Math.min(dotScale,1.7), tE);
+      } else if(d.p2 && tE>0){ alive=1-tE; y+=tE*26; }
+
+      // Fade in at the very start.
+      var entry = clamp(seg(p,A[0],A[1])*1.6 - d.seed*0.25);
+      d.el.setAttribute('transform','translate('+x.toFixed(1)+','+y.toFixed(1)+')');
+      d.el.setAttribute('r', r.toFixed(1));
+      d.el.style.opacity = (alive * (0.25 + 0.75*entry)).toFixed(3);
+      d.el.classList.toggle('final', !!(d.p3 && tE>0.55));
+    });
+
+    halo.classList.toggle('on', tE>0.9);
+
+    // Stage index for caption, ticks and counter. These fire near the END of
+    // each transition, not the start, so the number on screen always matches
+    // the number of dots actually left.
+    var stage = p<0.51 ? 0 : p<0.67 ? 1 : p<0.83 ? 2 : 3;
+    caps.forEach(function(c){ c.setAttribute('data-on', String(+c.dataset.i===stage)); });
+    ticks.forEach(function(t){ t.setAttribute('data-fill', String(+t.dataset.k<=stage)); });
+    counter.textContent = ['40 possible','12 plausible','4 worth testing','1 tested'][stage];
+  }
+
+  if (reduce){
+    measureScale();
+    render(1);
+    return;
+  }
+
+  var ticking=false;
+  function onScroll(){
+    if(ticking) return; ticking=true;
+    requestAnimationFrame(function(){
+      var r=scene.getBoundingClientRect();
+      var total=scene.offsetHeight - pin.offsetHeight;
+      var p = total>0 ? clamp(-r.top/total) : 0;
+      render(p);
+      ticking=false;
+    });
+  }
+  addEventListener('scroll',onScroll,{passive:true});
+  addEventListener('resize',function(){measureScale();onScroll();},{passive:true});
+  measureScale(); render(0); onScroll();
+})();
+</script>
+</body>
+</html>

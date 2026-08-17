@@ -1,0 +1,708 @@
+:root{
+  /* Palette taken from ionutmaxim.com: the warm near-black #160B02, the burnt
+     orange #CC5500, and the cream #FEF6F0. Mid tones are interpolated from
+     those three so the ramp stays on that hue rather than drifting. */
+  --sand-50:#FFFCFA; --sand-100:#FEF6F0; --sand-200:#F9EDE4;
+  --sand-300:#F0E1D5; --sand-400:#E2CDBC; --sand-500:#C9AE99;
+
+  --ink:#160B02;        /* warm near-black, not neutral */
+  --ink-2:#4A3A2E;
+  --ink-3:#6E5B4C;      /* verified >=4.5:1 on sand-100 and sand-200 */
+
+  /* #CC5500 is the brand orange, but it only reaches 4.04:1 on this paper, so
+     it is kept for graphic marks and the text accent steps one shade darker.
+     Same hue, passes AA at label sizes on both paper tones. */
+  --clay-mark:#CC5500;  /* dots, rules, non-text marks */
+  --clay-400:#B84B00;
+  --clay-500:#A34400;   /* 5.81:1 on sand-100, 5.40:1 on sand-200 */
+  --clay-600:#8F3A00;
+  --clay-wash:#FBEADE;
+
+  --sage-500:#4F6558; --sage-wash:#E9EFEA;
+
+  /* The reference site runs a single system sans (Tailwind's default stack)
+     for everything, with weight doing the work. Same here: one family, no
+     webfont request at all. */
+  --sys:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,
+        "Helvetica Neue",Arial,sans-serif;
+  --display:var(--sys);
+  --body:var(--sys);
+
+  /* One curve, three durations: the 150/200/300ms standard easing used
+     throughout ionutmaxim.com. */
+  --ease-out:cubic-bezier(.4,0,.2,1);
+  --ease-spring:cubic-bezier(.16,1.02,.3,1);
+  --t-fast:150ms; --t-mid:200ms; --t-slow:300ms;
+
+  /* One radius scale used everywhere, rather than a different value per
+     component. Softer than square, far short of a pill. */
+  --r-sm:8px; --r-md:12px; --r-lg:20px;
+
+  --margin-col:168px;   /* the marginalia column */
+  --margin-gap:64px;    /* gap between it and the text column */
+
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--sand-100);color:var(--ink);font-family:var(--body);
+  font-size:18px;line-height:1.68;-webkit-font-smoothing:antialiased}
+/* Their headline device: a light face with selected phrases at full weight.
+   The contrast inside the sentence does the emphasis, not colour. */
+h1,h2,h3{margin:0;font-family:var(--display);font-weight:300;
+  letter-spacing:-0.02em;line-height:1.08}
+h1 strong,h2 strong,h3 strong,.heavy{font-weight:640;letter-spacing:-0.024em}
+p{margin:0 0 1.1em;max-width:60ch}
+p:last-child{margin-bottom:0}
+a{color:var(--clay-500)}
+:focus-visible{outline:2.5px solid var(--clay-500);outline-offset:3px;border-radius:3px}
+
+/* ── 1. Surface. Two stacked noise fields give the page the tooth of a
+   ── pressed paper stock: a fine fibre grain, and a slower coarse mottle that
+   ── stops the fine layer reading as digital dither. Both are inline SVG
+   ── turbulence, so the whole texture costs zero requests. ── */
+.surface{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* Coarse mottle: low frequency, few octaves, blurred. Reads as pulp. */
+.surface::before{content:'';position:absolute;inset:0;opacity:.38;
+  mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='420'><filter id='m'><feTurbulence type='fractalNoise' baseFrequency='0.008' numOctaves='3' seed='7' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/><feGaussianBlur stdDeviation='1.4'/></filter><rect width='420' height='420' filter='url(%23m)' opacity='0.10'/></svg>");
+  background-size:420px 420px}
+
+/* Fine fibre: high frequency, tight. Reads as the tooth of the sheet. */
+.surface::after{content:'';position:absolute;inset:0;opacity:.42;
+  mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='f'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' seed='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='180' height='180' filter='url(%23f)' opacity='0.05'/></svg>");
+  background-size:180px 180px}
+
+/* Panels carry a touch more tooth than the page, so they read as a heavier
+   sheet laid on top rather than a flat colour swap. */
+.tinted{position:relative}
+.tinted::after{content:'';position:absolute;inset:0;pointer-events:none;
+  border-radius:inherit;opacity:.42;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' seed='11' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='180' height='180' filter='url(%23p)' opacity='0.06'/></svg>")}
+
+@media (prefers-reduced-motion: no-preference){}
+
+.doc{max-width:1140px;margin:0 auto;padding:0 26px}
+
+/* ── 2. The rail. One annotation system: the marginalia sit to its left and
+   ── double as the section markers, so nothing is labelled twice. ── */
+.spine{display:none}
+@media(min-width:1180px){
+  /* Doubled: 64px of air each side of the rail. Everything downstream (grid
+     gaps, dot offset, rail position) derives from this one number. */
+  :root{--margin-gap:128px}
+  /* left is set in JS from the real column edge: 50vw includes the scrollbar
+     but the centred container does not, so vw math drifts by half a scrollbar. */
+  /* Above the masthead (z-30): the rail is the primary chrome now, so its
+     wordmark cap must not be covered by the sticky header. */
+  .spine{display:block;position:fixed;top:0;bottom:0;width:1px;z-index:40;
+    pointer-events:none;left:-100px}
+  .spine .track{position:absolute;inset:0;background:var(--sand-400);opacity:.85}
+  /* scaleY rather than height: compositor-only, no layout on every scroll frame. */
+  .spine .fill{position:absolute;left:0;top:0;width:1px;height:100%;
+    background:var(--clay-mark);transform:scaleY(0);transform-origin:top;
+    transition:transform 90ms linear}
+
+  /* The line is furniture: the wordmark caps its top end, the ask caps its
+     bottom. Both sit on the page ground so the rule appears to run into them. */
+  .spine .cap{position:absolute;left:0;transform:translateX(-50%);
+    background:var(--sand-100);pointer-events:auto;display:grid;place-items:center}
+  .spine .cap--top{top:0;padding:22px 14px 14px}
+
+  /* Not fixed: the disc sits at the foot of the page on the rail's line and
+     scrolls away with everything else. Container is transparent. */
+  .railfoot{position:relative;height:0;background:none}
+  .railfoot a{position:absolute;bottom:8px;left:var(--rail-x,50%);
+    transform:translateX(-50%)}
+
+  .railmark{font-family:var(--display);font-weight:640;font-size:17px;
+    letter-spacing:-0.02em;color:var(--ink);text-decoration:none;white-space:nowrap;
+    transition:color var(--t-slow) var(--ease-out)}
+  .railmark:hover{color:var(--clay-500)}
+  .railmark em{font-style:normal;color:var(--clay-500)}
+
+  /* The disc is the only call to action on wide screens. It sits on the line
+     and blooms into the full button on hover: width and corner radius are the
+     only things that move, so the centre stays pinned to the rule. */
+  .railcta{position:relative;display:flex;align-items:center;justify-content:center;
+    gap:0;width:58px;height:58px;border-radius:999px;overflow:hidden;
+    color:#fff;text-decoration:none;font-family:var(--body);
+    font-size:16px;font-weight:600;white-space:nowrap;
+    background:linear-gradient(180deg,#C25000 0%,#B04800 52%,#A34400 100%);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.24),
+               0 6px 18px -6px rgba(120,50,0,.5);
+    transition:width 420ms var(--ease-out),
+               border-radius 420ms var(--ease-out),
+               box-shadow 420ms var(--ease-out)}
+  .railcta .lbl{max-width:0;opacity:0;overflow:hidden;
+    transition:max-width 420ms var(--ease-out),
+               opacity 220ms var(--ease-out),
+               margin 420ms var(--ease-out)}
+  .railcta svg{flex:none;transition:transform 420ms var(--ease-out)}
+
+  .railcta:hover,.railcta:focus-visible{color:#fff;width:272px;border-radius:16px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.3),
+               0 16px 34px -10px rgba(120,50,0,.6)}
+  .railcta:hover .lbl,.railcta:focus-visible .lbl{max-width:190px;opacity:1;
+    margin:0 12px 0 4px}
+  .railcta:hover svg,.railcta:focus-visible svg{transform:translateX(2px)}
+  .railcta:active{box-shadow:inset 0 1px 0 rgba(255,255,255,.2),
+               0 6px 14px -6px rgba(120,50,0,.5)}
+
+  /* The wordmark now lives on the rail, so the masthead drops its copy and
+     the nav moves right, clear of the rail cap. */
+  .top .name{display:none}
+}
+
+/* Marginalia: right-aligned against the rail, with a marker that is part of the
+   block itself, so it can never drift out of alignment with its own text. */
+.margin{font-size:13px;line-height:1.62;color:var(--ink-3)}
+@media(min-width:920px){
+  .margin{position:sticky;top:104px;align-self:start;text-align:right;
+    padding-right:2px;transition:color var(--t-mid) var(--ease-out)}
+  .margin em{border-top:1px solid var(--sand-400)}
+}
+@media(min-width:1180px){
+  .margin{position:sticky}
+  .margin::after{content:'';position:absolute;top:5px;
+    right:calc((var(--margin-gap) / 2) * -1 - 5px);  /* +0.5px for the rail's own width */
+    width:9px;height:9px;border-radius:50%;
+    background:var(--sand-100);border:2px solid var(--sand-400);
+    transition:border-color var(--t-mid) var(--ease-out),
+               background var(--t-mid) var(--ease-out),
+               transform var(--t-mid) var(--ease-spring)}
+  .margin[data-on="true"]::after{background:var(--clay-mark);border-color:var(--clay-mark);
+    transform:scale(1.2)}
+}
+.margin b{display:block;font-family:var(--body);font-size:11px;font-weight:500;
+  text-transform:uppercase;letter-spacing:2.4px;
+  color:var(--ink-3);margin-bottom:7px;transition:color var(--t-mid) var(--ease-out)}
+.margin[data-on="true"] b{color:var(--clay-500)}
+.margin em{display:block;font-style:normal;margin-top:14px;padding-top:13px;
+  border-top:1px solid var(--sand-400);color:var(--ink-3)}
+
+.railfoot{display:none}
+@media(min-width:1180px){
+  .railfoot{display:block}
+  /* The rail disc is the call to action here, so the inline one retires. */
+  .close .act,.close .act-note{display:none}
+}
+
+/* ── Masthead ── */
+.top{position:sticky;top:0;z-index:30;display:flex;justify-content:space-between;
+  align-items:baseline;gap:22px;padding:22px 26px;flex-wrap:wrap;max-width:1140px;margin:0 auto;
+  background:color-mix(in srgb,var(--sand-100) 80%,transparent);
+  backdrop-filter:blur(14px) saturate(1.3);-webkit-backdrop-filter:blur(14px) saturate(1.3);
+  border-bottom:1px solid transparent;transition:border-color var(--t-mid) var(--ease-out)}
+
+.top[data-stuck="true"]{border-bottom-color:var(--sand-300)}
+/* On small screens the nav wraps, making the bar tall enough to sit over the
+   headline. Release the sticky there. The real build gets a menu button. */
+@media(max-width:760px){
+  .top{position:static;padding:20px 26px 16px}
+  .top nav{gap:18px;font-size:14px}
+  .top nav a{font-size:14px}
+}
+.top .name{font-family:var(--display);font-size:19px;font-weight:600;letter-spacing:-0.015em}
+.top nav{display:flex;gap:26px}
+.top nav a{position:relative;font-size:15px;color:var(--ink-2);text-decoration:none;
+  transition:color var(--t-fast) var(--ease-out)}
+.top nav a::after{content:'';position:absolute;left:0;right:0;bottom:-4px;height:1.5px;
+  background:var(--clay-500);transform:scaleX(0);transform-origin:right;
+  transition:transform var(--t-mid) var(--ease-out)}
+.top nav a:hover{color:var(--clay-500)}
+.top nav a:hover::after{transform:scaleX(1);transform-origin:left}
+/* Declared after the base rule, or space-between wins on source order.
+   With the wordmark on the rail, the nav owns the right end of the bar. */
+@media(min-width:1180px){
+  .top{justify-content:flex-end}
+}
+
+/* ── Hero ──
+   The bloom used to live inside .open, which is only as wide as the text
+   column, so overflow:hidden cut it into a visible rectangle. It now sits in a
+   full-bleed band and is masked to fade out, so it has no edge at all. */
+.heroband{position:relative;overflow:hidden;isolation:isolate}
+.heroband>.doc{position:relative;z-index:2}
+.open{position:relative;padding:104px 0 96px}
+@media(max-width:760px){.open{padding:64px 0 58px}}
+.bloom{position:absolute;inset:-30% -12% -40% -12%;z-index:0;pointer-events:none;
+  -webkit-mask-image:radial-gradient(120% 96% at 58% 38%,#000 34%,transparent 80%);
+          mask-image:radial-gradient(120% 96% at 58% 38%,#000 34%,transparent 80%)}
+.bloom i{position:absolute;display:block;border-radius:50%;filter:blur(70px);opacity:.55}
+.bloom i:nth-child(1){width:52vw;height:52vw;max-width:680px;max-height:680px;left:38%;top:-18%;
+  background:radial-gradient(circle,#F0D9C6,transparent 68%);animation:drift1 26s var(--ease-out) infinite alternate}
+.bloom i:nth-child(2){width:40vw;height:40vw;max-width:520px;max-height:520px;left:58%;top:26%;
+  background:radial-gradient(circle,#E7DFCB,transparent 66%);animation:drift2 34s var(--ease-out) infinite alternate}
+.bloom i:nth-child(3){width:30vw;height:30vw;max-width:400px;max-height:400px;left:30%;top:52%;
+  background:radial-gradient(circle,#DCE6DD,transparent 66%);animation:drift3 30s var(--ease-out) infinite alternate}
+@keyframes drift1{to{transform:translate3d(-7%,6%,0) scale(1.12)}}
+@keyframes drift2{to{transform:translate3d(6%,-8%,0) scale(1.08)}}
+@keyframes drift3{to{transform:translate3d(-5%,-6%,0) scale(1.15)}}
+
+/* ── 3. Pointer light. The paper catches a warm highlight where you look. ── */
+.lamp{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0;
+  transition:opacity 900ms var(--ease-out);
+  background:radial-gradient(420px circle at var(--mx,60%) var(--my,40%),
+    rgba(196,99,60,.10),transparent 62%)}
+.heroband[data-lamp="true"] .lamp{opacity:1}
+
+/* ── One content column for the entire page. Hero, bands and closing section
+   ── all start at the same left edge; only the margin notes sit outside it. ── */
+.open .inner{display:grid;gap:22px}
+@media(min-width:920px){
+  .open .inner{grid-template-columns:var(--margin-col) minmax(0,1fr);
+    gap:var(--margin-gap);align-items:start}
+}
+.open .inner>.margin{padding-top:10px}
+.close{display:grid;gap:22px}
+@media(min-width:920px){
+  .close{grid-template-columns:var(--margin-col) minmax(0,1fr);
+    gap:var(--margin-gap);align-items:start}
+}
+
+/* ── 7. The sieve. A pinned scene: everything you could build, narrowed by
+   ── scroll to the one thing that decides it. ── */
+.band--scene{padding:0;align-items:start}
+.scene{position:relative;height:300vh}
+.pin{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:26px}
+.pin svg{width:100%;height:auto;display:block;overflow:visible}
+.scene .d{fill:var(--sand-500)}
+.scene .d.final{fill:var(--clay-mark)}
+.scene .halo{fill:none;stroke:var(--clay-mark);stroke-width:1;opacity:0;
+  transform-box:fill-box;transform-origin:center}
+.scene .halo.on{animation:ping 4s var(--ease-out) infinite}
+@keyframes ping{0%{opacity:.6;transform:scale(.4)}70%{opacity:0;transform:scale(1.35)}100%{opacity:0;transform:scale(1.35)}}
+
+/* One caption at a time, crossfading with the stage. */
+.caption{position:relative;height:104px;width:100%;text-align:center}
+.caption span{position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;gap:6px;opacity:0;transform:translateY(8px);
+  transition:opacity 420ms var(--ease-out),transform 520ms var(--ease-out)}
+.caption span[data-on="true"]{opacity:1;transform:none}
+.caption b{font-family:var(--display);font-size:clamp(1.25rem,2.4vw,1.75rem);
+  font-weight:600;letter-spacing:-0.02em}
+.caption i{font-style:normal;font-size:15px;color:var(--ink-3);max-width:44ch;line-height:1.55}
+.caption span[data-key="true"] b{color:var(--clay-500)}
+
+.ticks{display:flex;gap:10px;align-items:center}
+.ticks i{display:block;width:40px;height:2px;background:var(--sand-400);
+  position:relative;overflow:hidden}
+.ticks i::after{content:'';position:absolute;inset:0;background:var(--clay-500);
+  transform:scaleX(0);transform-origin:left;transition:transform 220ms linear}
+.ticks i[data-fill="true"]::after{transform:scaleX(1)}
+.counter{font-family:var(--display);font-size:13px;font-weight:600;color:var(--ink-3);
+  min-width:112px;text-align:right;font-variant-numeric:tabular-nums}
+
+@media(max-width:919px){
+  .scene{height:280vh}
+  .caption{height:120px}
+}
+
+/* ── 8. Deliverable glyphs. Line art, drawn on reveal. No tiles. ── */
+.glyph{width:26px;height:26px;flex:none;color:var(--clay-500);align-self:start;margin-top:4px}
+.glyph path,.glyph rect,.glyph circle,.glyph line{fill:none;stroke:currentColor;
+  stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:var(--len,90);stroke-dashoffset:var(--len,90);
+  transition:stroke-dashoffset 1100ms var(--ease-out)}
+.asset[data-in="true"] .glyph path,.asset[data-in="true"] .glyph rect,
+.asset[data-in="true"] .glyph circle,.asset[data-in="true"] .glyph line{stroke-dashoffset:0}
+
+/* ── 4. Variable-weight entrance. The headline sets itself. ── */
+.open h1{font-size:clamp(2.7rem,6.6vw,4.7rem);line-height:1.0;letter-spacing:-0.032em;
+  max-width:none;margin-bottom:34px}
+.rise{display:block;overflow:hidden;padding-bottom:.04em}
+.rise strong{font-weight:640}
+/* Hand-set lines only earn their keep where they actually fit. Below that the
+   headline reflows as ordinary text and skips the mask entirely. */
+@media(max-width:760px){
+  .rise{display:inline;overflow:visible;padding:0}
+  .rise>span{display:inline;transform:none}
+}
+.rise>span{display:inline-block;transform:translateY(105%);
+  transition:transform 760ms var(--ease-spring)}
+body[data-ready="true"] .rise>span{transform:translateY(0)}
+
+.open .deck{font-size:clamp(1.12rem,2vw,1.32rem);line-height:1.58;color:var(--ink-2);
+  max-width:41ch;margin-bottom:40px}
+.open .deck b{font-weight:600;color:var(--ink)}
+
+/* ── The single call to action. One per page, so it can afford presence. ── */
+.act{position:relative;display:inline-flex;align-items:center;gap:16px;
+  padding:20px 24px 20px 34px;border-radius:var(--r-md);min-height:64px;
+  font-family:var(--body);font-size:17.5px;font-weight:600;letter-spacing:-0.005em;
+  color:#fff;text-decoration:none;overflow:hidden;isolation:isolate;
+  /* Top stop is darker than clay-400: at that lightness white text fell to
+     4.04:1. This floor keeps every band of the gradient above AA. */
+  background:linear-gradient(180deg,#EA650F 0%,#DF5A06 52%,#CF4F00 100%);
+  /* A lit top edge and a warm cast beneath: the button sits on the paper. */
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),
+             inset 0 -1px 0 rgba(0,0,0,.14),
+             0 1px 2px rgba(93,41,18,.20),
+             0 10px 26px -8px rgba(93,41,18,.42);
+  transition:transform 420ms var(--ease-spring),box-shadow 420ms var(--ease-out),
+             filter 300ms var(--ease-out)}
+.act:hover{color:#fff;filter:saturate(1.06) brightness(1.03);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.28),
+             inset 0 -1px 0 rgba(0,0,0,.14),
+             0 2px 4px rgba(93,41,18,.22),
+             0 20px 44px -12px rgba(93,41,18,.52)}
+.act:active{transform:translateY(1px) scale(.994)}
+
+/* A slow sheen crosses the face on hover. */
+.act::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(105deg,transparent 32%,rgba(255,255,255,.20) 48%,transparent 64%);
+  transform:translateX(-120%);transition:transform 900ms var(--ease-out)}
+.act:hover::before{transform:translateX(120%)}
+
+/* The arrow rides in its own chip, which opens as you approach. */
+.act .chip{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;
+  background:rgba(255,255,255,.16);flex:none;
+  transition:background 320ms var(--ease-out),transform 420ms var(--ease-spring)}
+.act:hover .chip{background:rgba(255,255,255,.26);transform:translateX(3px)}
+.act svg{transition:transform 420ms var(--ease-spring)}
+.act:hover svg{transform:translateX(2px)}
+.act:focus-visible{outline:2.5px solid var(--clay-600);outline-offset:4px}
+
+.act-note{font-size:15px;color:var(--ink-3);margin-top:18px}
+
+/* ── Stat row. Three plain numbers, hairline-separated. ── */
+.stats{display:grid;gap:0;border-top:1px solid var(--sand-300);
+  border-bottom:1px solid var(--sand-300);margin-top:56px}
+@media(min-width:720px){.stats{grid-template-columns:repeat(3,1fr)}}
+.stat{padding:22px 0}
+@media(min-width:720px){
+  .stat{padding:24px 28px;border-left:1px solid var(--sand-300)}
+  .stat:first-child{padding-left:0;border-left:0}
+}
+@media(max-width:719px){.stat + .stat{border-top:1px solid var(--sand-300)}}
+.stat b{display:block;font-family:var(--display);font-weight:550;
+  font-size:clamp(1.5rem,3vw,2rem);letter-spacing:-0.024em;margin-bottom:4px}
+.stat span{font-size:14.5px;color:var(--ink-3)}
+
+/* ── Bands ── */
+.band{display:grid;grid-template-columns:1fr;gap:22px;padding:80px 0}
+@media(min-width:920px){.band{grid-template-columns:var(--margin-col) minmax(0,1fr);
+  gap:var(--margin-gap);padding:104px 0}}
+/* Sections read as panels resting on the page rather than full-width stripes.
+   Inset is kept small so the text column never shifts at any width. */
+.tinted{position:relative;background:var(--sand-200);border-radius:var(--r-lg);
+  margin-inline:20px}
+@media(max-width:760px){.tinted{margin-inline:10px;border-radius:var(--r-md)}}
+
+/* The notch is masked out of the panel itself, so there is no disc sitting on
+   the seam and no colour to keep in sync: the panel simply has a bite taken
+   out of its top edge, antialiased by the compositor. */
+.tinted{
+  -webkit-mask-image:radial-gradient(circle 26px at 50% 0,
+    transparent 0 25px,#000 26.5px);
+          mask-image:radial-gradient(circle 26px at 50% 0,
+    transparent 0 25px,#000 26.5px);
+  -webkit-mask-size:100% 100%;mask-size:100% 100%;
+  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
+
+.notch{position:relative;z-index:5;height:0;display:flex;justify-content:center;
+  pointer-events:none}
+.notch i{position:absolute;top:-14px;width:28px;height:28px;
+  display:grid;place-items:center;color:var(--ink-3)}
+.notch svg{width:15px;height:15px;animation:nudge 2.8s var(--ease-out) infinite}
+@keyframes nudge{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(3px)}}
+
+
+h2{font-size:clamp(1.72rem,3.5vw,2.5rem);line-height:1.1;max-width:19ch;margin-bottom:26px}
+.lede{font-size:1.06rem;color:var(--ink-2)}
+
+/* ── Steps ── */
+.steps{display:grid;gap:36px}
+@media(min-width:840px){.steps{grid-template-columns:repeat(3,1fr);gap:40px}}
+.step{position:relative;padding:20px 16px 18px;margin:0 -16px;border-radius:var(--r-md);
+  transition:background var(--t-mid) var(--ease-out),transform var(--t-mid) var(--ease-out)}
+.step::before{content:'';position:absolute;top:0;left:16px;right:16px;height:2px;
+  background:var(--sand-400);transform:scaleX(0);transform-origin:left;
+  transition:transform 800ms var(--ease-out)}
+.step[data-in="true"]::before{transform:scaleX(1)}
+.step:hover{background:var(--sand-50);transform:translateY(-3px)}
+.tinted .step:hover{background:var(--sand-100)}
+.step .n{display:block;font-family:var(--display);font-size:13px;font-weight:600;
+  color:var(--clay-500);margin-bottom:12px}
+.step h3{font-size:1.18rem;font-weight:600;margin-bottom:10px;line-height:1.22}
+.step p{font-size:.97rem;color:var(--ink-2);margin:0}
+
+/* ── 5. Deliverables that open. Named things you can look inside. ── */
+.assets{margin-top:6px}
+.asset{border-top:1px solid var(--sand-300)}
+.asset:last-child{border-bottom:1px solid var(--sand-300)}
+.asset button{all:unset;display:grid;grid-template-columns:26px 1fr 26px;gap:16px;align-items:start;
+  width:100%;box-sizing:border-box;cursor:pointer;padding:28px 18px;margin:0 -18px;
+  width:calc(100% + 36px);border-radius:var(--r-md);
+  transition:background var(--t-mid) var(--ease-out)}
+@media(min-width:780px){.asset button{grid-template-columns:26px 224px minmax(0,1fr) 26px;gap:14px 22px}}
+.asset button:hover{background:var(--clay-wash)}
+.asset button:focus-visible{outline:2.5px solid var(--clay-500);outline-offset:-2px}
+.asset .nm{font-family:var(--display);font-size:1.28rem;font-weight:600;letter-spacing:-0.018em;
+  transition:transform var(--t-mid) var(--ease-spring)}
+.asset button:hover .nm{transform:translateX(6px)}
+.asset .sm{color:var(--ink-2);font-size:1.02rem}
+@media(max-width:779px){.asset .sm{display:none}}
+.asset .sign{position:relative;width:20px;height:20px;justify-self:end;margin-top:6px}
+.asset .sign::before,.asset .sign::after{content:'';position:absolute;background:var(--clay-500);
+  border-radius:1px;transition:transform var(--t-mid) var(--ease-spring)}
+.asset .sign::before{left:0;right:0;top:9px;height:2px}
+.asset .sign::after{top:0;bottom:0;left:9px;width:2px}
+.asset[data-open="true"] .sign::after{transform:scaleY(0)}
+.asset[data-open="true"] .sign::before{transform:rotate(180deg)}
+/* 0fr → 1fr: height animates without measuring anything. */
+.asset .more{display:grid;grid-template-rows:0fr;
+  transition:grid-template-rows 420ms var(--ease-out)}
+.asset[data-open="true"] .more{grid-template-rows:1fr}
+.asset .more>div{overflow:hidden}
+.asset .more p{padding:0 0 28px;color:var(--ink-2);font-size:1rem;max-width:58ch}
+@media(min-width:780px){.asset .more p{padding-left:280px}}
+
+/* ── 6. The statement reads itself as you scroll. ── */
+.statement{font-family:var(--display);font-size:clamp(1.7rem,4vw,2.75rem);line-height:1.14;
+  letter-spacing:-0.028em;font-weight:300;max-width:22ch;margin:0 0 26px}
+.statement w.key{font-weight:640}
+/* Unlit words sit at --ink-3, which still clears AA. The effect is a deepening,
+   not a reveal, so nothing is ever below contrast while you read it. */
+.statement w{display:inline-block;color:var(--ink-3);
+  transition:color 320ms var(--ease-out)}
+.statement w[data-lit="true"]{color:var(--ink)}
+.statement w.key[data-lit="true"]{color:var(--clay-500)}
+
+.rev{opacity:0;transform:translateY(18px);
+  transition:opacity var(--t-slow) var(--ease-out),transform var(--t-slow) var(--ease-out)}
+.rev[data-in="true"]{opacity:1;transform:none}
+
+.close{padding:104px 0 118px}
+@media(max-width:760px){.close{padding:72px 0 84px}}
+.close h2{max-width:20ch;margin-bottom:20px}
+.colo{padding:22px 0 44px;border-top:1px solid var(--sand-300);display:flex;
+  justify-content:space-between;gap:16px;font-size:13px;color:var(--ink-3);flex-wrap:wrap}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms !important;transition-duration:.001ms !important}
+  .rev{opacity:1;transform:none}
+  .rise>span{transform:none}
+  .bloom i{animation:none}
+  .lamp{display:none}
+  .statement w{color:var(--ink)}
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   Components introduced when the system went site-wide
+   ══════════════════════════════════════════════════════════════════════ */
+
+.skip-link{position:absolute;left:16px;top:-100px;z-index:100;background:var(--clay-500);
+  color:#fff;padding:12px 20px;border-radius:var(--r-sm);font-weight:600;
+  text-decoration:none;transition:top var(--t-slow) var(--ease-out)}
+.skip-link:focus{top:16px;color:#fff}
+
+.top .name{font-family:var(--display);font-weight:640;font-size:17px;
+  letter-spacing:-0.02em;color:var(--ink);text-decoration:none}
+.top .name em{font-style:normal;color:var(--clay-500)}
+
+/* Mobile nav: a real menu button rather than a wrapping row of links. */
+.navtoggle{display:none}
+@media(max-width:760px){
+  .top{position:sticky;flex-wrap:nowrap;padding:14px 20px;
+    align-items:center;justify-content:space-between}
+  .navtoggle{display:grid;place-content:center;gap:5px;width:44px;height:44px;
+    margin-right:-8px;border:0;background:none;cursor:pointer;padding:0}
+  .navtoggle span{display:block;width:20px;height:1.5px;background:var(--ink);
+    transition:transform var(--t-slow) var(--ease-out),opacity var(--t-slow) var(--ease-out)}
+  .navtoggle[aria-expanded="true"] span:first-child{transform:translateY(3.25px) rotate(45deg)}
+  .navtoggle[aria-expanded="true"] span:last-child{transform:translateY(-3.25px) rotate(-45deg)}
+  /* 0fr only collapses the first grid row, and there are four links, so the
+     menu sat open. max-height collapses the whole box. */
+  .top nav{position:absolute;left:0;right:0;top:100%;display:flex;
+    flex-direction:column;gap:0;background:var(--sand-100);
+    border-bottom:1px solid transparent;padding:0 20px;
+    max-height:0;overflow:hidden;
+    transition:max-height 320ms var(--ease-out),
+               padding 320ms var(--ease-out),
+               border-color 320ms var(--ease-out)}
+  .top[data-open="true"] nav{max-height:70vh;padding:6px 20px 18px;
+    border-bottom-color:var(--sand-300)}
+  .top nav a{min-height:52px;display:flex;align-items:center;font-size:17px;
+    border-bottom:1px solid var(--sand-300)}
+  .top nav a:last-child{border-bottom:0}
+  .top nav a::after{display:none}
+}
+
+/* Doubts */
+.doubts{display:grid;gap:18px}
+.doubt{padding:22px 24px;background:var(--sand-50);border:1px solid var(--sand-300);
+  border-radius:var(--r-md)}
+@media(min-width:800px){.doubt{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);
+  gap:28px;align-items:start}}
+.doubt .q{margin:0;font-size:1.02rem;color:var(--ink);font-weight:500}
+.doubt .a{margin:8px 0 0;color:var(--ink-2)}
+@media(min-width:800px){.doubt .a{margin:0}}
+
+/* Three-up */
+.grid3{display:grid;gap:26px}
+@media(min-width:820px){.grid3{grid-template-columns:repeat(3,1fr);gap:34px}}
+.grid3 h3{font-size:1.1rem;font-weight:640;margin-bottom:8px;line-height:1.25}
+.grid3 p{color:var(--ink-2);font-size:.97rem}
+
+/* Fit lists */
+.fit{display:grid;gap:18px}
+@media(min-width:820px){.fit{grid-template-columns:repeat(2,1fr);gap:24px}}
+.fit__col{padding:24px;border:1px solid var(--sand-300);border-radius:var(--r-md);
+  background:var(--sand-50)}
+.fit__col.no{background:transparent}
+.fit__title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1.8px;
+  margin:0 0 16px;color:var(--clay-500)}
+.fit__title.no{color:var(--ink-3)}
+.checklist{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.checklist li{position:relative;padding-left:26px;color:var(--ink-2);margin:0;max-width:none}
+.checklist li::before{content:'';position:absolute;left:2px;top:.55em;width:9px;height:9px;
+  border-radius:50%;background:var(--clay-mark)}
+.checklist.cross li::before{background:none;border:1.5px solid var(--sand-500);
+  width:8px;height:8px;top:.6em}
+
+/* Pricing stairs */
+.stairs{display:grid;gap:18px}
+@media(min-width:900px){.stairs{grid-template-columns:repeat(3,1fr);align-items:end}}
+.stair{padding:24px;border:1px solid var(--sand-300);border-radius:var(--r-md);
+  background:var(--sand-50)}
+@media(min-width:900px){.stair:nth-child(2){margin-bottom:22px}.stair:nth-child(3){margin-bottom:44px}}
+.stair .k{font-size:11px;text-transform:uppercase;letter-spacing:2.4px;font-weight:500;
+  color:var(--clay-500);margin:0 0 10px}
+.stair h3{font-size:1.14rem;font-weight:640;margin-bottom:8px}
+.stair p{font-size:.95rem;color:var(--ink-2);margin:0}
+
+/* Probe lists */
+.probe{list-style:none;margin:22px 0 0;padding:0 0 0 22px;display:grid;gap:16px;
+  border-left:2px solid var(--sand-400)}
+.probe li{margin:0;color:var(--ink-2);max-width:62ch}
+.probe strong{display:block;color:var(--ink);font-weight:640;margin-bottom:2px}
+
+/* Verdicts */
+.verdicts{display:grid;gap:14px;margin-top:24px}
+@media(min-width:760px){.verdicts{grid-template-columns:repeat(3,1fr)}}
+.verdict{padding:20px;border:1px solid var(--sand-300);border-radius:var(--r-md);
+  background:var(--sand-50)}
+.verdict .k{font-size:11px;text-transform:uppercase;letter-spacing:2.4px;font-weight:600;
+  margin:0 0 10px}
+.verdict.go .k{color:var(--clay-500)}
+.verdict.adjust .k{color:#7A5A1B}
+.verdict.stop .k{color:var(--ink-3)}
+.verdict p{font-size:.94rem;color:var(--ink-2);margin:0}
+
+/* Case notes */
+.case{display:grid;gap:22px;margin-top:26px}
+@media(min-width:820px){.case{grid-template-columns:repeat(2,1fr)}
+  .case .case__block:first-child{grid-column:1 / -1}}
+.case__block h4{font-size:11px;text-transform:uppercase;letter-spacing:2.2px;font-weight:600;
+  color:var(--ink-3);margin:0 0 8px}
+.case__block.change h4{color:var(--clay-500)}
+.case__block.kill h4{color:#7A5A1B}
+.case__block p{color:var(--ink-2);margin:0;font-size:.97rem}
+
+/* FAQ */
+.faq{border-top:1px solid var(--sand-300);margin-top:8px}
+.faq details{border-bottom:1px solid var(--sand-300)}
+.faq summary{display:flex;align-items:center;justify-content:space-between;gap:18px;
+  min-height:64px;padding:16px 0;cursor:pointer;list-style:none;
+  font-size:1.05rem;font-weight:500;color:var(--ink)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--clay-500)}
+.faq summary i{position:relative;flex:none;width:14px;height:14px}
+.faq summary i::before,.faq summary i::after{content:'';position:absolute;background:var(--clay-500);
+  transition:transform var(--t-slow) var(--ease-out)}
+.faq summary i::before{left:0;right:0;top:6px;height:1.5px}
+.faq summary i::after{top:0;bottom:0;left:6px;width:1.5px}
+.faq details[open] summary i::after{transform:scaleY(0)}
+.faq details>div{padding:0 0 20px}
+.faq details p{color:var(--ink-2);max-width:62ch}
+
+/* Quiet inline link with arrow */
+.quiet{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:.98rem;
+  text-decoration:none;color:var(--clay-500)}
+.quiet svg{transition:transform var(--t-slow) var(--ease-out)}
+.quiet:hover svg{transform:translateX(3px)}
+
+/* Start page */
+.startgrid{display:grid;gap:34px}
+@media(min-width:900px){.startgrid{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:48px;align-items:start}}
+.form-card{background:var(--sand-50);border:1px solid var(--sand-300);
+  border-radius:var(--r-lg);padding:24px}
+@media(min-width:600px){.form-card{padding:32px}}
+.field{margin-bottom:20px}
+.field__label{display:block;font-size:14.5px;font-weight:600;margin-bottom:8px}
+.req{color:var(--clay-500)}
+.field__hint{display:block;font-size:14px;color:var(--ink-3);margin-bottom:10px}
+.input,.textarea{width:100%;min-height:52px;padding:14px;font-family:var(--body);
+  font-size:16px;color:var(--ink);background:var(--sand-100);
+  border:1px solid var(--sand-400);border-radius:var(--r-sm);
+  transition:border-color var(--t-slow) var(--ease-out),box-shadow var(--t-slow) var(--ease-out)}
+.input:focus,.textarea:focus{outline:none;border-color:var(--clay-500);
+  box-shadow:0 0 0 3px rgba(204,85,0,.16)}
+.textarea{min-height:118px;resize:vertical;line-height:1.6}
+.field__error{display:none;margin:8px 0 0;font-size:14px;font-weight:500;color:#A32014}
+.field[data-invalid="true"] .input,.field[data-invalid="true"] .textarea{border-color:#A32014}
+.field[data-invalid="true"] .field__error{display:block}
+.form-status{display:none;padding:22px;border-radius:var(--r-md);background:var(--clay-wash);
+  border:1px solid var(--sand-400)}
+.form-status[data-visible="true"]{display:block}
+.form-status h3{font-size:1.1rem;font-weight:640;margin-bottom:8px}
+.form-status p{color:var(--ink-2);font-size:.97rem;margin:0}
+.fineprint{font-size:13.5px;color:var(--ink-3);margin-top:16px}
+.act--block{width:100%;justify-content:center;padding-left:26px;padding-right:26px}
+
+/* Footer */
+.colo{position:relative;z-index:2;display:flex;justify-content:space-between;gap:16px;
+  flex-wrap:wrap;max-width:1140px;margin:0 auto;padding:24px 26px 44px;
+  font-size:13.5px;color:var(--ink-3);border-top:1px solid var(--sand-300)}
+.colo a{color:var(--ink-3);text-decoration:none}
+.colo a:hover{color:var(--clay-500)}
+
+/* Everything above the texture layers. The rail is deliberately excluded:
+   it must keep position:fixed and its own z-index. */
+main,.colo{position:relative;z-index:2}
+.top{position:sticky;z-index:30}
+
+/* ── Mobile refinements ────────────────────────────────────────────────
+   11px tracked labels are legible on a desktop monitor and not on a phone;
+   tap targets under 44px fail on touch. Both are fixed at the source rather
+   than per component. */
+.margin b,.verdict .k,.stair .k,.case__block h4,.fit__title,.caption i{font-size:12px}
+@media(max-width:760px){
+  .margin b,.verdict .k,.stair .k,.case__block h4,.fit__title{font-size:12.5px;
+    letter-spacing:2px}
+  body{font-size:17px}
+  .margin{font-size:14px;margin-bottom:4px}
+  .band{padding:56px 0}
+  .doc{padding:0 20px}
+  .colo{padding:20px 20px 40px}
+}
+
+/* Tap targets. Scoped below the rail breakpoint, or this re-shows the
+   masthead wordmark that the rail rule deliberately hides. */
+@media(max-width:1179px){
+  .top .name{display:inline-flex;align-items:center;min-height:44px}
+}
+.quiet{min-height:44px}
+.faq summary{min-height:56px}
+
+/* Marginalia reads as a section label on small screens, not a right rail. */
+@media(max-width:919px){
+  .margin{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 10px;
+    padding-bottom:14px;border-bottom:1px solid var(--sand-300);margin-bottom:22px}
+  .margin b{margin-bottom:0}
+  .margin em{margin-top:0;padding-top:0;border-top:0;flex-basis:100%;
+    color:var(--ink-3);opacity:.9}
+}
+
+/* Hero type is a touch tighter on a phone so the deck still lands above the fold. */
+@media(max-width:520px){
+  .open h1{font-size:clamp(2.15rem,10vw,2.9rem)}
+  .stats{margin-top:38px}
+  .stat b{font-size:1.5rem}
+}

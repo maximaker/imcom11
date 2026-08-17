@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sample C · Warm human counsel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FBF6EC; --cream-2:#F3EADA; --ink:#241E19; --ink-2:#5A5047; --ink-3:#8A7F72;
+  --rule:#E0D4C0; --clay:#B4471F; --clay-soft:#F6E7DE;
+  --display:'Instrument Serif',Georgia,serif; --body:'Work Sans',system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--body);
+  font-size:18px;line-height:1.72;font-weight:400;-webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0;font-family:var(--display);font-weight:400;letter-spacing:-0.01em;line-height:1.08}
+p{margin:0 0 1.15em;max-width:58ch}
+p:last-child{margin-bottom:0}
+a{color:var(--clay)}
+
+.wrap{max-width:980px;margin:0 auto;padding:0 26px}
+.narrow{max-width:660px}
+section{padding:80px 0}
+@media(min-width:800px){section{padding:104px 0}}
+
+/* Header stays quiet: this page is a conversation, not a storefront. */
+.top{display:flex;justify-content:space-between;align-items:center;gap:20px;
+  padding:26px 0;flex-wrap:wrap}
+.top .name{font-family:var(--display);font-size:22px}
+.top nav{display:flex;gap:24px}
+.top nav a{font-size:15px;color:var(--ink-2);text-decoration:none}
+.top nav a:hover{color:var(--clay);text-decoration:underline;text-underline-offset:4px}
+
+.hero{padding:56px 0 84px}
+.hero h1{font-size:clamp(2.9rem,7vw,5rem);line-height:1.0;max-width:15ch;margin-bottom:32px}
+.hero h1 em{font-style:italic;color:var(--clay)}
+.hero .sub{font-size:clamp(1.15rem,2.1vw,1.4rem);line-height:1.6;color:var(--ink-2);
+  max-width:38ch;margin-bottom:38px;font-weight:300}
+
+.btn{display:inline-block;background:var(--clay);color:#fff;text-decoration:none;
+  font-size:17px;font-weight:500;padding:17px 34px;border-radius:2px;
+  transition:background 180ms ease,transform 180ms ease}
+.btn:hover{background:#96360F;color:#fff}
+.btn:active{transform:translateY(1px)}
+.note{font-size:15px;color:var(--ink-3);margin-top:16px}
+
+h2{font-size:clamp(1.9rem,4vw,2.9rem);max-width:18ch;margin-bottom:26px}
+.lede{font-size:1.1rem;color:var(--ink-2);font-weight:300}
+
+.warm{background:var(--cream-2)}
+
+/* Portrait slot. Deliberately an empty frame, not a stock face. */
+.meet{display:grid;gap:36px;align-items:center}
+@media(min-width:820px){.meet{grid-template-columns:260px minmax(0,1fr);gap:56px}}
+.portrait{aspect-ratio:4/5;border:1px solid var(--rule);background:var(--cream);
+  display:grid;place-items:center;text-align:center;padding:20px}
+.portrait span{font-size:13px;color:var(--ink-3);line-height:1.5}
+
+/* Steps as a numbered conversation, generous and unboxed. */
+.walk{display:grid;gap:46px;counter-reset:s}
+.walk .item{display:grid;gap:14px}
+@media(min-width:760px){.walk .item{grid-template-columns:64px minmax(0,1fr);gap:28px;align-items:start}}
+.walk .num{font-family:var(--display);font-size:2.6rem;line-height:0.9;color:var(--clay);opacity:0.85}
+.walk h3{font-family:var(--display);font-size:1.55rem;margin-bottom:8px}
+.walk p{color:var(--ink-2);font-weight:300}
+
+/* Assets: hanging headings, hairline separators, no cards. */
+.owns{display:grid;gap:0;margin-top:12px}
+.own{padding:30px 0;border-top:1px solid var(--rule)}
+.own:last-child{border-bottom:1px solid var(--rule)}
+.own h3{font-size:1.5rem;margin-bottom:10px}
+.own p{color:var(--ink-2);font-weight:300}
+
+/* The promise, set as a spoken line. */
+.promise{font-family:var(--display);font-size:clamp(1.9rem,4.6vw,3.1rem);line-height:1.16;
+  max-width:20ch;margin-bottom:28px}
+.promise em{font-style:italic;color:var(--clay)}
+
+.end{text-align:center}
+.end h2{margin:0 auto 20px}
+.end .lede{margin:0 auto 34px;max-width:44ch}
+.colo{padding:26px 0 46px;border-top:1px solid var(--rule);display:flex;
+  justify-content:space-between;gap:16px;font-size:13px;color:var(--ink-3);flex-wrap:wrap}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <span class="name">The discovery sprint</span>
+    <nav><a href="#">How it works</a><a href="#">What I've built</a><a href="#">About</a><a href="#">Start</a></nav>
+  </header>
+
+  <section class="hero">
+    <h1>Know whether your idea is worth building, <em>before</em> you spend months finding out.</h1>
+    <p class="sub">In two weeks you own a working version of the one part that matters most, evidence from real users, and a straight answer: keep going, or stop.</p>
+    <a class="btn" href="#">Book a free intro call</a>
+    <p class="note">A short, no-pressure call about your idea and whether this fits.</p>
+  </section>
+</div>
+
+<section class="warm">
+  <div class="wrap narrow">
+    <h2>The scary part isn't building it. It's building the wrong thing.</h2>
+    <p class="lede">Your idea has probably been sitting in a doc for a while. Not because you're lazy, but because committing real money to it feels like a leap and you can't quite see where you'd land.</p>
+    <p class="lede">That instinct is right. Most ideas don't fail because nobody could build them. They fail because someone spent months and a pile of money before finding out that nobody wanted the thing that got built.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2 style="margin-bottom:52px">Three steps, start to answer</h2>
+    <div class="walk">
+      <div class="item">
+        <div class="num">1</div>
+        <div>
+          <h3>Find out if it's worth building.</h3>
+          <p>You bring the idea. Together you find the one thing that has to be true for it to work, and you get a straight call. If there's a fatal flaw, you find it here, cheaply, before anything gets built.</p>
+        </div>
+      </div>
+      <div class="item">
+        <div class="num">2</div>
+        <div>
+          <h3>Get a real version of the part that matters.</h3>
+          <p>One working flow that real people can actually use. Not a mockup. Something you can put in front of users.</p>
+        </div>
+      </div>
+      <div class="item">
+        <div class="num">3</div>
+        <div>
+          <h3>Test it and decide, with a clear rule.</h3>
+          <p>Before testing, you agree what result means go, what means adjust, what means stop. Then you decide with evidence instead of a gut feeling.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="warm">
+  <div class="wrap">
+    <h2>What you own at the end</h2>
+    <div class="owns">
+      <div class="own"><h3>The working build</h3><p>One real flow through the core of your idea, usable on a phone. Yours to keep, extend, or hand to any team.</p></div>
+      <div class="own"><h3>The decision brief</h3><p>What the riskiest assumption was, what the testing showed, and a straight call: go, adjust, or stop.</p></div>
+      <div class="own"><h3>The testing playbook</h3><p>How to find the right people, how to run sessions so politeness doesn't pollute the results, and what to watch for. Reusable on every idea you have after this one.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="meet">
+      <div class="portrait"><span>Portrait goes here.<br>A real photograph of you,<br>looking at the camera.</span></div>
+      <div>
+        <p class="promise">The goal is that you <em>don't need me</em> again.</p>
+        <p class="lede">Plenty of people in this business are quietly hoping you'll stay. This works the other way round. When the sprint ends, you can read your own evidence, make your own call, and either move forward or walk away without another opinion.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="warm end">
+  <div class="wrap">
+    <h2>Let's find out if your idea is real</h2>
+    <p class="lede">One call. You talk through your idea, you hear honestly whether this fits. No pitch, no pressure.</p>
+    <a class="btn" href="#">Book a free intro call</a>
+  </div>
+</section>
+
+<div class="wrap"><div class="colo"><span>Sample C · Warm human counsel</span><span>Instrument Serif · Work Sans</span></div></div>
+</body>
+</html>
