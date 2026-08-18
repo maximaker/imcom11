@@ -39,6 +39,9 @@
      ring they harden into is the ring the brand actually uses, gap included. */
   var CX = 16, CY = 16, R = 11, GAP = 34, N = 14;
   var SOLID = 360 - 2 * GAP;
+  /* A dot is exactly as thick as the ring it becomes, so the two fuse instead of
+     the stroke stepping up in weight as it draws through them. */
+  var DOT_R = parseFloat(getComputedStyle(ring).strokeWidth) / 2 || 1.55;
   var NS = 'http://www.w3.org/2000/svg';
 
   /* Deterministic, so the swarm is identical on every first load. */
@@ -49,11 +52,14 @@
 
   var dots = [], els = [];
   for (var i = 0; i < N; i++) {
-    var seat = (GAP + (SOLID * (i + 0.5)) / N) * Math.PI / 180;
+    /* Seated across the solid arc end to end, not inset half a step at each end:
+       the circle they form has to reach exactly as far as the stroke that
+       replaces it, or the ring visibly grows past where the dots were. */
+    var seat = (GAP + (SOLID * i) / (N - 1)) * Math.PI / 180;
     var away = (rnd(i, 1) * 360) * Math.PI / 180;
     var far = 21 + rnd(i, 2) * 15;
     var el = document.createElementNS(NS, 'circle');
-    el.setAttribute('r', 1.15);
+    el.setAttribute('r', DOT_R);
     el.setAttribute('cx', CX);
     el.setAttribute('cy', CY);
     swarm.appendChild(el);
@@ -64,23 +70,39 @@
     });
   }
 
-  /* Both strokes are drawn by hand: DrawSVG is a Club plugin, and dashoffset on
-     a measured length does the same job with nothing added. */
+  /* Both strokes are drawn by hand: DrawSVG is a Club plugin, and a dash offset
+     on a measured length does the same job with nothing added.
+     The offsets are written straight to style rather than tweened as properties,
+     because GSAP renders a dash offset as a whole number of px whatever
+     autoRound is set to, and these lengths are fractional. The lead is 11.2 units
+     long; hidden at 11 it left 0.2 units of stroke with a round cap on it painted
+     from the very first frame, as a stray dot beside the first idea. Rounding also
+     made the drawing itself step, a unit at a time. So a plain object is tweened
+     from 1 to 0 and the offsets are painted from it. */
   var ringLen = ring.getTotalLength(), leadLen = lead.getTotalLength();
-  gsap.set(ring, { strokeDasharray: ringLen, strokeDashoffset: ringLen });
-  gsap.set(lead, { strokeDasharray: leadLen, strokeDashoffset: leadLen });
+  var draw = { ring: 1, lead: 1 };            /* 1 hidden, 0 fully drawn */
+  function paint() {
+    ring.style.strokeDashoffset = (ringLen * draw.ring) + 'px';
+    lead.style.strokeDashoffset = (leadLen * draw.lead) + 'px';
+  }
+  ring.style.strokeDasharray = ringLen + 'px';
+  lead.style.strokeDasharray = leadLen + 'px';
+  paint();
   /* The core keeps its final radius and is scaled instead. Animating the r
      attribute re-rasterises the SVG every frame; a transform does not, and the
-     dot is small enough that the two look identical. */
-  var SEED = 1.5 / 3.7;
+     dot is small enough that the two look identical.
+     The seed is the size of one of the others, because that is what it is: at
+     this point it is an idea among ideas, and only later the one that was kept. */
+  var SEED = DOT_R / 3.7;
   gsap.set(core, { attr: { r: 3.7 }, fill: INK, scale: 0, transformOrigin: '16px 16px' });
   gsap.set(els, { fill: SAND, opacity: 0, scale: 0.6, transformOrigin: 'center' });
   els.forEach(function (el, n) { gsap.set(el, { x: dots[n].from.x, y: dots[n].from.y }); });
 
-  /* Where the mark has to end up. Measured now, while the layout is settled: the
-     masthead copy is hidden but still laid out, so its box is the real one. Held
-     as plain numbers rather than measured mid-flight, so skipping ahead cannot
-     land the mark somewhere else. */
+  /* Where the mark has to end up. The masthead copy is hidden but still laid out,
+     so its box is the real one. Measured through a function rather than frozen
+     into numbers, because the move does not begin until 4.3 seconds in: a window
+     resized or a phone turned before then would otherwise land the mark where the
+     masthead used to be. */
   function landing() {
     var target = document.querySelector('.top .name .mark');
     if (!target) return null;
@@ -92,8 +114,7 @@
       y: (t.top + t.height / 2) - (s.top + s.height / 2)
     };
   }
-  var end = landing();
-  if (!end) { release(); return; }
+  if (!landing()) { release(); return; }   /* nothing to aim at, so do not try */
 
   /* The page comes in behind the mark, in reading order. Held at opacity 0 by
      inline styles before the CSS gate lifts, or every piece would appear at once
@@ -158,26 +179,41 @@
       stagger: { each: 0.03, from: 'random' }
     }, 0.95)
 
-    /* The circle hardens: the stroke draws steadily through them as they give
-       way, so there is no frame where the ring is neither dots nor line. */
-    .to(ring, { strokeDashoffset: 0, duration: 0.95, ease: 'power1.inOut' }, 2.15)
+    /* The circle hardens, and only once it is a circle. The converge above runs
+       0.95 to 2.49 once its stagger is counted, so starting the stroke any earlier
+       draws ring where dots have not arrived yet. The dots then give way under it,
+       finishing together with it, so there is no frame where the ring is neither
+       dots nor line. */
+    .to(draw, { ring: 0, duration: 0.95, ease: 'power1.inOut', onUpdate: paint }, 2.50)
     .to(els, { opacity: 0, scale: 0.4, duration: 0.45,
-      stagger: { each: 0.025 } }, 2.40)
+      stagger: { each: 0.025 } }, 2.65)
 
-    /* One dot remains, lit, and the line runs out through the gap. */
-    .to(core, { scale: 1, fill: CLAY, duration: 0.55, ease: 'back.out(1.4)' }, 2.95)
-    .to(lead, { strokeDashoffset: 0, duration: 0.45 }, 3.10)
+    /* One dot remains, lit, and the line runs out through the gap as it closes. */
+    .to(core, { scale: 1, fill: CLAY, duration: 0.55, ease: 'back.out(1.4)' }, 3.30)
+    .to(draw, { lead: 0, duration: 0.45, onUpdate: paint }, 3.45)
 
     /* A beat with the finished mark, before it goes anywhere. */
 
     /* Then its place on the page, at the size it lives at. The ground goes first,
        so the mark is already travelling across the real page. */
-    .to(stage, { backgroundColor: 'rgba(0,0,0,0)', duration: 0.50 }, 3.90)
-    .to(svg, { scale: end.scale, x: end.x, y: end.y,
-      duration: 1.05, ease: 'power2.inOut' }, 3.90)
+    .to(stage, { backgroundColor: 'rgba(0,0,0,0)', duration: 0.50 }, 4.30)
+    /* Read when the tween begins, not when it was written. */
+    .to(svg, { scale: function () { return landing().scale; },
+      x: function () { return landing().x; },
+      y: function () { return landing().y; },
+      duration: 1.05, ease: 'power2.inOut' }, 4.30)
 
     /* Only once it has landed. */
-    .add(bringPageIn, 4.95);
+    .add(bringPageIn, 5.35);
+
+  /* And if the window changes size mid-flight, the same values are read again. */
+  function retarget() { tl.getChildren(false, true, false).forEach(function (t) {
+    if (t.targets && t.targets()[0] === svg) t.invalidate();
+  }); }
+  addEventListener('resize', retarget, { passive: true });
+  tl.eventCallback('onComplete', function () {
+    removeEventListener('resize', retarget);
+  });
 
   /* A first-time visitor who starts scrolling or tapping has told you enough.
      Sped up rather than cut, so the mark still lands where it belongs. */

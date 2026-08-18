@@ -51,10 +51,33 @@ Four things are load-bearing:
   the end of the stagger hands them back to that rule and they disappear, the
   button among them.
 
-It runs unhurried: 4.95s to the mark landing, another 1.5s for the page, with
-every phase overlapping the next so nothing starts from a standstill. The core's
-size is a transform rather than its `r` attribute, which keeps it off the
-rasteriser. Any scroll, tap or keypress speeds the timeline up rather than
+It runs unhurried: 5.35s to the mark landing, another 1.5s for the page, with
+every phase overlapping the next so nothing starts from a standstill.
+
+Four things keep it honest to the mark it is drawing, and all four are worth
+leaving alone:
+
+- **A dot is exactly as thick as the ring it becomes.** `DOT_R` is read from the
+  ring's own stroke width, so the stroke fuses with the dots instead of stepping
+  up in weight as it draws through them.
+- **The dots span the solid arc end to end,** 34 to 326 degrees, seated at
+  `GAP + SOLID * i / (N - 1)`. Inset by half a step, as an even distribution would
+  be, the ring visibly grows past where the dots were.
+- **Nothing solidifies before the circle exists.** The converge runs to 2.49s once
+  its stagger is counted, so the stroke starts at 2.50s. Earlier and it draws ring
+  where dots have not arrived.
+- **Dash offsets are written to `style` by hand, not tweened as properties.** GSAP
+  renders a dash offset as a whole number of px regardless of `autoRound`, and
+  these lengths are fractional: the lead is 11.2 units long, and hidden at 11 it
+  painted 0.2 units of stroke with a round cap on it from the first frame, as a
+  stray dot beside the first idea. Rounding also made the drawing step a unit at a
+  time.
+
+The core's size is a transform rather than its `r` attribute, which keeps it off
+the rasteriser, and the seed is the size of one of the other dots, because that is
+what it is at that point. The landing is read through a function rather than
+frozen into numbers, so a window resized or a phone turned during the five seconds
+before the move still lands the mark on the masthead. Any scroll, tap or keypress speeds the timeline up rather than
 jumping it, so the mark still lands where it belongs.
 
 Reduced motion skips it. So does a missing GSAP, a failed timeline, and a three
