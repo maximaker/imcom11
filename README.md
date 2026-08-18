@@ -202,6 +202,31 @@ button's box, becomes a pill, and hands over: the ride goes to opacity 0 and
 270x74 in the same place. What the reader ends up with is a link inside a section,
 not something floating.
 
+The motion is a spring, integrated in fixed sub-steps, and three details in it are
+load-bearing:
+
+- **The vertical target is a point in the document, not in the viewport.** A target
+  fixed to the middle of the screen never moves while the page scrolls, so there is
+  nothing to trail and the dot is simply glued there. Chasing a point in the page
+  means a fast scroll leaves it behind and it slides back when the reader stops.
+  Measured: 67px behind on a gentle read, 234px at 1400px/s, back to 0 within 400ms
+  of stopping.
+- **The lag is bounded at a third of the screen.** A spring's steady lag is
+  proportional to speed, so a hard flick would have thrown it most of a screen away,
+  which stops reading as keeping up and starts reading as lost. Capped at 306px on a
+  900px screen, and the cap only bites above about 1800px/s.
+- **The aim is blended, and blended against the end of the page.** Measuring how high
+  the closing button has climbed does not work, because the footer sits below it and
+  at full scroll it only reaches mid-screen: the blend saturated at 0.44 and the
+  handover never fired.
+
+Nothing in CSS transitions the shape, and the label and chip are written from the
+shape's actual width every frame: a CSS transition on top of a spring is two
+integrators arguing over one number, and a class flip with its own duration is a
+second clock on one movement. The corner radius is derived from the shape rather
+than animated, half the height while it is round and 16 once it is a pill, so it can
+never disagree with the outline it is rounding.
+
 The loop stops when it has caught up and nothing is moving, because the page should
 be still when the reader is; scrolling wakes it. It reverses if you scroll back up.
 Below 1180px, and under reduced motion, none of it is built and the closing button

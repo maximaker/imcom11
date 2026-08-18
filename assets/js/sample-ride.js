@@ -1,8 +1,8 @@
 /* Sample only: the call to action rides the rail.
    Past the hero it compacts to a dot on the rule and travels with the reader,
-   lagging a little so it reads as keeping up rather than being pinned. Through the
+   trailing a little so it reads as keeping up rather than being pinned. Through the
    last third it grows into the disc the foot of the rail used to carry, and as the
-   closing section arrives it flies to that section's own button, becomes it, and
+   closing section arrives it crosses to that section's own button, becomes it, and
    hands over. The button it hands to is the real one in the markup, so what the
    reader ends up with is a link in a section rather than something floating.
 
@@ -19,13 +19,10 @@
   var target = closing && closing.querySelector('.act');
   if (!rail || !hero || !closing || !target) return;
 
-  /* Without the ride the closing button is just visible, which is what the
-     stylesheet does by default. Nothing else to do. */
   if (still.matches || !wide.matches) { closing.setAttribute('data-handed', 'true'); return; }
 
   var DOT = 16, DISC = 58;
-  var GROW_FROM = 0.55, GROW_TO = 0.86;   /* where the dot becomes the disc */
-  var EASE = 0.09;                        /* how far it closes the gap each frame */
+  var GROW_FROM = 0.50, GROW_TO = 0.88;   /* where the dot becomes the disc */
 
   var ride = document.createElement('a');
   ride.className = 'ride';
@@ -38,106 +35,183 @@
     '<path d="M5 12h13m0 0l-5.5-5.5M18 12l-5.5 5.5" stroke="currentColor" ' +
     'stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
   document.body.appendChild(ride);
-
-  /* Where it is, versus where it wants to be. The gap between the two is the whole
-     effect: it is never quite where the scroll has got to. */
-  var at = { x: 0, y: 0, w: DOT, h: DOT, r: 999 };
-  var to = { x: 0, y: 0, w: DOT, h: DOT, r: 999 };
-  var started = false, handed = false, running = false, shown = false;
+  var label = ride.querySelector('.ride__label');
+  var chip = ride.querySelector('.ride__chip');
 
   function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
   function smooth(t) { t = clamp(t); return t * t * (3 - 2 * t); }
   function lerp(a, b, t) { return a + (b - a) * t; }
 
+  /* A spring, not a fixed fraction of the remaining distance per frame. Two
+     reasons. A fraction is tied to frame rate, so the same page moves twice as
+     fast on a 120Hz screen as on a 60Hz one, which is the difference between
+     trailing and merely being slow. And a spring carries velocity, so the thing
+     arrives with momentum and settles, instead of only ever decelerating: that is
+     most of what reads as natural rather than mechanical. */
+  function Spring(value, stiffness, damping) {
+    this.v = value; this.vel = 0; this.k = stiffness; this.c = damping;
+  }
+  Spring.prototype.to = function (goal, dt) {
+    this.vel += ((goal - this.v) * this.k - this.vel * this.c) * dt;
+    this.v += this.vel * dt;
+    return this.v;
+  };
+  Spring.prototype.set = function (v) { this.v = v; this.vel = 0; };
+  Spring.prototype.rests = function (goal) {
+    return Math.abs(goal - this.v) < 0.3 && Math.abs(this.vel) < 2;
+  };
+
+  /* The vertical spring works in document coordinates, not viewport ones, and the
+     scroll is subtracted at paint time. This is the whole effect: a target fixed to
+     the middle of the screen never moves while the page scrolls, so there is
+     nothing to trail and the dot is simply glued there. Chasing a point in the
+     document instead means a fast scroll leaves it behind, drifting up the screen,
+     and it slides back to the middle when the reader stops.
+     Softest on that axis, since that is the one the reader is moving along. A shade under critical damping (2*sqrt(k) is
+     about 19), which gives it the smallest overshoot rather than a bounce.
+     Stiffer across, because the crossing to the closing button is a decision
+     rather than a drift. Size critically damped, because a pill that overshoots
+     its own width wobbles. */
+  var sy = new Spring(0, 90, 16);
+  var sx = new Spring(0, 190, 27);
+  var sw = new Spring(DOT, 130, 23);
+  var sh = new Spring(DOT, 130, 23);
+
+  var started = false, handed = false, running = false, shown = false, last = 0;
+  var goal = { x: 0, y: 0, w: DOT, h: DOT, land: 0 };
+
   function aim() {
-    var y = window.scrollY;
     var h = document.documentElement.scrollHeight - window.innerHeight;
-    var p = h > 0 ? clamp(y / h) : 0;
+    var p = h > 0 ? clamp(window.scrollY / h) : 0;
 
     /* The hero keeps its own button, so the ride only exists once the hero has
-       gone. 120px of overlap, or it appears while the button it replaces is still
-       on screen. */
+       gone, with 120px of overlap or it appears while that button is still up. */
     started = hero.getBoundingClientRect().bottom < -120;
 
     var slot = target.getBoundingClientRect();
-    /* The endgame begins when the closing button's own place comes into view. From
-       here it is aiming at that, not at the rail. */
-    var landing = slot.top < window.innerHeight - 80;
+    var railBox = rail.getBoundingClientRect();
 
-    if (landing) {
-      to.x = slot.left + slot.width / 2;
-      to.y = slot.top + slot.height / 2;
-      to.w = slot.width; to.h = slot.height;
-      to.r = 16;
-    } else {
-      var r = rail.getBoundingClientRect();
-      to.x = r.left + r.width / 2;
-      /* Level with the middle of the screen, which is where the reader is looking. */
-      to.y = window.innerHeight * 0.5;
-      to.w = to.h = lerp(DOT, DISC, smooth((p - GROW_FROM) / (GROW_TO - GROW_FROM)));
-      to.r = 999;
-    }
-    return landing;
+    /* How near the end of the page the reader is, as a fraction over the last three
+       quarters of a screen. The aim is blended across this rather than switched at a
+       threshold: a target that jumps makes even a good spring look like it changed
+       its mind.
+       Measured against the end of the page and not against how high the closing
+       button has climbed, which was the first attempt and does not work: the footer
+       sits below that button, so at full scroll it only ever reaches the middle of
+       the screen. The blend saturated at 0.44, the ride stopped half-crossed and
+       half-grown, and the handover never fired. */
+    var scroll = window.scrollY;
+    var left = Math.max(0, h - scroll);
+    goal.land = smooth((window.innerHeight * 0.75 - left) / (window.innerHeight * 0.75));
+
+    /* Linear in scroll, and left to the spring to smooth. Two eases stacked on one
+       value is what makes growth feel mushy. */
+    var size = lerp(DOT, DISC, clamp((p - GROW_FROM) / (GROW_TO - GROW_FROM)));
+
+    goal.x = lerp(railBox.left + railBox.width / 2, slot.left + slot.width / 2, goal.land);
+    /* Both ends of this are document positions: the point in the page level with
+       the middle of the screen, and the closing button's own place in the page. */
+    goal.y = lerp(scroll + window.innerHeight * 0.5,
+                  scroll + slot.top + slot.height / 2, goal.land);
+    goal.w = lerp(size, slot.width, goal.land);
+    goal.h = lerp(size, slot.height, goal.land);
   }
 
   function paint() {
-    ride.style.width = at.w + 'px';
-    ride.style.height = at.h + 'px';
-    ride.style.borderRadius = at.r + 'px';
-    ride.style.transform = 'translate(' + (at.x - at.w / 2) + 'px,' +
-                                          (at.y - at.h / 2) + 'px)';
-    /* The label only exists once there is room for it, so it never clips. */
-    ride.setAttribute('data-form', at.w > 150 ? 'pill' : at.w > 34 ? 'disc' : 'dot');
+    var w = sw.v, h = sh.v;
+    ride.style.width = w + 'px';
+    ride.style.height = h + 'px';
+    /* The corner follows the shape rather than being animated on its own: a circle
+       is half its height, a pill is 16, and everything between is where it is. So
+       the radius can never disagree with the outline it is rounding. */
+    ride.style.borderRadius = lerp(h / 2, 16, clamp((w / Math.max(h, 1) - 1) / 2)) + 'px';
+    /* Document space back to the screen. Where it has got to, minus where the page
+       has got to, is how far behind it is. */
+    ride.style.transform = 'translate(' + (sx.v - w / 2) + 'px,' +
+                                          (sy.v - window.scrollY - h / 2) + 'px)';
+
+    /* Label and chip are driven off the width itself, not off a class flip with its
+       own transition. Two clocks on one movement is the other thing that reads as
+       synthetic: the label used to arrive on its own schedule while the shape was
+       still opening. */
+    var lab = clamp((w - 148) / 76);
+    label.style.opacity = lab;
+    label.style.maxWidth = (lab * 210) + 'px';
+    label.style.marginLeft = (lab * 22) + 'px';
+    label.style.marginRight = (lab * 10) + 'px';
+    chip.style.opacity = clamp((w - 26) / 18);
+    ride.setAttribute('data-form', lab > 0.5 ? 'pill' : w > 34 ? 'disc' : 'dot');
   }
 
-  function frame() {
-    var landing = aim();
+  function frame(now) {
+    /* Real elapsed time, clamped: a backgrounded tab or one long frame would
+       otherwise hand the spring a step it cannot integrate and throw it. */
+    var dt = last ? Math.min((now - last) / 1000, 1 / 30) : 1 / 60;
+    last = now;
+
+    aim();
 
     if (!started) {
-      /* Back in the hero: put it away and stop, rather than easing it up the page. */
       if (shown) { shown = false; ride.setAttribute('data-in', 'false'); }
-      at.x = to.x; at.y = to.y; at.w = at.h = DOT; at.r = 999;
+      sx.set(goal.x); sy.set(goal.y); sw.set(DOT); sh.set(DOT);
       paint();
       running = false;
       return;
     }
     if (!shown) {
       shown = true;
-      at.x = to.x; at.y = to.y;          /* arrive where it belongs, then ease */
+      sx.set(goal.x); sy.set(goal.y);      /* arrive in place, then trail */
       ride.setAttribute('data-in', 'true');
     }
 
-    at.x = lerp(at.x, to.x, EASE);
-    at.y = lerp(at.y, to.y, EASE);
-    at.w = lerp(at.w, to.w, EASE);
-    at.h = lerp(at.h, to.h, EASE);
-    at.r = lerp(at.r, to.r, EASE);
+    /* Integrated in fixed sub-steps rather than one step per frame. The spring is
+       solved by plain Euler, whose error grows with the step, so a 60Hz screen and a
+       120Hz screen were landing about 6% apart on the same scroll. Sub-stepping puts
+       both on the same trajectory whatever the display does. */
+    var step = 1 / 120, n = Math.max(1, Math.ceil(dt / step)), sub = dt / n;
+    for (var i = 0; i < n; i++) {
+      sx.to(goal.x, sub); sy.to(goal.y, sub);
+      sw.to(goal.w, sub); sh.to(goal.h, sub);
+    }
+
+    /* A ceiling on how far behind it is allowed to fall. The spring's steady lag is
+       proportional to scroll speed, so a gentle read leaves it 70px back and a hard
+       flick would throw it most of a screen away, which stops reading as keeping up
+       and starts reading as lost. Bounded at a third of the screen, and only while
+       it is still on the rail: during the crossing the target is the button, and it
+       is allowed to take as long as it takes. */
+    if (goal.land < 0.01) {
+      var maxLag = window.innerHeight * 0.34;
+      var rest = window.scrollY + window.innerHeight * 0.5;
+      if (rest - sy.v > maxLag) { sy.v = rest - maxLag; }
+      else if (sy.v - rest > maxLag) { sy.v = rest + maxLag; }
+    }
     paint();
 
     /* Handed over once it is sitting on the real button: same place, same size, so
        the swap is not visible. */
-    var close = landing &&
-      Math.abs(at.x - to.x) < 1.5 && Math.abs(at.y - to.y) < 1.5 &&
-      Math.abs(at.w - to.w) < 2;
-    if (close && !handed) {
+    var arrived = goal.land > 0.99 &&
+      sx.rests(goal.x) && sy.rests(goal.y) && sw.rests(goal.w);
+    if (arrived && !handed) {
       handed = true;
       closing.setAttribute('data-handed', 'true');
       ride.setAttribute('data-in', 'false');
-    } else if (handed && !landing) {
+    } else if (handed && goal.land < 0.9) {
       handed = false;
       closing.setAttribute('data-handed', 'false');
       ride.setAttribute('data-in', 'true');
     }
 
-    /* Still catching up? Keep going. Settled and nothing moving? Stop, because the
-       page should be still when the reader is. */
-    var moving = Math.abs(at.x - to.x) > 0.2 || Math.abs(at.y - to.y) > 0.2 ||
-                 Math.abs(at.w - to.w) > 0.2;
-    running = moving && !handed;
+    /* Still catching up? Keep going. Settled, and the reader is still? Stop: the
+       page has no idle motion in it anywhere else either. */
+    running = !handed && !(sx.rests(goal.x) && sy.rests(goal.y) &&
+                           sw.rests(goal.w) && sh.rests(goal.h));
     if (running) requestAnimationFrame(frame);
   }
 
-  function wake() { if (!running) { running = true; requestAnimationFrame(frame); } }
+  function wake() {
+    if (!running) { running = true; last = 0; requestAnimationFrame(frame); }
+  }
   addEventListener('scroll', wake, { passive: true });
   addEventListener('resize', wake, { passive: true });
   wake();

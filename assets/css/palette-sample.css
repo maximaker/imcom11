@@ -275,7 +275,10 @@
    every frame. This is only the look: a dot on the rule that grows into the disc
    the foot of the rail used to carry, and finally into the closing section's own
    button, which it then hands over to. */
-.ride{position:fixed;left:0;top:0;z-index:45;
+/* width, height, border-radius and transform are all set per frame by the script,
+   so nothing here may transition them: a CSS transition on top of a spring is two
+   integrators fighting over the same number. Only the fade in and out is CSS. */
+.ride{position:fixed;left:0;top:0;z-index:45;will-change:transform,width,height;
   display:grid;grid-auto-flow:column;place-items:center;gap:0;
   box-sizing:border-box;overflow:hidden;white-space:nowrap;text-decoration:none;
   color:#fff;font-family:var(--body);font-size:17.5px;font-weight:600;
@@ -289,18 +292,14 @@
 .ride:hover{filter:saturate(1.06) brightness(1.03)}
 .ride:focus-visible{outline:2.5px solid var(--clay-600);outline-offset:4px}
 
-/* The label is only in the layout once the shape is wide enough to hold it, so it
-   never clips as the dot grows. */
-.ride__label{max-width:0;opacity:0;overflow:hidden;
-  transition:max-width 220ms var(--ease-out),opacity 160ms var(--ease-out),
-             margin 220ms var(--ease-out)}
-.ride[data-form="pill"] .ride__label{max-width:220px;opacity:1;margin:0 12px 0 22px}
+/* No transitions on the label or the chip. Their width, opacity and margins are
+   written every frame from the shape's actual width, so they cannot arrive on a
+   schedule of their own while the outline is still opening. Two clocks on one
+   movement is most of what makes an animation read as synthetic. */
+.ride__label{max-width:0;opacity:0;overflow:hidden}
 .ride__chip{display:grid;place-items:center;flex:none;
-  width:34px;height:34px;border-radius:50%;
-  opacity:0;transition:opacity 200ms var(--ease-out)}
-.ride[data-form="disc"] .ride__chip,
-.ride[data-form="pill"] .ride__chip{opacity:1}
-.ride[data-form="pill"] .ride__chip{background:rgba(255,255,255,.26);margin-right:12px}
+  width:34px;height:34px;border-radius:50%;opacity:0}
+.ride[data-form="pill"] .ride__chip{background:rgba(255,255,255,.26)}
 
 @media(min-width:1180px){
   /* The ride supersedes the disc that sat at the foot of the rail: same object,
