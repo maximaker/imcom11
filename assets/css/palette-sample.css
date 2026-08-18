@@ -133,7 +133,21 @@
      round off its centre, and one halo colour serves every band: it is the page
      paper, and the rail crosses the tinted panels rather than sitting inside
      them. */
-  .spine .bead{background:var(--sand-300);
+  /* One colour per state, and no ring. The bead was two-tone in both states -- a
+     2px border in one value around a centre in another -- and once the lit centre
+     came off the accent while the border did not, a passed bead read as an orange
+     ring around an olive core inside a paper halo. Three colours on a 13px dot,
+     repeated down the page, which is more construction than a section marker needs
+     and reads as an object rather than a mark.
+     So it is a flat disc: one value, and the halo, which is not a third colour but
+     the page's own paper doing the one job the dot cannot do without -- breaking a
+     1px rule cleanly whichever way the two rasterise.
+     Smaller with it. Dropping the border makes the whole 13px solid where only the
+     inner 9px was before, so a plain 13px disc would have weighed more than the
+     ring it replaced; 10px keeps it lighter than what it replaces rather than
+     heavier. */
+  .spine .bead{width:10px;height:10px;border:0;
+    background:var(--sand-300);
     box-shadow:0 0 0 4px var(--sand-100)}
   /* A deepening rather than a change of colour, which is how the statement's words
      light too: the bead stays the same material and simply darkens once the fill
