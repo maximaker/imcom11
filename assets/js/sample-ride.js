@@ -29,7 +29,19 @@
   }
 
   var DOT = 16, DISC = 58;
-  var GROW_FROM = 0.50, GROW_TO = 0.88;   /* where the dot becomes the disc */
+  var GROW_BACK = 2;   /* sections before the last one that the regrowth starts in */
+
+  /* Where the growth begins is a place on the page, not a fraction of its height.
+     A fraction reads differently on every page: the same 0.50 started the regrowth
+     halfway down, which on this one is six sections early, and it would move again
+     the moment a section is added. Counting back from the closing section instead
+     means it always begins the same number of sections out, whatever the page is. */
+  var pivot = null;
+  (function () {
+    var nodes = [].slice.call(document.querySelectorAll('[data-node]'));
+    var i = nodes.indexOf(closing);
+    if (i >= GROW_BACK) pivot = nodes[i - GROW_BACK];
+  })();
 
   var ride = document.createElement('a');
   ride.className = 'ride';
@@ -89,7 +101,6 @@
 
   function aim() {
     var h = document.documentElement.scrollHeight - window.innerHeight;
-    var p = h > 0 ? clamp(window.scrollY / h) : 0;
 
     var seat = start.getBoundingClientRect();
     var slot = target.getBoundingClientRect();
@@ -122,8 +133,21 @@
     goal.land = smooth((window.innerHeight * 0.75 - left) / (window.innerHeight * 0.75));
 
     /* Linear in scroll, and left to the spring to smooth. Two eases stacked on one
-       value is what makes growth feel mushy. */
-    var size = lerp(DOT, DISC, clamp((p - GROW_FROM) / (GROW_TO - GROW_FROM)));
+       value is what makes growth feel mushy.
+       It starts the moment the pivot section first comes into view and is complete
+       exactly where the crossing to the closing button begins, so the disc is at
+       full size before it has to start becoming a pill and the two movements never
+       fight. Falls back to fractions of the page if there is no section to count
+       from, which is any page whose closing section is the second one. */
+    var growFrom, growTo = h - window.innerHeight * 0.75;
+    if (pivot) {
+      growFrom = pivot.getBoundingClientRect().top + scroll - window.innerHeight;
+    } else {
+      growFrom = h * 0.50; growTo = h * 0.88;
+    }
+    var size = lerp(DOT, DISC, growTo > growFrom
+      ? clamp((scroll - growFrom) / (growTo - growFrom))
+      : (scroll >= growTo ? 1 : 0));
 
     /* Three places it can be, blended in order: the hero's button, the rail, the
        closing button. lift crosses the first pair and land the second, and the two

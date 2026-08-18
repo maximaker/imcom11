@@ -44,6 +44,19 @@ out = (out.replace("fill='%23160B02'", "fill='%23171B34'")
 # the tokens, so it follows the new palette wherever it does run.
 out = out.replace("localStorage.getItem('ofo.intro') === '1'", 'true', 1)
 
+# The travelling button is the hero's button: it compacts to the dot, rides down and
+# becomes the closing one, so the words have to survive the whole trip. They did not
+# — the ride carried "Tell me about your idea" the entire way and handed over to a
+# button reading "Book a free intro call", so the copy changed in the instant the
+# swap happened, which is the one moment the swap must be invisible. The closing
+# button takes the hero's words. Sample only, like the ride itself; the live site has
+# no travelling button and its closing copy is untouched.
+old = '<span>Book a free intro call</span>'
+new = '<span>Tell me about your idea</span>'
+assert out.count(old) == 1, out.count(old)
+out = out.replace(old, new, 1)
+print("  closing button now carries the hero's words")
+
 # The answer to each objection is revealed on hover in the sample, which leaves a
 # sighted keyboard user with no way to read it: :focus-within cannot fire on a card
 # with nothing focusable in it. A tabindex makes the card itself the focus stop, so
