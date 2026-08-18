@@ -18,11 +18,6 @@ MARK = ('<svg class="mark" viewBox="0 0 32 32" aria-hidden="true">'
 
 WORDMARK = 'one flow<em>.</em>first'
 
-NOTCH = ('<div class="notch" aria-hidden="true"><i><svg viewBox="0 0 24 24" fill="none">'
-         '<path d="M12 5v13m0 0l-5-5m5 5l5-5" stroke="currentColor" stroke-width="1.8" '
-         'stroke-linecap="round" stroke-linejoin="round"/></svg></i></div>')
-
-
 def screen(label, body):
     """A phone-sized line drawing standing in for a screenshot. Swap the whole
     <svg> for <img src="assets/img/name.png" alt="..."> when a real one exists:
@@ -49,7 +44,7 @@ def band(node, label, title, note, body, tinted=False, extra_class=""):
              f'      <div>\n{body}\n      </div>\n'
              f'    </section>')
     if tinted:
-        return (f'{NOTCH}\n<div class="tinted">\n  <div class="doc">\n'
+        return (f'<div class="tinted">\n  <div class="doc">\n'
                 f'{inner}\n  </div>\n</div>')
     return f'<div class="doc">\n{inner}\n</div>'
 

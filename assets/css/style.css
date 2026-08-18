@@ -41,6 +41,15 @@
   --margin-col:168px;   /* the marginalia column */
   --margin-gap:64px;    /* gap between it and the text column */
 
+  /* The two halves that put a margin label, its dot, and the first line of the
+     heading beside it on one invisible row. --lead-centre is half a heading's
+     first line: h2 is line-height 1.1, so half of that is .55 of its own
+     clamped size. --label-half is half a label's line, 12px at 1.62. A
+     statement-led band leads with a slightly larger face and lands ~3px off,
+     which is under a rounding error at these sizes. */
+  --lead-centre:calc(.55 * clamp(1.72rem,3.5vw,2.5rem));
+  --label-half:calc(12px * 1.62 / 2);
+
 }
 
 *,*::before,*::after{box-sizing:border-box}
@@ -114,8 +123,9 @@ a{color:var(--clay-500)}
   /* Not fixed: the disc sits at the foot of the page on the rail's line and
      scrolls away with everything else. Container is transparent. */
   .railfoot{position:relative;height:0;background:none}
+  /* Above the rail too: the disc caps the rule's foot, it is not crossed by it. */
   .railfoot a{position:absolute;bottom:8px;left:var(--rail-x,50%);
-    transform:translateX(-50%)}
+    transform:translateX(-50%);z-index:21}
 
 
   /* The disc is the rail's only furniture, and the only call to action on wide
@@ -154,12 +164,15 @@ a{color:var(--clay-500)}
 .margin{font-size:13px;line-height:1.62;color:var(--ink-3)}
 @media(min-width:920px){
   .margin{position:sticky;top:104px;align-self:start;text-align:right;
-    padding-right:2px;transition:color var(--t-mid) var(--ease-out)}
+    padding-right:2px;padding-top:calc(var(--lead-centre) - var(--label-half));
+    transition:color var(--t-mid) var(--ease-out)}
   .margin em{border-top:1px solid var(--sand-400)}
 }
 @media(min-width:1180px){
-  .margin{position:sticky}
-  .margin::after{content:'';position:absolute;top:5px;
+  /* Above the rail: the dot marks the rule, so the rule must not cross it. */
+  .margin{position:sticky;z-index:21}
+  .margin::after{content:'';position:absolute;
+    top:calc(var(--lead-centre) - 6.5px);   /* half the 9px dot plus its 2px ring */
     right:calc((var(--margin-gap) / 2) * -1 - 5px);  /* +0.5px for the rail's own width */
     width:9px;height:9px;border-radius:50%;
     background:var(--sand-100);border:2px solid var(--sand-400);
@@ -530,24 +543,6 @@ body[data-ready="true"] .rise>span{transform:translateY(0)}
   margin-inline:20px}
 @media(max-width:760px){.tinted{margin-inline:10px;border-radius:var(--r-md)}}
 
-/* The notch is masked out of the panel itself, so there is no disc sitting on
-   the seam and no colour to keep in sync: the panel simply has a bite taken
-   out of its top edge, antialiased by the compositor. */
-.tinted{
-  -webkit-mask-image:radial-gradient(circle 26px at 50% 0,
-    transparent 0 25px,#000 26.5px);
-          mask-image:radial-gradient(circle 26px at 50% 0,
-    transparent 0 25px,#000 26.5px);
-  -webkit-mask-size:100% 100%;mask-size:100% 100%;
-  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
-
-.notch{position:relative;z-index:5;height:0;display:flex;justify-content:center;
-  pointer-events:none}
-.notch i{position:absolute;top:-14px;width:28px;height:28px;
-  display:grid;place-items:center;color:var(--ink-3)}
-.notch svg{width:15px;height:15px;animation:nudge 2.8s var(--ease-out) infinite}
-@keyframes nudge{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(3px)}}
-
 
 h2{font-size:clamp(1.72rem,3.5vw,2.5rem);line-height:1.1;max-width:19ch;margin-bottom:26px}
 .lede{font-size:1.06rem;color:var(--ink-2)}
@@ -803,9 +798,16 @@ h2{font-size:clamp(1.72rem,3.5vw,2.5rem);line-height:1.1;max-width:19ch;margin-b
 .colo a{color:var(--ink-3);text-decoration:none}
 .colo a:hover{color:var(--clay-500)}
 
-/* Everything above the texture layers. The rail is deliberately excluded:
-   it must keep position:fixed and its own z-index. */
-main,.colo{position:relative;z-index:2}
+/* Everything above the texture layers. The rail is deliberately excluded: it
+   must keep position:fixed and its own z-index.
+   main takes no z-index of its own on purpose. With one it becomes a stacking
+   context, and then nothing inside it can rise above the rail at z-20, which is
+   why the rule used to draw straight through the marginalia dots and the foot
+   disc. It is positioned and later in the DOM than .surface, so it still sits
+   above the texture. (.act carries isolation:isolate, so its sheen at z-index:-1
+   stays contained either way.) */
+main{position:relative}
+.colo{position:relative;z-index:2}
 
 /* ── Mobile refinements ────────────────────────────────────────────────
    11px tracked labels are legible on a desktop monitor and not on a phone;

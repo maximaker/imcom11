@@ -86,6 +86,18 @@ HTML directly for one-off copy changes.
   overlapped both the margin label and the heading. The bar is where a brand
   mark belongs. The rail is structure, and its only furniture is the foot disc,
   because a circle can sit on a rule without cutting a rectangle out of the page.
+- A margin label, its dot on the rail, and the first line of the heading beside
+  it share one invisible row. Both offsets come from `--lead-centre` (half a
+  heading's first line, so `.55` of the h2's own clamped size) and `--label-half`,
+  which is why the alignment holds as the type scales. A statement-led band leads
+  with a slightly larger face and lands ~3px off, under a rounding error at these
+  sizes.
+- `main` deliberately carries no `z-index`. With one it becomes a stacking
+  context, and then nothing inside it can rise above the rail at `z-20`, which is
+  why the rule used to draw through the marginalia dots and the foot disc. Both
+  now sit at `z-21`. Tinted panels stay unpositioned, so the rule still passes
+  over them. `.act` has `isolation:isolate`, so its sheen at `z-index:-1` stays
+  contained either way.
 - The left rail is a progress rule headed by the logomark, carrying the call to
   action at its foot. `--spine-top` is measured in JS rather than hardcoded, or
   differing font metrics would leave a sliver or a gap, and it is resolved
