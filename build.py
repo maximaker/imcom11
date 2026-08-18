@@ -17,6 +17,7 @@ V_CSS = ver('assets/css/style.css')
 V_SITE = ver('assets/js/site.js')
 V_INTRO = ver('assets/js/intro.js')
 V_GSAP = ver('assets/js/vendor/gsap.min.js')
+V_RIDE = ver('assets/js/ride.js')
 
 NAV = [("how-it-works.html", "How it works"),
        ("what-ive-built.html", "What I've built"),
@@ -144,11 +145,22 @@ def hero(margin_html, h1, deck, extra=""):
 
 
 def shell(slug, title, desc, body, close_heading, close_body,
-          nav_slug=None, robots=None):
+          nav_slug=None, robots=None, close_cta="Book a free intro call"):
     """nav_slug lets a child page mark its parent as current. robots is for
-    pages that should stay out of search, such as the case study template."""
+    pages that should stay out of search, such as the case study template.
+
+    close_cta is the label on the closing button. It is a parameter because of the
+    travelling call to action: on a page where that runs, the button the reader ends
+    up with is the hero's button, carried down, so the two have to read the same or
+    the words change in the instant the handover is meant to be invisible. Pages
+    without a hero button keep the plainer wording, since nothing travels there."""
     here = nav_slug or slug
     robots = f'<meta name="robots" content="{robots}">\n' if robots else ''
+    # The ride is the hero's button, compacted and carried down the rail, so it is
+    # only shipped to a page that has one to start from. Asking the markup rather
+    # than keeping a list of slugs: add a hero button to a page and it rides.
+    RIDE = (f'<script src="assets/js/ride.js?v={V_RIDE}" defer></script>'
+            if 'class="hero-cta' in body else '')
     nav = "\n      ".join(
         f'<a href="{h}"{" aria-current=\"page\"" if h == here else ""}>{t}</a>'
         for h, t in NAV)
@@ -159,13 +171,13 @@ def shell(slug, title, desc, body, close_heading, close_body,
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{title}</title>
 <meta name="description" content="{desc}">
-{robots}<meta name="theme-color" content="#FEF6F0">
+{robots}<meta name="theme-color" content="#FAF3E3">
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{desc}">
 <meta property="og:type" content="website">
 <link rel="stylesheet" href="assets/css/style.css?v={V_CSS}">
 {NOSCRIPT}{GATE}
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23160B02'/><path d='M24.3 21.6A10 10 0 1 1 24.3 10.4' fill='none' stroke='%23FEF6F0' stroke-width='3' stroke-linecap='round'/><circle cx='16' cy='16' r='3.5' fill='%23CC5500'/></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23171B34'/><path d='M24.3 21.6A10 10 0 1 1 24.3 10.4' fill='none' stroke='%23FAF3E3' stroke-width='3' stroke-linecap='round'/><circle cx='16' cy='16' r='3.5' fill='%23C4522C'/></svg>">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to main content</a>
@@ -206,7 +218,7 @@ def shell(slug, title, desc, body, close_heading, close_body,
     <div>
       <h2>{close_heading}</h2>
       <p class="lede" style="margin-bottom:32px">{close_body}</p>
-      <a class="act" href="start.html" id="cta"><span>Book a free intro call</span>
+      <a class="act" href="start.html" id="cta"><span>{close_cta}</span>
         <span class="chip" aria-hidden="true">{ARROW}</span></a>
     </div>
   </section>
@@ -216,7 +228,7 @@ def shell(slug, title, desc, body, close_heading, close_body,
   <div class="doc">
   <div class="railfoot">
     <a class="railcta" href="start.html">
-      <span class="lbl">Book a free intro call</span>
+      <span class="lbl">{close_cta}</span>
       {ARROW}
     </a>
   </div>
@@ -229,6 +241,7 @@ def shell(slug, title, desc, body, close_heading, close_body,
 </footer>
 
 <script src="assets/js/site.js?v={V_SITE}" defer></script>
+{RIDE}
 </body>
 </html>
 '''
@@ -300,9 +313,9 @@ HOME = HOME_HERO + "\n\n" + band(
     "Doubts", "Two", "Said out loud", "The three things people think and rarely say.",
     '''      <h2 class="rev">You might be <strong>thinking</strong></h2>
       <div class="doubts">
-        <div class="doubt rev"><p class="q">"What if it's a bad idea and I find out too late."</p><p class="a">You find out first, before anything gets built.</p></div>
-        <div class="doubt rev"><p class="q">"I'm not technical. I won't understand what's happening."</p><p class="a">You don't need to be. You'll get it explained clearly enough to decide with confidence.</p></div>
-        <div class="doubt rev"><p class="q">"I don't want to be talked into a build I don't need."</p><p class="a">You won't be. You'll get an honest answer even when the honest answer is no.</p></div>
+        <div class="doubt rev" tabindex="0"><p class="q">"What if it's a bad idea and I find out too late."</p><p class="a">You find out first, before anything gets built.</p></div>
+        <div class="doubt rev" tabindex="0"><p class="q">"I'm not technical. I won't understand what's happening."</p><p class="a">You don't need to be. You'll get it explained clearly enough to decide with confidence.</p></div>
+        <div class="doubt rev" tabindex="0"><p class="q">"I don't want to be talked into a build I don't need."</p><p class="a">You won't be. You'll get an honest answer even when the honest answer is no.</p></div>
       </div>''') + "\n\n" + band(
     "After", "Three", "After", "The difference between hoping and being able to find out.",
     '''      <h2 class="rev">In two weeks, guessing turns into <strong>something you can test</strong></h2>
@@ -764,7 +777,8 @@ PAGES = [
     ("index.html", "Is your idea worth building? | One flow first",
      "In two weeks you own the one part that matters most, built for real, and a bar agreed before anyone sees it. Then real people tell you whether it holds.",
      HOME, "Let's find out if your idea is <strong>real</strong>",
-     "One call. You talk through your idea, you hear honestly whether this fits. No pitch, no pressure."),
+     "One call. You talk through your idea, you hear honestly whether this fits. No pitch, no pressure.",
+     {"close_cta": "Tell me about your idea"}),
     ("how-it-works.html", "How it works | One flow first",
      "Exactly what happens across the two weeks: the qualifying questions, the decision rule, the build, the brief, the playbook, and what comes after.",
      HOWITWORKS, "Ready to <strong>find out?</strong>",

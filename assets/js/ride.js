@@ -21,12 +21,20 @@
   var start = top && top.querySelector('.act');
   if (!rail || !hero || !closing || !target || !top || !start) return;
 
-  /* Nothing to ride: both real buttons simply show themselves. */
+  /* Nothing to ride: both real buttons simply show themselves. Note that the flag
+     below is never set in this case, so the stylesheet leaves the page's own call to
+     action exactly as it would have been without this script at all. */
   if (still.matches || !wide.matches) {
     top.setAttribute('data-handed', 'true');
     closing.setAttribute('data-handed', 'true');
     return;
   }
+
+  /* Past every early return, so the ride is definitely happening. Everything in the
+     stylesheet that hides a real call to action in favour of this one is gated on
+     this attribute: a page that never gets here keeps the disc at the foot of the
+     rail, which is what it had before the ride existed. */
+  document.documentElement.setAttribute('data-ride', 'on');
 
   var DOT = 16, DISC = 58;
   var GROW_BACK = 2;   /* sections before the last one that the regrowth starts in */
