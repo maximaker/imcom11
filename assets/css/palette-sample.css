@@ -251,7 +251,11 @@
 @media(max-width:799px){
   .doubt .a{margin-top:14px}
 }
-.steps{gap:44px}
+/* One variable for the gutter, because the track below has to reach across it. Set
+   as the gap as well as read by the reach, so the two cannot drift apart: the first
+   attempt hard-coded 40px from style.css and missed by 4px, which is exactly what
+   this section widened it to. */
+.steps{--step-gap:44px;gap:var(--step-gap)}
 
 /* ── The objection first, the answer on hover ──────────────────────────────
    Quoting what the reader is thinking lands harder when they read it alone for a
@@ -346,19 +350,59 @@
    "Step one" in 13px was the only thing distinguishing them. A numeral carries
    it now: large, light, in the accent, with the words kept as the label. The
    count comes from a CSS counter, so the markup stays as it is. */
+/* ── The method as a timeline ───────────────────────────────────────────────
+   Three columns of prose with a numeral on each read as three parallel facts,
+   which is the one thing these are not: they happen in an order, and the first
+   can end the project before the other two exist. Nothing in the layout said so.
+   The section becomes the page's own rail laid on its side. Each step's rule
+   extends across the gutter to meet its neighbour, so what was three separate
+   hairlines over three unequal columns is now one continuous track, and each step
+   drops a station on it. Same construction as the spine: a flat disc in the muted
+   rail tone with a halo of the paper behind it, which is what lets a 10px dot
+   interrupt a 1px line cleanly whichever way the two rasterise.
+   It draws rather than appears. Each segment already scaled in from the left when
+   its column revealed, and that is left alone -- three segments that meet, drawn
+   one after another, read as a single line being drawn across the section. The
+   station follows its own segment by 260ms, so the line arrives first and the stop
+   lands on it. */
 .steps{counter-reset:step}
 .step{counter-increment:step}
-.step .n{position:relative;min-height:38px;padding-left:52px;
+
+.step::before{height:1px;background:var(--rail-fill)}
+@media(min-width:840px){
+  /* The segment stops at its own column's edge, so it has to cover the gutter to
+     reach the next one. The last one stops there, or the track runs off the side
+     of the section with nothing to join. */
+  .step::before{right:calc(16px - var(--step-gap))}
+  .step:last-child::before{right:16px}
+}
+
+.step::after{content:'';position:absolute;top:0;left:16px;
+  width:10px;height:10px;border-radius:50%;box-sizing:border-box;
+  background:var(--rail-mark);box-shadow:0 0 0 4px var(--sand-100);
+  transform:translate(-50%,-50%) scale(0);
+  transition:transform 520ms var(--ease-spring) 260ms}
+.step[data-in="true"]::after{transform:translate(-50%,-50%) scale(1)}
+/* The band is untinted today; this keeps the halo honest if it ever is not. */
+.tinted .step::after{box-shadow:0 0 0 4px var(--sand-200)}
+
+/* The numeral hangs under its own station, and is larger for it: it is the thing
+   carrying the sequence now that the track has somewhere to put it. Left at the
+   accent deliberately -- this section is not the rail, and the numerals are the
+   one flourish in it. Note that they are a CSS counter and so invisible to a
+   screen reader, which is why the "Step one" beside them stays: that span is the
+   only accessible name the step has. */
+.step .n{position:relative;min-height:56px;padding-left:66px;
   display:flex;align-items:center}
 .step .n::before{content:counter(step);position:absolute;left:0;top:50%;
   transform:translateY(-50%);
-  font-family:var(--display);font-size:38px;font-weight:300;line-height:1;
-  letter-spacing:-.03em;color:var(--clay-mark)}
-/* The rule that already tops each step becomes its baseline, so the numeral sits
-   on the same line the eye follows across the three. */
-.step::before{height:2px}
+  font-family:var(--display);font-size:54px;font-weight:200;line-height:1;
+  letter-spacing:-.04em;color:var(--clay-mark)}
 @media(min-width:820px){
-  .step{padding-top:24px}
+  .step{padding-top:34px}
+}
+@media (prefers-reduced-motion:reduce){
+  .step::after{transition:none;transform:translate(-50%,-50%) scale(1)}
 }
 
 
