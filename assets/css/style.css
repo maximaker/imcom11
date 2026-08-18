@@ -407,6 +407,49 @@ body[data-ready="true"] .rise>span{transform:translateY(0)}
 .proof .kill b{display:block;font-size:11px;text-transform:uppercase;letter-spacing:2.2px;
   font-weight:600;color:var(--clay-500);margin-bottom:5px}
 
+/* ── Case-study screens. Line drawings in the same idiom as the deliverable
+   glyphs, so proof shots read as part of the page rather than pasted onto it.
+   A real screenshot can replace the <svg> with an <img> and needs no new CSS. ── */
+.shots{display:grid;gap:24px;margin-top:32px}
+@media(min-width:700px){.shots{grid-template-columns:repeat(3,1fr);gap:22px}}
+.shot{margin:0}
+.shot .screen,.shot img{display:block;width:100%;height:auto}
+.shot img{border-radius:var(--r-md);border:1px solid var(--sand-300)}
+.shot figcaption{margin-top:14px;font-size:13px;line-height:1.55;color:var(--ink-3)}
+@media(max-width:699px){
+  /* One screen at a time on a phone, at a size worth looking at. */
+  .shot .screen,.shot img{max-width:300px;margin-inline:auto}
+  .shot figcaption{max-width:300px;margin-inline:auto}
+}
+.screen{overflow:visible}
+.screen .fr{fill:var(--sand-50);stroke:var(--sand-400);stroke-width:1.5}
+.screen text{font-family:var(--body);fill:var(--ink)}
+.screen .t{font-size:21px;font-weight:640;letter-spacing:-0.02em}
+.screen .s{font-size:13.5px;fill:var(--ink-3)}
+.screen .mid{text-anchor:middle}
+.screen .d{font-size:11.5px;font-weight:600;letter-spacing:2.2px;fill:var(--ink-3)}
+.screen .pill{fill:none;stroke:var(--sand-400);stroke-width:1.2}
+.screen .pill.on{fill:var(--clay-wash);stroke:var(--clay-mark)}
+.screen .p{font-size:14.5px;text-anchor:middle}
+.screen .card{fill:none;stroke:var(--sand-400);stroke-width:1.2}
+.screen .rule{stroke:var(--sand-400);stroke-width:1.5;fill:none;stroke-linecap:round}
+.screen .btn{fill:var(--clay-500)}
+.screen .btnt{font-size:15.5px;font-weight:600;fill:var(--sand-50);text-anchor:middle}
+.screen .ring{fill:var(--clay-wash);stroke:none}
+.screen .tick{stroke:var(--clay-mark);stroke-width:2.6;fill:none;
+  stroke-linecap:round;stroke-linejoin:round}
+
+/* ── Session quotes. What someone said, and the moment they said it. The
+   attribution earns the quote; without it a quote is just a claim. ── */
+.quotes{display:grid;gap:18px;margin-top:30px}
+@media(min-width:820px){.quotes{grid-template-columns:repeat(2,1fr);gap:22px}}
+.quote{margin:0;padding:24px 26px;background:var(--sand-50);
+  border:1px solid var(--sand-300);border-radius:var(--r-md)}
+.quote p{margin:0;font-family:var(--display);font-size:1.14rem;line-height:1.44;
+  letter-spacing:-0.012em;color:var(--ink);text-wrap:pretty}
+.quote footer{margin-top:15px;padding-top:13px;border-top:1px solid var(--sand-300);
+  font-size:12.5px;line-height:1.5;color:var(--ink-3)}
+
 /* ── Bands ── */
 .band{display:grid;grid-template-columns:1fr;gap:22px;padding:80px 0}
 @media(min-width:920px){.band{grid-template-columns:var(--margin-col) minmax(0,1fr);

@@ -16,6 +16,20 @@ NOTCH = ('<div class="notch" aria-hidden="true"><i><svg viewBox="0 0 24 24" fill
          'stroke-linecap="round" stroke-linejoin="round"/></svg></i></div>')
 
 
+def screen(label, body):
+    """A phone-sized line drawing standing in for a screenshot. Swap the whole
+    <svg> for <img src="assets/img/name.png" alt="..."> when a real one exists:
+    .shot styles the figure, not the medium."""
+    return (f'<svg class="screen" viewBox="0 0 320 600" role="img" aria-label="{label}">'
+            f'<rect class="fr" x="8" y="8" width="304" height="584" rx="30"/>'
+            f'{body}</svg>')
+
+
+def shot(caption, label, body):
+    return (f'        <figure class="shot rev">{screen(label, body)}'
+            f'<figcaption>{caption}</figcaption></figure>')
+
+
 def margin(label, title, note):
     return (f'<div class="margin"><b>{label}</b>{title}'
             f'<em>{note}</em></div>')
@@ -39,9 +53,14 @@ def hero(margin_html, h1, deck, extra=""):
             f'    </div>\n  </section>\n</div>')
 
 
-def shell(slug, title, desc, body, close_heading, close_body):
+def shell(slug, title, desc, body, close_heading, close_body,
+          nav_slug=None, robots=None):
+    """nav_slug lets a child page mark its parent as current. robots is for
+    pages that should stay out of search, such as the case study template."""
+    here = nav_slug or slug
+    robots = f'<meta name="robots" content="{robots}">\n' if robots else ''
     nav = "\n      ".join(
-        f'<a href="{h}"{" aria-current=\"page\"" if h == slug else ""}>{t}</a>'
+        f'<a href="{h}"{" aria-current=\"page\"" if h == here else ""}>{t}</a>'
         for h, t in NAV)
     return f'''<!doctype html>
 <html lang="en">
@@ -50,7 +69,7 @@ def shell(slug, title, desc, body, close_heading, close_body):
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{title}</title>
 <meta name="description" content="{desc}">
-<meta name="theme-color" content="#FEF6F0">
+{robots}<meta name="theme-color" content="#FEF6F0">
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{desc}">
 <meta property="og:type" content="website">
@@ -236,7 +255,7 @@ HOME = HOME_HERO + "\n\n" + band(
       <p class="lede rev" style="margin-top:26px">That last one matters more than it looks. It's the part that keeps working long after the two weeks end.</p>''',
     tinted=True) + "\n\n" + band(
     "Terms", "Six", "Terms", "The unusual promise.",
-    '''      <p class="statement" id="statement">You should never be stuck with me.</p>
+    '''      <p class="statement" id="statement" data-key="never stuck with me.">You should never be stuck with me.</p>
       <p class="lede rev">Plenty of people in this business are quietly hoping you'll stay. This works the other way round. When the two weeks end, you can read your own evidence, make your own call, and move forward or walk away without another opinion. You keep the build, the brief, and the method.</p>
       <p class="lede rev">People do come back. Usually with the next idea, or the same one pointed somewhere new. That's a choice, not a dependency, and it's the only kind worth having.</p>''') + "\n\n" + band(
     "Trust", "Seven", "Why trust it", "Competence, stated as what you get.",
@@ -253,9 +272,9 @@ HOME = HOME_HERO + "\n\n" + band(
       <p class="lede">These were built for real ideas, with the same tools and the same speed you'd get. What matters isn't that they work. It's what got cut to make them work.</p>
       <div class="proofs">
         <div class="proof rev">
-          <h3>[APP NAME 1]</h3>
-          <p>[ONE LINE]</p>
-          <p class="kill"><b>What I'd kill</b>[WHAT I'D KILL]</p>
+          <h3>Slate</h3>
+          <p>A booking page for independent physios who ran everything through WhatsApp.</p>
+          <p class="kill"><b>What I'd kill</b>The week view. Four days of work, used by two of ten people.</p>
         </div>
         <div class="proof rev">
           <h3>[APP NAME 2]</h3>
@@ -378,11 +397,21 @@ BUILT = '''<div class="doc">
       <div class="margin"><b>Proof</b>What I've built<em>Chosen for judgment shown, not technical polish.</em></div>
       <div>
         <h1><span class="rise"><span>Real apps, built</span></span><span class="rise"><span><strong>for real ideas.</strong></span></span></h1>
-        <p class="deck rev">Here's the thinking behind them, not just the screenshots. The change and kill notes are the point.</p>
+        <p class="deck rev">Here's the thinking behind them, not just the screenshots. The change and kill notes are the point, and the first one is written out in full.</p>
       </div>
     </div>
   </section>
-</div>''' + "\n\n" + "\n\n".join(
+</div>''' + "\n\n" + band(
+    "App 01", "App 01", "Slate", "Booking for independent physios. An adjust, not a go. A worked example: the numbers are illustrative.",
+    '''      <h2 class="rev">Slate</h2>
+      <p class="lede">A booking page for independent physios who ran everything through WhatsApp.</p>
+      <div class="case rev">
+        <div class="case__block"><h4>The problem it solves</h4><p>Around sixty regulars, a phone that never stopped, and a Sunday evening spent copying appointments into a paper diary. The alternative was answering the same message forty times a week.</p></div>
+        <div class="case__block change"><h4>What I'd change if this were a paid product</h4><p>Make the confirmation the product. Nine of ten people booked unaided, and seven then messaged to check it had worked. The reply is the thing they wanted; the calendar was scaffolding.</p></div>
+        <div class="case__block kill"><h4>What I'd kill</h4><p>The week view. Four days of work, used by two of ten people. It survived because it looks like the thing a booking tool is supposed to have.</p></div>
+      </div>
+      <p class="rev" style="margin-top:32px"><a class="quiet" href="case-slate.html">Read the full case note ''' + ARROW + '''</a></p>''',
+    tinted=True) + "\n\n" + "\n\n".join(
     band(f"App {i:02d}", f"App {i:02d}", "[App name]", "[One line you'd say to a friend.]",
          f'''      <h2 class="rev">[App name]</h2>
       <p class="lede">[One line: what it is, said the way you'd say it to a friend.]</p>
@@ -391,8 +420,8 @@ BUILT = '''<div class="doc">
         <div class="case__block change"><h4>What I'd change if this were a paid product</h4><p>[The one structural change that would make people pay, not the polish list.]</p></div>
         <div class="case__block kill"><h4>What I'd kill</h4><p>[The feature that was fun to build and earns nothing. Say why it survived as long as it did.]</p></div>
       </div>''',
-         tinted=(i % 2 == 1))
-    for i in (1, 2, 3)) + "\n\n" + band(
+         tinted=(i % 2 == 0))
+    for i in (2, 3)) + "\n\n" + band(
     "Pattern", "Then", "The pattern", "The building is the easy half now.",
     '''      <h2 class="rev">Nine apps, and the <strong>same lesson each time</strong></h2>
       <p class="lede">Every one of these got built fast, with the same tools and the same speed you'd get. And in every one, the interesting decision was not what to add. It was what to leave out.</p>
@@ -492,6 +521,146 @@ START = '''<div class="doc">
   </section>
 </div>'''
 
+# ────────────────────── worked case study (template) ──────────────────────
+# Structure, order, and prose are the reusable part. The session counts and the
+# two quotes are illustrative. Before this page goes public: replace those, drop
+# the note in the hero margin, and remove robots=noindex from its PAGES entry.
+#
+# The three screens are line drawings standing in for screenshots. To use real
+# ones, swap a screen(...) call for an <img>: .shot styles the figure, not the
+# medium. No photograph is used anywhere on the site, on purpose.
+
+S_TIMES = ('<text class="t" x="34" y="66">This week</text>'
+           '<text class="s" x="34" y="90">Pick a time. That is the whole thing.</text>'
+           '<text class="d" x="34" y="142">TUE 14</text>'
+           '<rect class="pill" x="34" y="154" width="80" height="36" rx="18"/><text class="p" x="74" y="177">09:00</text>'
+           '<rect class="pill" x="122" y="154" width="80" height="36" rx="18"/><text class="p" x="162" y="177">11:30</text>'
+           '<rect class="pill" x="210" y="154" width="76" height="36" rx="18"/><text class="p" x="248" y="177">16:00</text>'
+           '<text class="d" x="34" y="230">WED 15</text>'
+           '<rect class="pill on" x="34" y="242" width="80" height="36" rx="18"/><text class="p" x="74" y="265">08:30</text>'
+           '<rect class="pill" x="122" y="242" width="80" height="36" rx="18"/><text class="p" x="162" y="265">13:00</text>'
+           '<text class="d" x="34" y="318">THU 16</text>'
+           '<rect class="pill" x="34" y="330" width="80" height="36" rx="18"/><text class="p" x="74" y="353">10:00</text>'
+           '<rect class="pill" x="122" y="330" width="80" height="36" rx="18"/><text class="p" x="162" y="353">15:30</text>'
+           '<rect class="pill" x="210" y="330" width="76" height="36" rx="18"/><text class="p" x="248" y="353">17:00</text>'
+           '<path class="rule" d="M34 406h252"/>'
+           '<text class="s" x="34" y="436">Nothing else on this screen.</text>')
+
+S_CONFIRM = ('<text class="t" x="34" y="66">Wednesday, 8:30</text>'
+             '<text class="s" x="34" y="90">45 minutes. Same room as last time.</text>'
+             '<rect class="card" x="34" y="120" width="252" height="120" rx="14"/>'
+             '<path class="rule" d="M58 156h140M58 182h96M58 208h120"/>'
+             '<rect class="btn" x="34" y="272" width="252" height="54" rx="14"/>'
+             '<text class="btnt" x="160" y="305">Book it</text>'
+             '<text class="s" x="34" y="360">No account. No card. No password.</text>')
+
+S_REPLY = ('<circle class="ring" cx="160" cy="152" r="38"/>'
+           '<path class="tick" d="M146 152l11 11 21-24"/>'
+           '<text class="t mid" x="160" y="238">You are in.</text>'
+           '<text class="s mid" x="160" y="266">Wednesday, 8:30.</text>'
+           '<rect class="card" x="34" y="306" width="252" height="88" rx="14"/>'
+           '<path class="rule" d="M58 340h150M58 366h104"/>'
+           '<text class="s" x="34" y="430">This screen is where the idea broke.</text>')
+
+CASE_SHOTS = (
+    shot("Pick a time. Three days, a handful of slots, nothing else competing for attention.",
+         "The times screen: three days, each offering a few bookable slots", S_TIMES) + "\n" +
+    shot("Confirm. No account, no card, no password, because none of those were the question.",
+         "The confirm screen: the chosen appointment and a single button", S_CONFIRM) + "\n" +
+    shot("Confirmed. Seven of ten people read this screen and went to message anyway.",
+         "The confirmation screen: a tick, the appointment, and a quiet receipt", S_REPLY))
+
+CASE = '''<div class="doc">
+  <section class="open">
+    <div class="inner">
+      <div class="margin"><b>Case study</b>Slate<em>A worked example. Numbers and quotes are illustrative until a real one lands.</em></div>
+      <div>
+        <h1><span class="rise"><span>Booking was never</span></span><span class="rise"><span><strong>the problem.</strong></span></span></h1>
+        <p class="deck rev">Slate was going to be a booking page for independent physios. Ten sessions said the calendar was the easy part, and the thing people wanted was a reply. Here is the whole trail, including what got killed.</p>
+      </div>
+    </div>
+  </section>
+</div>''' + "\n\n" + band(
+    "The idea", "One", "The idea", "A clear brief is still a guess about which part hurts.",
+    '''      <h2 class="rev">The idea, <strong>in one line</strong></h2>
+      <p class="lede">A booking tool for independent physios who currently run everything through WhatsApp.</p>
+      <p class="lede">The physio who described it had around sixty regulars, a phone that never stopped, and a Sunday evening spent copying appointments into a paper diary. She wanted what the big clinics have: a booking page, a calendar, confirmations that send themselves.</p>
+      <p class="lede">That is a clear brief. It is also a guess about which part hurts.</p>''',
+    tinted=True) + "\n\n" + band(
+    "The bet", "Two", "The risky part", "The exciting part and the risky part are rarely the same part.",
+    '''      <p class="statement" id="statement" data-key="book themselves">People would rather book themselves than ask.</p>
+      <p class="lede rev">The exciting part was the calendar. The risky part was six words further down the brief: "so she stops answering messages." Everything else depended on sixty regulars choosing a form over a thread, and nobody had ever asked them to.</p>
+      <p class="lede rev">Three things were ruled out as not the risk, on purpose:</p>
+      <ul class="probe">
+        <li><strong>Taking payment.</strong> Everyone already paid in the room. Adding cards would have tested a problem nobody had.</li>
+        <li><strong>More than one practitioner.</strong> A real constraint one day, an excuse to build a calendar system now.</li>
+        <li><strong>Insurance codes.</strong> Fiddly, visible, and irrelevant to whether anyone books at all.</li>
+      </ul>''') + "\n\n" + band(
+    "The rule", "Three", "The decision rule", "Written on day two, while the idea was still flattering.",
+    '''      <h2 class="rev">Agreed <strong>before any testing</strong></h2>
+      <p class="lede">Three sentences, written down before there was anything to look at, so the bar could not move later.</p>
+      <div class="verdicts">
+        <div class="verdict go rev"><p class="k">Go</p><p>Six of ten regulars book their next appointment through the page unaided, and nobody messages afterwards to check it worked.</p></div>
+        <div class="verdict adjust rev"><p class="k">Adjust</p><p>They book, then message anyway. The booking works and something else is missing.</p></div>
+        <div class="verdict stop rev"><p class="k">Stop</p><p>They open the page, close it, and go back to WhatsApp. Booking was never the friction.</p></div>
+      </div>''',
+    tinted=True) + "\n\n" + band(
+    "The flow", "Four", "The one flow", "Three screens. Everything else deliberately absent.",
+    '''      <h2 class="rev">One flow, <strong>made real</strong></h2>
+      <p class="lede">See this week, pick a time, done. Usable on a phone, in ninety seconds, by someone standing in a hallway.</p>
+      <div class="shots">
+''' + CASE_SHOTS + '''
+      </div>
+      <p class="lede rev" style="margin-top:36px"><strong>What got left out on purpose:</strong></p>
+      <ul class="probe">
+        <li><strong>Accounts and passwords.</strong> A first name and a phone number identify a regular well enough for two weeks.</li>
+        <li><strong>The practice-side calendar.</strong> A spreadsheet did that job behind the scenes. Nobody was testing the spreadsheet.</li>
+        <li><strong>Cancellation rules, reminders, profiles, a policy page.</strong> All real one day. None of them the question.</li>
+      </ul>''') + "\n\n" + band(
+    "The evidence", "Five", "What testing showed", "What people did, not what they said they would do.",
+    '''      <h2 class="rev">What ten sessions <strong>showed</strong></h2>
+      <div class="stats rev">
+        <div class="stat"><b>10</b><span>Regulars, recruited from the practice's own list.</span></div>
+        <div class="stat"><b>9</b><span>Booked unaided, most of them in under a minute.</span></div>
+        <div class="stat"><b>7</b><span>Sent a message anyway, right after booking.</span></div>
+      </div>
+      <p class="lede rev" style="margin-top:36px">Nine out of ten cleared the bar the tool was built to clear. Then seven of them opened WhatsApp and typed the thing the tool had just made unnecessary.</p>
+      <div class="quotes">
+        <blockquote class="quote rev">
+          <p>"I've booked it, but can you just confirm you got it?"</p>
+          <footer>Sent about forty seconds after a successful booking. Session four.</footer>
+        </blockquote>
+        <blockquote class="quote rev">
+          <p>"I don't mind messaging her. I mind not knowing if she's seen it."</p>
+          <footer>Asked why she messaged after the confirmation screen. Session seven.</footer>
+        </blockquote>
+      </div>
+      <p class="lede rev" style="margin-top:32px">Booking was never the friction. Waiting was. The confirmation screen said the appointment existed. It did not say a person knew about it, and that is the reassurance people were actually chasing.</p>''',
+    tinted=True) + "\n\n" + band(
+    "The call", "Six", "The call", "Measured against the rule, not against the mood in the room.",
+    '''      <h2 class="rev">The call: <strong>adjust</strong></h2>
+      <p class="lede">The rule said go only if nobody messaged afterwards. Seven did. So this is an adjust, and the flat version of that is worth more than a generous one.</p>
+      <div class="verdicts">
+        <div class="verdict adjust rev"><p class="k">Adjust</p><p>The problem is real and the shape is wrong. This is not a booking system with reminders bolted on. It is a confirmation system that happens to take bookings.</p></div>
+      </div>
+      <p class="lede rev" style="margin-top:32px">The change is one sentence: lead with the reply, not the calendar. A regular should get a message from a person, in the thread they already use, and the booking page should be the quiet mechanism underneath it rather than the thing being sold. The same two weeks can run again on that version, against a new bar.</p>''') + "\n\n" + band(
+    "The cuts", "Seven", "What I would kill", "The change and the kill are the reason any of this is written down.",
+    '''      <h2 class="rev">What I would <strong>change and kill</strong></h2>
+      <div class="case rev">
+        <div class="case__block"><h4>What the two weeks bought</h4><p>A named change instead of a hunch, for the price of ten conversations and one flow. The version that would have shipped without this was a well-built calendar for a problem that was never about calendars.</p></div>
+        <div class="case__block change"><h4>What I would change if this were a paid product</h4><p>Make the confirmation the product. The reply lands in WhatsApp, from the practice, within seconds. The booking page becomes the mechanism underneath it instead of the thing on the poster.</p></div>
+        <div class="case__block kill"><h4>What I would kill</h4><p>The week view. It took four days and two of the ten people used it. Everyone else took the first sensible slot they were offered. It survived that long because it looks like the thing a booking tool is supposed to have, which is the worst reason for anything to exist.</p></div>
+      </div>''',
+    tinted=True) + "\n\n" + band(
+    "The two weeks", "Eight", "How it ran", "Fixed scope, and most of it spent not building.",
+    '''      <h2 class="rev">Where the <strong>two weeks went</strong></h2>
+      <div class="stairs">
+        <div class="stair rev"><p class="k">Days one and two</p><h3>Find the risky part</h3><p>The brief said calendar. The questions said reassurance. The decision rule got written before there was anything to look at.</p></div>
+        <div class="stair rev"><p class="k">Days three to eight</p><h3>Build one flow</h3><p>Three screens, real times, no accounts. Four of those days went into a week view that later got cut, which is the tuition.</p></div>
+        <div class="stair rev"><p class="k">Days nine to twelve</p><h3>Ten sessions, then the brief</h3><p>Ten regulars, one flow, no coaching. The call written against the rule, with the evidence underneath it.</p></div>
+      </div>
+      <p class="rev" style="margin-top:36px"><a class="quiet" href="what-ive-built.html">See the other apps ''' + ARROW + '''</a></p>''')
+
 PAGES = [
     ("index.html", "Know whether your idea is worth building | One flow first",
      "In two weeks you own a working version of the one part that matters most, evidence from real users, and a straight answer: keep going, or stop.",
@@ -505,6 +674,11 @@ PAGES = [
      "Real apps, built for real ideas. The thinking behind them, including what I'd change and what I'd kill.",
      BUILT, "Let's find out if your idea is <strong>real</strong>",
      "One call. You talk through your idea, you hear honestly whether this fits."),
+    ("case-slate.html", "Slate: booking was never the problem | One flow first",
+     "A worked two-week case study. The bet, the decision rule agreed in advance, one flow built for real, ten test sessions, and the call: adjust, not go.",
+     CASE, "Got an idea with a <strong>risky part?</strong>",
+     "One call. You talk through the idea, you hear honestly whether this fits.",
+     {"nav_slug": "what-ive-built.html", "robots": "noindex"}),
     ("about.html", "About | One flow first",
      "Twenty years of deciding what to build and what to cut, and why the work is scoped, small, and honest about where the value stops.",
      ABOUT, "Let's find out if your idea is <strong>real</strong>",
@@ -515,6 +689,8 @@ PAGES = [
      "Write to hello@oneflowfirst.com with the same one line about your idea."),
 ]
 
-for slug, title, desc, body, ch, cb in PAGES:
-    pathlib.Path(slug).write_text(shell(slug, title, desc, body, ch, cb))
+for page in PAGES:
+    slug, title, desc, body, ch, cb = page[:6]
+    opts = page[6] if len(page) > 6 else {}
+    pathlib.Path(slug).write_text(shell(slug, title, desc, body, ch, cb, **opts))
     print("wrote", slug)

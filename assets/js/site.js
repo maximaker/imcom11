@@ -8,8 +8,13 @@
 
   /* Split the statement into words so it can be read by the scroll. */
   var st = document.getElementById('statement');
-  var keyWords = {'never':1,'stuck':1,'with':1,'me.':1};
   if (st){
+    /* Which words light up is a copy decision, so it lives in the markup:
+       data-key="never stuck with me." on the statement itself. */
+    var keyWords = {};
+    (st.getAttribute('data-key')||'').trim().split(/\s+/).forEach(function(k){
+      if(k) keyWords[k]=1;
+    });
     var words = st.textContent.trim().split(/\s+/);
     st.textContent='';
     words.forEach(function(word,i){
