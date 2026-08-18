@@ -174,6 +174,32 @@
 .doubt{padding:26px 28px}
 .steps{gap:44px}
 
+/* ── The objection first, the answer on hover ──────────────────────────────
+   Quoting what the reader is thinking lands harder when they read it alone for a
+   moment, so the answer is the reply to a hover rather than something already
+   sitting there.
+   Scoped to pointers that can hover rather than to a width: a touch screen of any
+   size keeps the answer, which is what a phone needs, and so does a small laptop
+   window, which a width query would have wrongly hidden it on.
+   The answer keeps its space, so the card cannot jump and nothing reflows, and it
+   is only made transparent, never display:none, so it stays in the accessibility
+   tree and is still read out. :focus-within is there so a keyboard reaches it the
+   moment anything inside the card ever becomes focusable. */
+@media (hover:hover) and (pointer:fine){
+  .doubt .a{opacity:0;transform:translateX(-6px);
+    transition:opacity var(--t-slow) var(--ease-out),
+               transform var(--t-slow) var(--ease-out)}
+  .doubt:hover .a,
+  .doubt:focus-within .a{opacity:1;transform:none}
+  /* Something has to answer the cursor, or the card gives no sign there is
+     anything to find. The wood shadow, same as every other card. */
+  .doubt{transition:box-shadow var(--t-mid) var(--ease-out)}
+  .doubt:hover{box-shadow:0 6px 22px -12px rgba(74,58,26,.26)}
+}
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:reduce){
+  .doubt .a{transition:none;transform:none}
+}
+
 /* ── The deliverable rows ──────────────────────────────────────────────────
    Two problems. The hover was the accent wash while every other card on the page
    hovers to white, so this one row looked like a different kind of object. And
@@ -212,7 +238,15 @@
 .asset button:hover .nm{transform:translateX(4px)}
 
 @media(min-width:780px){
-  .asset .more p{padding-left:48px;padding-right:26px;max-width:66ch}
+  /* Aligned with the summary above it, which is the column the original 280px was
+     aiming at and missing by 14. Written as the grid that produces it rather than
+     as the total, so it cannot drift from the header: glyph, gap, name, gap. */
+  .asset .more p{padding-left:calc(26px + 22px + 224px + 22px);
+    padding-right:26px;max-width:62ch}
+}
+@media(max-width:779px){
+  /* No summary column down here, so the body follows the name instead. */
+  .asset .more p{padding-left:calc(26px + 16px)}
 }
 .asset .more p{padding-bottom:30px}
 

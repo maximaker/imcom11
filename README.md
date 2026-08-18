@@ -142,8 +142,10 @@ design changes asked for on top of the palette, all still confined to that one
 file: hairline-separated three-up grids with capped measures instead of three
 crowded columns, one hover for every card (white plus a wood shadow, where the
 deliverable rows used to hover to the accent wash and steps inside a tinted band
-hovered to cream), the opened deliverable text moved back under its own title
-instead of 280px to the right, a numeral on each step from a CSS counter, and the
+hovered to cream), the opened deliverable text aligned with the summary
+above it (294px, written as the grid that produces it, where the original 280px
+was aiming at that column and missing by 14), the objection cards showing only the
+question until hovered, a numeral on each step from a CSS counter, and the
 quotes set in Caveat, vendored in `assets/fonts` — the quotes only, because they
 are the one place on the page where the words are someone else's.
 
