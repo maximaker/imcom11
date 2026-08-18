@@ -35,6 +35,17 @@
   --sand-400:#D6C39E;   /* was #E2CDBC — field borders, the rail track */
   --sand-500:#CCB58A;   /* was #C9AE99 — the sieve dots, the mark's lead line */
 
+  /* ── The rail ──
+     Deliberately below the accent. The travelling call to action is a 16px orange
+     dot on this line, and it was the same colour as the fill behind it and the
+     section beads beside it, so the one mark on the page that wants to be found
+     was competing with two dozen that do not. These are both quiet, and the accent
+     is left to the button alone.
+     Ratios against paper-fresh: the orange dot is 3.90, the fill 1.95, a passed
+     bead 2.55. The order is the point, not the numbers. */
+  --rail-fill:#C0AF86;  /* was --clay-mark, 3.90 — the line as it advances */
+  --rail-mark:#A8996F;  /* was --clay-mark, 3.90 — a bead the fill has reached */
+
   /* ── Ink ──
      Indigo rather than the warm near-black: cool against the wood, so the two
      never muddy. Ratios are against paper-fresh, which is what it sits on. */
@@ -86,10 +97,10 @@
 .fit__col.no{background:#E7D9BE;border-color:#D6C39E}
 
 /* ── The rail ──────────────────────────────────────────────────────────────
-   White track, orange fill. Against wood, white reads as light rather than as a
-   colour, which is the one thing the reference reserves it for, and it puts the
-   orange at 4.31:1 against the line it is filling rather than 1.6:1 against a
-   wood one.
+   White track, warm fill. Against wood, white reads as light rather than as a
+   colour, which is the one thing the reference reserves it for, and it gives the
+   fill a ground to advance against rather than a wood one it would disappear into.
+   The fill was the accent orange and is not any more: see --rail-fill.
    It advances on a curve now instead of a straight line. The reference's single
    easing is described as fast out, long settle, which is exactly what a fill
    chasing the scroll should do; 90ms was too short for any curve to read, so the
@@ -98,7 +109,8 @@
    that steps. */
 @media(min-width:1180px){
   .spine .track{background:var(--sand-50);opacity:1}
-  .spine .fill{transition:transform 180ms cubic-bezier(.2,.7,.3,1)}
+  .spine .fill{background:var(--rail-fill);
+    transition:transform 180ms cubic-bezier(.2,.7,.3,1)}
 
   /* Making this read correctly took three goes, so it is worth writing down why.
      The dot is painted above the rail and its centre agrees with the rail's to
@@ -123,7 +135,28 @@
      them. */
   .spine .bead{background:var(--sand-300);
     box-shadow:0 0 0 4px var(--sand-100)}
-  .spine .bead[data-lit="true"]{background:var(--clay-mark)}
+  /* A deepening rather than a change of colour, which is how the statement's words
+     light too: the bead stays the same material and simply darkens once the fill
+     has passed it. It keeps its paper halo, and that is what makes it read as an
+     interruption in the line — not the contrast between the two, which is slight
+     on purpose. */
+  .spine .bead[data-lit="true"]{background:var(--rail-mark)}
+}
+
+/* ── The hover pulse ──
+   Muting the fill and the beads left the pulse as the loudest thing on the rail:
+   full-strength clay at 3.90 against paper, where the call to action's dot is 3.39.
+   The one mark meant to be found was being out-shouted by a decoration on the line
+   it rides.
+   Its hue stays — it is the logomark's own clay travelling down the rule it points
+   along, and that is the whole idea of the gesture — so the weight comes down
+   instead. The keyframes are redefined rather than the element's opacity set,
+   because the animation pins opacity at both ends and would simply overrule it.
+   At 0.60 the comet peaks at 2.13 over the bare track and 3.05 over the fill,
+   both under the dot, and still clearly a highlight against the 1.95 fill. */
+@keyframes railpulse{
+  0%{transform:translateY(-96px);opacity:.6}
+  100%{transform:translateY(100vh);opacity:.6}
 }
 
 /* The docked masthead needs nothing here: style.css now mixes it from
