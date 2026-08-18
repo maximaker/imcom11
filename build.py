@@ -86,6 +86,21 @@ GATE = '''<script>
 })();
 </script>'''
 
+NOSCRIPT = '''<noscript><style>
+/* Almost every block on the page is a .rev, revealed by the observer in
+   site.js. Without it the page is a masthead over an empty column, so the
+   reveal is opt-in: present the content, and let the motion be the thing that
+   needs JS. The accordions collapse with grid-template-rows and would take
+   their bodies with them, so they stand open here too. */
+.rev{opacity:1;transform:none}
+.asset .more{grid-template-rows:1fr}
+.asset .sign{display:none}
+</style></noscript>
+'''
+
+# Hoisted out of shell()'s f-string for the same reason GATE is: the CSS above
+# is all braces, and an f-string reads every one of them as a field.
+
 # Versions are substituted rather than interpolated: GATE is a plain string,
 # and the script inside it is full of braces an f-string would try to read.
 GATE = GATE.replace('@GSAP@', V_GSAP).replace('@INTRO@', V_INTRO)
@@ -149,7 +164,7 @@ def shell(slug, title, desc, body, close_heading, close_body,
 <meta property="og:description" content="{desc}">
 <meta property="og:type" content="website">
 <link rel="stylesheet" href="assets/css/style.css?v={V_CSS}">
-{GATE}
+{NOSCRIPT}{GATE}
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23160B02'/><path d='M24.3 21.6A10 10 0 1 1 24.3 10.4' fill='none' stroke='%23FEF6F0' stroke-width='3' stroke-linecap='round'/><circle cx='16' cy='16' r='3.5' fill='%23CC5500'/></svg>">
 </head>
 <body>
@@ -337,7 +352,7 @@ HOME = HOME_HERO + "\n\n" + band(
       <p class="lede rev" style="margin-top:26px">That last one matters more than it looks. It's <strong>the part that keeps working long after the two weeks end</strong>.</p>''',
     tinted=True) + "\n\n" + band(
     "Terms", "Six", "Terms", "The unusual promise.",
-    '''      <p class="statement" id="statement" data-key="never stuck with me.">You should never be stuck with me.</p>
+    '''      <h2 class="statement" id="statement" data-key="never stuck with me.">You should never be stuck with me.</h2>
       <p class="lede rev">Plenty of people in this business are quietly hoping you'll stay. This works the other way round. When the two weeks end, you can read your own evidence, make your own call, and move forward or walk away without another opinion. You keep the build, the brief, and the method.</p>
       <p class="lede rev">People do come back. Usually with the next idea, or the same one pointed somewhere new. That's <strong>a choice, not a dependency</strong>, and it's the only kind worth having.</p>''') + "\n\n" + band(
     "Trust", "Seven", "Why trust it", "Competence, stated as what you get.",
@@ -489,9 +504,9 @@ BUILT = '''<div class="doc">
     '''      <h2 class="rev">Slate</h2>
       <p class="lede">A booking page for independent physios who ran everything through WhatsApp.</p>
       <div class="case rev">
-        <div class="case__block"><h4>The problem it solves</h4><p>Around sixty regulars, a phone that never stopped, and a Sunday evening spent copying appointments into a paper diary. The alternative was answering the same message forty times a week.</p></div>
-        <div class="case__block change"><h4>What I'd change if this were a paid product</h4><p>Make the confirmation the product. Nine of ten people booked unaided, and seven then messaged to check it had worked. The reply is the thing they wanted; the calendar was scaffolding.</p></div>
-        <div class="case__block kill"><h4>What I'd kill</h4><p>The week view. Four days of work, used by two of ten people. It survived because it looks like the thing a booking tool is supposed to have.</p></div>
+        <div class="case__block"><h3 class="case__k">The problem it solves</h3><p>Around sixty regulars, a phone that never stopped, and a Sunday evening spent copying appointments into a paper diary. The alternative was answering the same message forty times a week.</p></div>
+        <div class="case__block change"><h3 class="case__k">What I'd change if this were a paid product</h3><p>Make the confirmation the product. Nine of ten people booked unaided, and seven then messaged to check it had worked. The reply is the thing they wanted; the calendar was scaffolding.</p></div>
+        <div class="case__block kill"><h3 class="case__k">What I'd kill</h3><p>The week view. Four days of work, used by two of ten people. It survived because it looks like the thing a booking tool is supposed to have.</p></div>
       </div>
       <p class="rev" style="margin-top:32px"><a class="quiet" href="case-slate.html">Read the full case note ''' + ARROW + '''</a></p>''',
     tinted=True) + "\n\n" + "\n\n".join(
@@ -499,9 +514,9 @@ BUILT = '''<div class="doc">
          f'''      <h2 class="rev">[App name]</h2>
       <p class="lede">[One line: what it is, said the way you'd say it to a friend.]</p>
       <div class="case rev">
-        <div class="case__block"><h4>The problem it solves</h4><p>[Who had the problem, what it cost them, and what they were doing instead before this existed.]</p></div>
-        <div class="case__block change"><h4>What I'd change if this were a paid product</h4><p>[The one structural change that would make people pay, not the polish list.]</p></div>
-        <div class="case__block kill"><h4>What I'd kill</h4><p>[The feature that was fun to build and earns nothing. Say why it survived as long as it did.]</p></div>
+        <div class="case__block"><h3 class="case__k">The problem it solves</h3><p>[Who had the problem, what it cost them, and what they were doing instead before this existed.]</p></div>
+        <div class="case__block change"><h3 class="case__k">What I'd change if this were a paid product</h3><p>[The one structural change that would make people pay, not the polish list.]</p></div>
+        <div class="case__block kill"><h3 class="case__k">What I'd kill</h3><p>[The feature that was fun to build and earns nothing. Say why it survived as long as it did.]</p></div>
       </div>''',
          tinted=(i % 2 == 0))
     for i in (2, 3)) + "\n\n" + band(
@@ -672,7 +687,7 @@ CASE = '''<div class="doc">
       <p class="lede">One thing worth saying up front: Slate is one of my own nine apps, not a client engagement. The regulars were already reachable, so the sessions ran the same week the build finished. On someone else's idea that is the part you cannot count on, which is why testing sits outside the two weeks and can be added on.</p>''',
     tinted=True) + "\n\n" + band(
     "The bet", "Two", "The risky part", "The exciting part and the risky part are rarely the same part.",
-    '''      <p class="statement" id="statement" data-key="book themselves">People would rather book themselves than ask.</p>
+    '''      <h2 class="statement" id="statement" data-key="book themselves">People would rather book themselves than ask.</h2>
       <p class="lede rev">The exciting part was the calendar. The risky part was six words further down the brief: "so she stops answering messages." Everything else depended on sixty regulars choosing a form over a thread, and nobody had ever asked them to.</p>
       <p class="lede rev">Three things were ruled out as not the risk, on purpose:</p>
       <ul class="probe">
@@ -731,9 +746,9 @@ CASE = '''<div class="doc">
     "The cuts", "Seven", "What I would kill", "The change and the kill are the reason any of this is written down.",
     '''      <h2 class="rev">What I would <strong>change and kill</strong></h2>
       <div class="case rev">
-        <div class="case__block"><h4>What the two weeks bought</h4><p>A named change instead of a hunch, for the price of ten conversations and one flow. The version that would have shipped without this was a well-built calendar for a problem that was never about calendars.</p></div>
-        <div class="case__block change"><h4>What I would change if this were a paid product</h4><p>Make the confirmation the product. The reply lands in WhatsApp, from the practice, within seconds. The booking page becomes the mechanism underneath it instead of the thing on the poster.</p></div>
-        <div class="case__block kill"><h4>What I would kill</h4><p>The week view. It took four days and two of the ten people used it. Everyone else took the first sensible slot they were offered. It survived that long because it looks like the thing a booking tool is supposed to have, which is the worst reason for anything to exist.</p></div>
+        <div class="case__block"><h3 class="case__k">What the two weeks bought</h3><p>A named change instead of a hunch, for the price of ten conversations and one flow. The version that would have shipped without this was a well-built calendar for a problem that was never about calendars.</p></div>
+        <div class="case__block change"><h3 class="case__k">What I would change if this were a paid product</h3><p>Make the confirmation the product. The reply lands in WhatsApp, from the practice, within seconds. The booking page becomes the mechanism underneath it instead of the thing on the poster.</p></div>
+        <div class="case__block kill"><h3 class="case__k">What I would kill</h3><p>The week view. It took four days and two of the ten people used it. Everyone else took the first sensible slot they were offered. It survived that long because it looks like the thing a booking tool is supposed to have, which is the worst reason for anything to exist.</p></div>
       </div>''',
     tinted=True) + "\n\n" + band(
     "The two weeks", "Eight", "How it ran", "Fixed scope, and most of it spent not building.",

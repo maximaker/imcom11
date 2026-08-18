@@ -9,7 +9,17 @@
 <meta property="og:title" content="About | One flow first">
 <meta property="og:description" content="Twenty years of deciding what to build and what to cut, and why the work is scoped, small, and honest about where the value stops.">
 <meta property="og:type" content="website">
-<link rel="stylesheet" href="assets/css/style.css?v=b9cfd694">
+<link rel="stylesheet" href="assets/css/style.css?v=1b222544">
+<noscript><style>
+/* Almost every block on the page is a .rev, revealed by the observer in
+   site.js. Without it the page is a masthead over an empty column, so the
+   reveal is opt-in: present the content, and let the motion be the thing that
+   needs JS. The accordions collapse with grid-template-rows and would take
+   their bodies with them, so they stand open here too. */
+.rev{opacity:1;transform:none}
+.asset .more{grid-template-rows:1fr}
+.asset .sign{display:none}
+</style></noscript>
 <script>
 /* Decides, before anything paints, whether the first-load animation runs. It has
    to be inline and here: hiding the page from a deferred script means showing it
@@ -192,6 +202,6 @@
   <span><a href="mailto:hello@oneflowfirst.com">hello@oneflowfirst.com</a></span>
 </footer>
 
-<script src="assets/js/site.js?v=6b32a2e4" defer></script>
+<script src="assets/js/site.js?v=0f2c3a3c" defer></script>
 </body>
 </html>

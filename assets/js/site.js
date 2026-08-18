@@ -358,6 +358,24 @@
   addEventListener('resize',function(){measure();onScroll();},{passive:true});
   measure(); onScroll();
 
+  /* Measured again once the webfonts have actually arrived. --bar-h and the rail's
+     head both come from the bar's own height, which is a line box, so it depends on
+     font metrics: measured against the fallback and never corrected, the rule starts
+     a couple of pixels off the logomark and main gives back the wrong amount of
+     room. Nothing moves when the fonts were already cached, which is the common
+     case, so this costs one measurement. */
+  if(document.fonts && document.fonts.ready){
+    document.fonts.ready.then(function(){ measure(); onScroll(); });
+  }
+  /* The rail is display:none below its breakpoint and cannot be placed while it is
+     hidden. Widening a window fires resize and so recovers on its own; this makes
+     the recovery explicit rather than a side effect of that, and covers the case
+     where the breakpoint is crossed without a resize the listener above sees. */
+  var railMQ = matchMedia('(min-width:1180px)');
+  if(railMQ.addEventListener){
+    railMQ.addEventListener('change',function(){ measure(); onScroll(); });
+  }
+
   /* Pointer lamp, desktop only. */
   var hero=document.getElementById('heroband');
   if(hero && !reduce && matchMedia('(min-width:980px) and (pointer:fine)').matches){

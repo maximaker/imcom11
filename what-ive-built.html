@@ -9,7 +9,17 @@
 <meta property="og:title" content="What I've built | One flow first">
 <meta property="og:description" content="Real apps, built for real ideas. The thinking behind them, including what I'd change and what I'd kill.">
 <meta property="og:type" content="website">
-<link rel="stylesheet" href="assets/css/style.css?v=b9cfd694">
+<link rel="stylesheet" href="assets/css/style.css?v=1b222544">
+<noscript><style>
+/* Almost every block on the page is a .rev, revealed by the observer in
+   site.js. Without it the page is a masthead over an empty column, so the
+   reveal is opt-in: present the content, and let the motion be the thing that
+   needs JS. The accordions collapse with grid-template-rows and would take
+   their bodies with them, so they stand open here too. */
+.rev{opacity:1;transform:none}
+.asset .more{grid-template-rows:1fr}
+.asset .sign{display:none}
+</style></noscript>
 <script>
 /* Decides, before anything paints, whether the first-load animation runs. It has
    to be inline and here: hiding the page from a deferred script means showing it
@@ -117,9 +127,9 @@
       <h2 class="rev">Slate</h2>
       <p class="lede">A booking page for independent physios who ran everything through WhatsApp.</p>
       <div class="case rev">
-        <div class="case__block"><h4>The problem it solves</h4><p>Around sixty regulars, a phone that never stopped, and a Sunday evening spent copying appointments into a paper diary. The alternative was answering the same message forty times a week.</p></div>
-        <div class="case__block change"><h4>What I'd change if this were a paid product</h4><p>Make the confirmation the product. Nine of ten people booked unaided, and seven then messaged to check it had worked. The reply is the thing they wanted; the calendar was scaffolding.</p></div>
-        <div class="case__block kill"><h4>What I'd kill</h4><p>The week view. Four days of work, used by two of ten people. It survived because it looks like the thing a booking tool is supposed to have.</p></div>
+        <div class="case__block"><h3 class="case__k">The problem it solves</h3><p>Around sixty regulars, a phone that never stopped, and a Sunday evening spent copying appointments into a paper diary. The alternative was answering the same message forty times a week.</p></div>
+        <div class="case__block change"><h3 class="case__k">What I'd change if this were a paid product</h3><p>Make the confirmation the product. Nine of ten people booked unaided, and seven then messaged to check it had worked. The reply is the thing they wanted; the calendar was scaffolding.</p></div>
+        <div class="case__block kill"><h3 class="case__k">What I'd kill</h3><p>The week view. Four days of work, used by two of ten people. It survived because it looks like the thing a booking tool is supposed to have.</p></div>
       </div>
       <p class="rev" style="margin-top:32px"><a class="quiet" href="case-slate.html">Read the full case note <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13m0 0l-5.5-5.5M18 12l-5.5 5.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
       </div>
@@ -135,9 +145,9 @@
       <h2 class="rev">[App name]</h2>
       <p class="lede">[One line: what it is, said the way you'd say it to a friend.]</p>
       <div class="case rev">
-        <div class="case__block"><h4>The problem it solves</h4><p>[Who had the problem, what it cost them, and what they were doing instead before this existed.]</p></div>
-        <div class="case__block change"><h4>What I'd change if this were a paid product</h4><p>[The one structural change that would make people pay, not the polish list.]</p></div>
-        <div class="case__block kill"><h4>What I'd kill</h4><p>[The feature that was fun to build and earns nothing. Say why it survived as long as it did.]</p></div>
+        <div class="case__block"><h3 class="case__k">The problem it solves</h3><p>[Who had the problem, what it cost them, and what they were doing instead before this existed.]</p></div>
+        <div class="case__block change"><h3 class="case__k">What I'd change if this were a paid product</h3><p>[The one structural change that would make people pay, not the polish list.]</p></div>
+        <div class="case__block kill"><h3 class="case__k">What I'd kill</h3><p>[The feature that was fun to build and earns nothing. Say why it survived as long as it did.]</p></div>
       </div>
       </div>
     </section>
@@ -151,9 +161,9 @@
       <h2 class="rev">[App name]</h2>
       <p class="lede">[One line: what it is, said the way you'd say it to a friend.]</p>
       <div class="case rev">
-        <div class="case__block"><h4>The problem it solves</h4><p>[Who had the problem, what it cost them, and what they were doing instead before this existed.]</p></div>
-        <div class="case__block change"><h4>What I'd change if this were a paid product</h4><p>[The one structural change that would make people pay, not the polish list.]</p></div>
-        <div class="case__block kill"><h4>What I'd kill</h4><p>[The feature that was fun to build and earns nothing. Say why it survived as long as it did.]</p></div>
+        <div class="case__block"><h3 class="case__k">The problem it solves</h3><p>[Who had the problem, what it cost them, and what they were doing instead before this existed.]</p></div>
+        <div class="case__block change"><h3 class="case__k">What I'd change if this were a paid product</h3><p>[The one structural change that would make people pay, not the polish list.]</p></div>
+        <div class="case__block kill"><h3 class="case__k">What I'd kill</h3><p>[The feature that was fun to build and earns nothing. Say why it survived as long as it did.]</p></div>
       </div>
       </div>
     </section>
@@ -198,6 +208,6 @@
   <span><a href="mailto:hello@oneflowfirst.com">hello@oneflowfirst.com</a></span>
 </footer>
 
-<script src="assets/js/site.js?v=6b32a2e4" defer></script>
+<script src="assets/js/site.js?v=0f2c3a3c" defer></script>
 </body>
 </html>

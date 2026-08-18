@@ -69,7 +69,7 @@
                                           rested band, so the label is a step
                                           darker at 5.29:1 */
 .verdict.stop .k{color:#8C3A24}        /* 6.92:1 */
-.case__block.kill h4{color:#7E5714}
+.case__block.kill .case__k{color:#7E5714}
 
 /* Form errors are the stop colour: darker than the accent, so an error and a
    link never read as the same thing. */
@@ -183,14 +183,20 @@
    window, which a width query would have wrongly hidden it on.
    The answer keeps its space, so the card cannot jump and nothing reflows, and it
    is only made transparent, never display:none, so it stays in the accessibility
-   tree and is still read out. :focus-within is there so a keyboard reaches it the
-   moment anything inside the card ever becomes focusable. */
+   tree and is still read out.
+   The card carries a tabindex in the sample (added by sample_palette.py) purely so
+   there is something for :focus-within to fire on: without it the reveal answered
+   the cursor and nothing else, and a keyboard user could never read a single
+   answer. Tab through the three and they open one at a time. */
 @media (hover:hover) and (pointer:fine){
   .doubt .a{opacity:0;transform:translateX(-6px);
     transition:opacity var(--t-slow) var(--ease-out),
                transform var(--t-slow) var(--ease-out)}
   .doubt:hover .a,
   .doubt:focus-within .a{opacity:1;transform:none}
+  /* The focus stop has to look like one, or tabbing lands somewhere invisible. */
+  .doubt:focus-visible{outline:2px solid var(--clay-600);outline-offset:3px}
+  .doubt:focus{outline:none}
   /* Something has to answer the cursor, or the card gives no sign there is
      anything to find. The wood shadow, same as every other card. */
   .doubt{transition:box-shadow var(--t-mid) var(--ease-out)}

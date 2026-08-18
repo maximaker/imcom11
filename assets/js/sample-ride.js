@@ -95,6 +95,12 @@
     var slot = target.getBoundingClientRect();
     var railBox = rail.getBoundingClientRect();
 
+    /* The rail's x is written by site.js from the real column edge, and it cannot be
+       measured while the rail is hidden, so its stylesheet default parks it off to
+       the left. Riding to that would send the dot off the side of the screen rather
+       than simply not working, which is the worse of the two failures. */
+    if (railBox.left < 0) { railBox = seat; }
+
     /* How far the hero's own button has climbed out of the way. This is the other
        half of the object: the dot on the rail is that button, compacted, so the ride
        begins life sitting exactly on it and takes its place as it leaves. 0 while

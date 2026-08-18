@@ -360,6 +360,18 @@ html[data-intro="running"] .spine{opacity:0}
 .top nav a{position:relative;font-family:var(--body);font-size:11px;font-weight:500;
   text-transform:uppercase;letter-spacing:2.4px;color:var(--ink-3);
   text-decoration:none;transition:color var(--t-mid) var(--ease-out)}
+/* A 44px hit area without touching the layout. Vertical padding would have done
+   it too, but the links are flex items and so blockified: the padding would grow
+   the row, make the masthead taller, and drag the underline below with it. An
+   inset pseudo-element belongs to the link for hit-testing and is invisible to
+   layout, so the bar keeps its height and the rule keeps its place. Horizontally
+   0, so the 30px gap between links stays a gap and no two targets overlap.
+   Desktop only: the stacked mobile rows are already 52px and adjacent, where
+   bleeding 12px past each edge would hand clicks to the neighbour. */
+@media(min-width:761px){
+  .top nav a::before{content:'';position:absolute;inset:-12px 0}
+}
+
 /* right:2px, not 0: tracked type carries a trailing letter-space the rule
    would otherwise sit under. */
 .top nav a::after{content:'';position:absolute;left:0;right:2px;bottom:-6px;height:1.5px;
@@ -741,15 +753,28 @@ h2{font-size:clamp(1.72rem,3.5vw,2.5rem);line-height:1.1;max-width:19ch;margin-b
      menu sat open. max-height collapses the whole box. */
   /* The panel hangs off .top, which is full width now, so its gutter is set to
      match .doc at this breakpoint rather than guessed. */
+  /* visibility, not just max-height. Clipping a box with overflow:hidden hides it
+     but leaves everything inside it focusable, so tabbing from the logo went
+     through four invisible links and scrolled the clipped panel to chase them.
+     visibility:hidden takes the whole subtree out of the tab order and off the
+     screen reader, which is what a collapsed menu should be; aria-expanded on the
+     button is what says it can be opened. Switched with a delay equal to the
+     collapse so it stays visible for the length of the animation, and back
+     instantly on the way open. */
   .top nav{position:absolute;left:0;right:0;top:100%;display:flex;
     flex-direction:column;gap:0;background:var(--sand-100);
     border-bottom:1px solid transparent;padding:0 20px;
-    max-height:0;overflow:hidden;
+    max-height:0;overflow:hidden;visibility:hidden;
     transition:max-height 320ms var(--ease-out),
                padding 320ms var(--ease-out),
-               border-color 320ms var(--ease-out)}
+               border-color 320ms var(--ease-out),
+               visibility 0s linear 320ms}
   .top[data-open="true"] nav{max-height:70vh;padding:6px 20px 18px;
-    border-bottom-color:var(--sand-300)}
+    border-bottom-color:var(--sand-300);visibility:visible;
+    transition:max-height 320ms var(--ease-out),
+               padding 320ms var(--ease-out),
+               border-color 320ms var(--ease-out),
+               visibility 0s linear 0s}
   .top nav a{min-height:52px;display:flex;align-items:center;
     border-bottom:1px solid var(--sand-300)}
   .top nav a:last-child{border-bottom:0}
@@ -822,10 +847,10 @@ h2{font-size:clamp(1.72rem,3.5vw,2.5rem);line-height:1.1;max-width:19ch;margin-b
 .case{display:grid;gap:22px;margin-top:26px}
 @media(min-width:820px){.case{grid-template-columns:repeat(2,1fr)}
   .case .case__block:first-child{grid-column:1 / -1}}
-.case__block h4{font-size:11px;text-transform:uppercase;letter-spacing:2.2px;font-weight:600;
+.case__block .case__k{font-size:11px;text-transform:uppercase;letter-spacing:2.2px;font-weight:600;
   color:var(--ink-3);margin:0 0 8px}
-.case__block.change h4{color:var(--clay-500)}
-.case__block.kill h4{color:#7A5A1B}
+.case__block.change .case__k{color:var(--clay-500)}
+.case__block.kill .case__k{color:#7A5A1B}
 .case__block p{color:var(--ink-2);margin:0;font-size:.97rem}
 
 /* FAQ */
@@ -901,10 +926,10 @@ main{position:relative}
    11px tracked labels are legible on a desktop monitor and not on a phone;
    tap targets under 44px fail on touch. Both are fixed at the source rather
    than per component. */
-.margin b,.verdict .k,.stair .k,.case__block h4,.fit__title,.caption i,
+.margin b,.verdict .k,.stair .k,.case__block .case__k,.fit__title,.caption i,
 .top nav a{font-size:12px}
 @media(max-width:760px){
-  .margin b,.verdict .k,.stair .k,.case__block h4,.fit__title,
+  .margin b,.verdict .k,.stair .k,.case__block .case__k,.fit__title,
   .top nav a{font-size:12.5px;
     letter-spacing:2px}
   body{font-size:17px}

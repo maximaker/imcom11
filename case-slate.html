@@ -10,7 +10,17 @@
 <meta property="og:title" content="Slate: booking was never the problem | One flow first">
 <meta property="og:description" content="A worked two-week case study. The bet, the decision rule agreed in advance, one flow built for real, ten test sessions, and the call: adjust, not go.">
 <meta property="og:type" content="website">
-<link rel="stylesheet" href="assets/css/style.css?v=b9cfd694">
+<link rel="stylesheet" href="assets/css/style.css?v=1b222544">
+<noscript><style>
+/* Almost every block on the page is a .rev, revealed by the observer in
+   site.js. Without it the page is a masthead over an empty column, so the
+   reveal is opt-in: present the content, and let the motion be the thing that
+   needs JS. The accordions collapse with grid-template-rows and would take
+   their bodies with them, so they stand open here too. */
+.rev{opacity:1;transform:none}
+.asset .more{grid-template-rows:1fr}
+.asset .sign{display:none}
+</style></noscript>
 <script>
 /* Decides, before anything paints, whether the first-load animation runs. It has
    to be inline and here: hiding the page from a deferred script means showing it
@@ -129,7 +139,7 @@
     <section class="band " data-node="The bet">
       <div class="margin"><b>Two</b>The risky part<em>The exciting part and the risky part are rarely the same part.</em></div>
       <div>
-      <p class="statement" id="statement" data-key="book themselves">People would rather book themselves than ask.</p>
+      <h2 class="statement" id="statement" data-key="book themselves">People would rather book themselves than ask.</h2>
       <p class="lede rev">The exciting part was the calendar. The risky part was six words further down the brief: "so she stops answering messages." Everything else depended on sixty regulars choosing a form over a thread, and nobody had ever asked them to.</p>
       <p class="lede rev">Three things were ruled out as not the risk, on purpose:</p>
       <ul class="probe">
@@ -228,9 +238,9 @@
       <div>
       <h2 class="rev">What I would <strong>change and kill</strong></h2>
       <div class="case rev">
-        <div class="case__block"><h4>What the two weeks bought</h4><p>A named change instead of a hunch, for the price of ten conversations and one flow. The version that would have shipped without this was a well-built calendar for a problem that was never about calendars.</p></div>
-        <div class="case__block change"><h4>What I would change if this were a paid product</h4><p>Make the confirmation the product. The reply lands in WhatsApp, from the practice, within seconds. The booking page becomes the mechanism underneath it instead of the thing on the poster.</p></div>
-        <div class="case__block kill"><h4>What I would kill</h4><p>The week view. It took four days and two of the ten people used it. Everyone else took the first sensible slot they were offered. It survived that long because it looks like the thing a booking tool is supposed to have, which is the worst reason for anything to exist.</p></div>
+        <div class="case__block"><h3 class="case__k">What the two weeks bought</h3><p>A named change instead of a hunch, for the price of ten conversations and one flow. The version that would have shipped without this was a well-built calendar for a problem that was never about calendars.</p></div>
+        <div class="case__block change"><h3 class="case__k">What I would change if this were a paid product</h3><p>Make the confirmation the product. The reply lands in WhatsApp, from the practice, within seconds. The booking page becomes the mechanism underneath it instead of the thing on the poster.</p></div>
+        <div class="case__block kill"><h3 class="case__k">What I would kill</h3><p>The week view. It took four days and two of the ten people used it. Everyone else took the first sensible slot they were offered. It survived that long because it looks like the thing a booking tool is supposed to have, which is the worst reason for anything to exist.</p></div>
       </div>
       </div>
     </section>
@@ -280,6 +290,6 @@
   <span><a href="mailto:hello@oneflowfirst.com">hello@oneflowfirst.com</a></span>
 </footer>
 
-<script src="assets/js/site.js?v=6b32a2e4" defer></script>
+<script src="assets/js/site.js?v=0f2c3a3c" defer></script>
 </body>
 </html>

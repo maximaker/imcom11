@@ -9,9 +9,19 @@
 <meta property="og:title" content="Is your idea worth building? | One flow first">
 <meta property="og:description" content="In two weeks you own the one part that matters most, built for real, and a bar agreed before anyone sees it. Then real people tell you whether it holds.">
 <meta property="og:type" content="website">
-<link rel="stylesheet" href="assets/css/style.css?v=b9cfd694">
-<link rel="stylesheet" href="assets/css/palette-sample.css?v=c44d84cb">
+<link rel="stylesheet" href="assets/css/style.css?v=1b222544">
+<link rel="stylesheet" href="assets/css/palette-sample.css?v=d0da1371">
 <meta name="robots" content="noindex">
+<noscript><style>
+/* Almost every block on the page is a .rev, revealed by the observer in
+   site.js. Without it the page is a masthead over an empty column, so the
+   reveal is opt-in: present the content, and let the motion be the thing that
+   needs JS. The accordions collapse with grid-template-rows and would take
+   their bodies with them, so they stand open here too. */
+.rev{opacity:1;transform:none}
+.asset .more{grid-template-rows:1fr}
+.asset .sign{display:none}
+</style></noscript>
 <script>
 /* Decides, before anything paints, whether the first-load animation runs. It has
    to be inline and here: hiding the page from a deferred script means showing it
@@ -173,9 +183,9 @@
       <div>
       <h2 class="rev">You might be <strong>thinking</strong></h2>
       <div class="doubts">
-        <div class="doubt rev"><p class="q">"What if it's a bad idea and I find out too late."</p><p class="a">You find out first, before anything gets built.</p></div>
-        <div class="doubt rev"><p class="q">"I'm not technical. I won't understand what's happening."</p><p class="a">You don't need to be. You'll get it explained clearly enough to decide with confidence.</p></div>
-        <div class="doubt rev"><p class="q">"I don't want to be talked into a build I don't need."</p><p class="a">You won't be. You'll get an honest answer even when the honest answer is no.</p></div>
+        <div class="doubt rev" tabindex="0"><p class="q">"What if it's a bad idea and I find out too late."</p><p class="a">You find out first, before anything gets built.</p></div>
+        <div class="doubt rev" tabindex="0"><p class="q">"I'm not technical. I won't understand what's happening."</p><p class="a">You don't need to be. You'll get it explained clearly enough to decide with confidence.</p></div>
+        <div class="doubt rev" tabindex="0"><p class="q">"I don't want to be talked into a build I don't need."</p><p class="a">You won't be. You'll get an honest answer even when the honest answer is no.</p></div>
       </div>
       </div>
     </section>
@@ -255,7 +265,7 @@
     <section class="band " data-node="Terms">
       <div class="margin"><b>Six</b>Terms<em>The unusual promise.</em></div>
       <div>
-      <p class="statement" id="statement" data-key="never stuck with me.">You should never be stuck with me.</p>
+      <h2 class="statement" id="statement" data-key="never stuck with me.">You should never be stuck with me.</h2>
       <p class="lede rev">Plenty of people in this business are quietly hoping you'll stay. This works the other way round. When the two weeks end, you can read your own evidence, make your own call, and move forward or walk away without another opinion. You keep the build, the brief, and the method.</p>
       <p class="lede rev">People do come back. Usually with the next idea, or the same one pointed somewhere new. That's <strong>a choice, not a dependency</strong>, and it's the only kind worth having.</p>
       </div>
@@ -396,7 +406,7 @@
   <span><a href="mailto:hello@oneflowfirst.com">hello@oneflowfirst.com</a></span>
 </footer>
 
-<script src="assets/js/site.js?v=6b32a2e4" defer></script>
-<script src="assets/js/sample-ride.js?v=5cff01be" defer></script>
+<script src="assets/js/site.js?v=0f2c3a3c" defer></script>
+<script src="assets/js/sample-ride.js?v=9e403081" defer></script>
 </body>
 </html>

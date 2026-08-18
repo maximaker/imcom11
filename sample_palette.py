@@ -44,6 +44,15 @@ out = (out.replace("fill='%23160B02'", "fill='%23171B34'")
 # the tokens, so it follows the new palette wherever it does run.
 out = out.replace("localStorage.getItem('ofo.intro') === '1'", 'true', 1)
 
+# The answer to each objection is revealed on hover in the sample, which leaves a
+# sighted keyboard user with no way to read it: :focus-within cannot fire on a card
+# with nothing focusable in it. A tabindex makes the card itself the focus stop, so
+# the same reveal answers Tab as answers the cursor. Done here rather than in
+# build.py because the live site shows both halves at once and needs no focus stop.
+n = out.count('class="doubt rev"')
+out = out.replace('class="doubt rev"', 'class="doubt rev" tabindex="0"')
+print(f'  {n} objection cards made focusable')
+
 # The ride is sample-only behaviour, so it is added here rather than in the shell.
 rv = hashlib.sha1(pathlib.Path('assets/js/sample-ride.js').read_bytes()).hexdigest()[:8]
 tag = '<script src="assets/js/sample-ride.js?v=' + rv + '" defer></script>'
