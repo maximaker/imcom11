@@ -209,6 +209,26 @@ a{color:var(--clay-500)}
 a:hover .mark__lead{stroke:var(--clay-400);transform:translateX(1.5px)}
 @media (prefers-reduced-motion: reduce){a:hover .mark__lead{transform:none}}
 
+/* ── First-load animation ──
+   The stage is only ever built on a first visit, and only for a reader who has
+   not asked for less motion. Everything the animation brings in itself starts
+   hidden here, in CSS, so nothing is visible for a frame before the timeline
+   takes hold. The h1 needs no entry: .rise already masks it until data-ready. */
+.intro{display:none}
+html[data-intro="running"] .intro{display:grid;place-items:center;
+  position:fixed;inset:0;z-index:90;background:var(--sand-100)}
+.intro__mark{width:min(46vw,232px);height:auto;overflow:visible}
+
+html[data-intro="running"] .top .name,
+html[data-intro="running"] .top nav,
+html[data-intro="running"] .open .margin,
+html[data-intro="running"] .open .deck,
+html[data-intro="running"] .principle,
+html[data-intro="running"] .hero-cta,
+html[data-intro="running"] .act-note,
+html[data-intro="running"] .stats,
+html[data-intro="running"] .spine{opacity:0}
+
 /* ── Masthead ──
    No ground of its own: it sits on the page like the first band, and so it does
    not travel. A transparent bar that follows the reader is a bar the page
@@ -843,9 +863,26 @@ main{position:relative}
     color:var(--ink-3);opacity:.9}
 }
 
-/* Hero type is a touch tighter on a phone so the deck still lands above the fold. */
+/* The narrowest phones still in use are 320px wide. Two things do not fit there
+   on their own: the tick row under the figure wants 302px of the 281px going, and
+   the button's label plus its chip land exactly on the available width, so it
+   wraps to two lines and takes 35px of height with it. */
+@media(max-width:380px){
+  .ticks i{width:28px}
+  .counter{min-width:84px}
+  .act{padding:18px 22px;gap:12px}
+}
+
+/* On a phone the whole hero is measured against one requirement: the button has
+   to be in the first view on a 667px screen, the shortest one still in real use.
+   Every number below is spent on that. */
 @media(max-width:520px){
   .open h1{font-size:clamp(2.15rem,10vw,2.9rem);line-height:1.04}
+  .open{padding-top:44px}
+  .open .margin{margin-bottom:16px}
+  .open .deck{margin-bottom:30px}
+  .principle{margin-top:24px}
+  .hero-cta{margin-top:26px}
   .stats{margin-top:38px}
   .stat b{font-size:1.5rem}
 }

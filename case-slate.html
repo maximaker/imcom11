@@ -11,12 +11,50 @@
 <meta property="og:description" content="A worked two-week case study. The bet, the decision rule agreed in advance, one flow built for real, ten test sessions, and the call: adjust, not go.">
 <meta property="og:type" content="website">
 <link rel="stylesheet" href="assets/css/style.css">
+<script>
+/* Decides, before anything paints, whether the first-load animation runs. It has
+   to be inline and here: hiding the page from a deferred script means showing it
+   first and then snatching it back. The flag is written now rather than when the
+   animation ends, so navigating away mid-way still counts as having seen it. */
+(function(){
+  var d=document.documentElement;
+  try{
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if(localStorage.getItem('ofo.intro')==='1') return;
+    localStorage.setItem('ofo.intro','1');
+  }catch(e){ return; }              /* no storage, no animation: never twice */
+  d.setAttribute('data-intro','running');
+  /* Fetched here rather than linked in the markup: this runs once ever, and the
+     other 99% of loads should not pay 72KB for it. async=false on an injected
+     script keeps execution order without blocking the parser. */
+  ['assets/js/vendor/gsap.min.js','assets/js/intro.js'].forEach(function(src){
+    var el=document.createElement('script');
+    el.src=src; el.async=false; d.appendChild(el);
+  });
+  /* If the script that runs it never arrives, the page must not stay hidden. */
+  setTimeout(function(){
+    if(d.getAttribute('data-intro')==='running' && !window.__introStarted){
+      d.removeAttribute('data-intro');
+      document.dispatchEvent(new Event('intro:ready'));
+    }
+  },2200);
+})();
+</script>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23160B02'/><path d='M24.3 21.6A10 10 0 1 1 24.3 10.4' fill='none' stroke='%23FEF6F0' stroke-width='3' stroke-linecap='round'/><circle cx='16' cy='16' r='3.5' fill='%23CC5500'/></svg>">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to main content</a>
 
 <div class="surface" aria-hidden="true"></div>
+
+<div class="intro" id="intro" aria-hidden="true">
+  <svg class="intro__mark" id="intro-mark" viewBox="0 0 32 32">
+    <g id="intro-swarm"></g>
+    <path class="mark__ring" id="intro-ring" d="M25.1 22.2A11 11 0 1 1 25.1 9.8"/>
+    <path class="mark__lead" id="intro-lead" d="M18.6 16h11.2"/>
+    <circle class="mark__core" id="intro-core" cx="16" cy="16" r="3.7"/>
+  </svg>
+</div>
 
 <div class="spine" aria-hidden="true">
   <div class="track"></div><div class="fill" id="spinefill"></div>

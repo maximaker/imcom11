@@ -1,6 +1,13 @@
 (function(){
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  requestAnimationFrame(function(){ document.body.setAttribute('data-ready','true'); });
+  /* data-ready starts the masked headline. On a first load the animation owns the
+     moment that happens, so it says when. */
+  function markReady(){ document.body.setAttribute('data-ready','true'); }
+  if (document.documentElement.getAttribute('data-intro') === 'running'){
+    document.addEventListener('intro:ready', markReady, {once:true});
+  } else {
+    requestAnimationFrame(markReady);
+  }
 
   document.querySelectorAll('.rise > span').forEach(function(s,i){
     s.style.transitionDelay = (0.06 + i*0.075)+'s';

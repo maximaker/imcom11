@@ -18,6 +18,37 @@ MARK = ('<svg class="mark" viewBox="0 0 32 32" aria-hidden="true">'
 
 WORDMARK = 'one flow<em>.</em>first'
 
+GATE = '''<script>
+/* Decides, before anything paints, whether the first-load animation runs. It has
+   to be inline and here: hiding the page from a deferred script means showing it
+   first and then snatching it back. The flag is written now rather than when the
+   animation ends, so navigating away mid-way still counts as having seen it. */
+(function(){
+  var d=document.documentElement;
+  try{
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if(localStorage.getItem('ofo.intro')==='1') return;
+    localStorage.setItem('ofo.intro','1');
+  }catch(e){ return; }              /* no storage, no animation: never twice */
+  d.setAttribute('data-intro','running');
+  /* Fetched here rather than linked in the markup: this runs once ever, and the
+     other 99% of loads should not pay 72KB for it. async=false on an injected
+     script keeps execution order without blocking the parser. */
+  ['assets/js/vendor/gsap.min.js','assets/js/intro.js'].forEach(function(src){
+    var el=document.createElement('script');
+    el.src=src; el.async=false; d.appendChild(el);
+  });
+  /* If the script that runs it never arrives, the page must not stay hidden. */
+  setTimeout(function(){
+    if(d.getAttribute('data-intro')==='running' && !window.__introStarted){
+      d.removeAttribute('data-intro');
+      document.dispatchEvent(new Event('intro:ready'));
+    }
+  },2200);
+})();
+</script>'''
+
+
 def screen(label, body):
     """A phone-sized line drawing standing in for a screenshot. Swap the whole
     <svg> for <img src="assets/img/name.png" alt="..."> when a real one exists:
@@ -76,12 +107,22 @@ def shell(slug, title, desc, body, close_heading, close_body,
 <meta property="og:description" content="{desc}">
 <meta property="og:type" content="website">
 <link rel="stylesheet" href="assets/css/style.css">
+{GATE}
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23160B02'/><path d='M24.3 21.6A10 10 0 1 1 24.3 10.4' fill='none' stroke='%23FEF6F0' stroke-width='3' stroke-linecap='round'/><circle cx='16' cy='16' r='3.5' fill='%23CC5500'/></svg>">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to main content</a>
 
 <div class="surface" aria-hidden="true"></div>
+
+<div class="intro" id="intro" aria-hidden="true">
+  <svg class="intro__mark" id="intro-mark" viewBox="0 0 32 32">
+    <g id="intro-swarm"></g>
+    <path class="mark__ring" id="intro-ring" d="M25.1 22.2A11 11 0 1 1 25.1 9.8"/>
+    <path class="mark__lead" id="intro-lead" d="M18.6 16h11.2"/>
+    <circle class="mark__core" id="intro-core" cx="16" cy="16" r="3.7"/>
+  </svg>
+</div>
 
 <div class="spine" aria-hidden="true">
   <div class="track"></div><div class="fill" id="spinefill"></div>
@@ -147,12 +188,10 @@ HOME_HERO = '''<div class="heroband" id="heroband">
       <div class="margin"><b>The offer</b>Two weeks<em>Fixed scope. Fixed price. The bar agreed before the build.</em></div>
       <div>
         <h1>
-          <span class="rise"><span>Know whether your idea</span></span>
-          <span class="rise"><span><strong>is worth building,</strong></span></span>
-          <span class="rise"><span>before you spend</span></span>
-          <span class="rise"><span>months finding out.</span></span>
+          <span class="rise"><span>Is your idea</span></span>
+          <span class="rise"><span><strong>worth building?</strong></span></span>
         </h1>
-        <p class="deck rev">In two weeks you own <b>a working version of the one part that matters most</b>, a bar agreed before anyone sees it, and the method to get a straight answer out of real people.</p>
+        <p class="deck rev">In two weeks you own <b>the one part that matters most</b>, built for real, and a bar agreed before anyone sees it.</p>
 
         <p class="principle rev">One flow first. <span>Nothing else yet.</span></p>
 
@@ -665,8 +704,8 @@ CASE = '''<div class="doc">
       <p class="rev" style="margin-top:36px"><a class="quiet" href="what-ive-built.html">See the other apps ''' + ARROW + '''</a></p>''')
 
 PAGES = [
-    ("index.html", "Know whether your idea is worth building | One flow first",
-     "In two weeks you own a working version of the one part that matters most, a bar agreed before anyone sees it, and the method to get a straight answer out of real people.",
+    ("index.html", "Is your idea worth building? | One flow first",
+     "In two weeks you own the one part that matters most, built for real, and a bar agreed before anyone sees it. Then real people tell you whether it holds.",
      HOME, "Let's find out if your idea is <strong>real</strong>",
      "One call. You talk through your idea, you hear honestly whether this fits. No pitch, no pressure."),
     ("how-it-works.html", "How it works | One flow first",

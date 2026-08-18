@@ -2,7 +2,9 @@
 
 Static marketing site for a productized two-week discovery engagement.
 The offer keeps the two-week timeframe; the brand does not use the word "sprint".
-Five pages, no build step, no dependencies, no webfont requests.
+Five pages plus a case study, no build step, no webfont requests, and nothing
+fetched from anywhere else. GSAP is the one dependency and it is vendored, not
+linked, so the site still makes no external request.
 
 ## Structure
 
@@ -14,11 +16,47 @@ Five pages, no build step, no dependencies, no webfont requests.
     start.html            intro-call form
     assets/css/style.css  the whole design system
     assets/img/mark.svg   the logomark, standalone
+    assets/js/intro.js    the first-load animation
+    assets/js/vendor/     gsap.min.js, vendored
     assets/js/site.js     all behavior
     build.py              regenerates the five pages from one shell
 
 Edit `build.py` and run `python3 build.py` to change shared chrome, or edit the
 HTML directly for one-off copy changes.
+
+## The first-load animation
+
+`assets/js/intro.js`, GSAP, once ever per browser.
+
+The mark assembles itself: one dot, then others gathering around it, settling
+onto the circle and hardening into the ring, gap included. One dot stays lit in
+the middle, the line runs out through the gap, and the whole thing walks to the
+masthead at the size it lives at. Then the page arrives behind it, a piece at a
+time, in reading order.
+
+Four things are load-bearing:
+
+- **The gate is inline in the head.** Hiding the page from a deferred script means
+  showing it first and snatching it back. It also injects GSAP itself, so the
+  other 99% of loads never download 72KB they cannot use.
+- **The flag is written when the animation starts,** not when it ends, so
+  navigating away halfway still counts as having seen it. No storage means no
+  animation, which is the safe way round.
+- **The landing is measured, not guessed.** The masthead mark is hidden but still
+  laid out, so its box is real. Verified pixel-exact: 30px onto 30px, centre
+  delta [0, 0], which is what lets the stage vanish and the real mark appear in
+  the same frame without a visible swap.
+- **The pieces it brings in are marked `data-in`.** They carry `.rev`, which is
+  `opacity:0` until the scroll observer marks it; without this, `clearProps` at
+  the end of the stagger hands them back to that rule and they disappear, the
+  button among them.
+
+Reduced motion skips it. So does a missing GSAP, a failed timeline, and a
+2.2 second failsafe in the gate: the page must never stay hidden. Any scroll,
+tap or keypress speeds it up rather than jumping, so the mark still lands where
+it belongs.
+
+To see it again, clear `ofo.intro` from localStorage.
 
 ## Design notes
 
