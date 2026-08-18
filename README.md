@@ -170,6 +170,11 @@ label whose row it belongs to, so it follows the type scale for free. If you tou
 this, the thing to check is not the arithmetic: it is whether the bead is a child
 of `.spine`.
 
+One bead per margin, not per numbered section. The hero carries a margin without
+being a numbered section, so keying the list to `[data-node]` left the first label
+on the page as the only one with no bead beside it. Its section is null and it
+simply never lights.
+
 Two of those fixes went into `style.css` instead, because they are wrong on the
 live site too: the hero's label, its dot and the first line of its headline now
 share a row (its heading is far bigger than a section's, so the hero scopes its

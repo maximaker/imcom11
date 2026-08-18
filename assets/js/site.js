@@ -172,11 +172,15 @@
     });
   }
 
-  /* Each section's own marginalia is its marker. No second list to keep in sync. */
+  /* Each margin is its own marker. No second list to keep in sync.
+     Every margin, not every numbered section: the hero carries a margin without
+     being a numbered section, so keying this to [data-node] left it as the one
+     label on the page with no bead beside it. Its sec is null and it simply never
+     lights. */
   var fill = document.getElementById('spinefill');
-  var marks = [].slice.call(document.querySelectorAll('[data-node]')).map(function(sec){
-    return { sec: sec, note: sec.querySelector('.margin') };
-  }).filter(function(m){ return m.note; });
+  var marks = [].slice.call(document.querySelectorAll('.margin')).map(function(note){
+    return { note: note, sec: note.closest('[data-node]') };
+  });
 
   function absTop(el){ return el.getBoundingClientRect().top + window.scrollY; }
 
@@ -245,6 +249,7 @@
   function measure(){
     placeRail();
     marks.forEach(function(m){
+      if(!m.sec) return;
       m.a = absTop(m.sec);
       m.b = m.a + m.sec.offsetHeight;
     });
@@ -291,7 +296,7 @@
       var mid=window.scrollY+window.innerHeight/2;
       var railTop=railEl ? parseFloat(getComputedStyle(railEl).top) || 0 : 0;
       marks.forEach(function(m,i){
-        var on = (mid>=m.a && mid<m.b);
+        var on = !!m.sec && mid>=m.a && mid<m.b;
         m.note.setAttribute('data-on', on ? 'true':'false');
         var bead=beads[i];
         if(bead){
