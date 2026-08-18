@@ -100,12 +100,23 @@
   .spine .track{background:var(--sand-50);opacity:1}
   .spine .fill{transition:transform 180ms cubic-bezier(.2,.7,.3,1)}
 
-  /* The dot is painted over the rail and centred on it to the pixel, but with a
-     white track it did not look like it: the dot was a ring with a cream hole,
-     and cream against white is 1.11:1, so the eye joined the line straight
-     through it. Filled, it interrupts the line it sits on. Inactive is the rule
-     colour, active stays clay, so the state still reads as colour. */
-  .margin::after{background:var(--sand-300)}
+  /* Making this read correctly took three goes, so it is worth writing down why.
+     The dot is painted above the rail and its centre agrees with the rail's to
+     0.00 in every measurement, and it still looked like a bead sitting beside the
+     line rather than on it. Two reasons, neither of them the alignment:
+       1. It was a ring with a cream hole, and cream against a white track is
+          1.11:1, so the interruption existed and was invisible.
+       2. A 1px rule and a 13px circle rasterise independently. Even snapped to
+          the same whole pixel they can land on neighbouring device pixels at
+          fractional display scaling, which is exactly the kind of 1px error the
+          eye is best at.
+     So the dot no longer relies on being pixel-perfect. It is filled, and it
+     carries an opaque halo of the paper behind it, which clears the rule for 4px
+     all round. The line is now unmistakably interrupted whichever way either of
+     them rounds. */
+  .margin::after{background:var(--sand-300);
+    box-shadow:0 0 0 4px var(--sand-100)}
+  .tinted .margin::after{box-shadow:0 0 0 4px var(--sand-200)}
   .margin[data-on="true"]::after{background:var(--clay-mark)}
 }
 
