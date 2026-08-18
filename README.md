@@ -262,6 +262,121 @@ the reference's editorial layout, with IBM Plex vendored in `assets/fonts`. It
 changes structure as well as colour, which is more than was asked for, and it is
 kept only because it is built.
 
+## From the design system doc (v1.0)
+
+`Design system from website.zip` is a system derived from this site's own pages.
+Six parts of it are adopted, in the `FROM THE DESIGN SYSTEM` section of
+`style.css`. The doc is a document rather than an authority — it was derived from
+an older build, it says so itself, and several of its statements conflict with
+decisions since measured here — so what is not adopted is listed below with the
+reason.
+
+**Type.** IBM Plex Sans and IBM Plex Mono, sans only. Both were already vendored
+in `assets/fonts` for an abandoned layout experiment, so this costs no
+third-party request: four files, 126KB, all self-hosted. The sans is variable
+across 100–700 because the scale sets display at 200 and 300; the mono is two
+static cuts because it is only ever used at 11–12px in two weights. The old
+system stack remains the fallback behind both, so a failed request degrades to
+last week's site.
+
+The scale is the doc's: h1 at 200 and `-.03em`, h2 at 300 and `-.025em`, h3 at
+500 and `-.015em`. Eyebrows and readouts move to mono at `.14em` — the section
+ordinals, the step labels, the case-block keys, the sieve counter and the nav.
+All of them were already uppercase at 11–12px with tracking pushed out by hand,
+which is mono's job done in a sans.
+
+**The paper grain.** Three repeating hairline weaves crossed at 0°, 90° and 37°,
+a little over 1% opacity, on `body` and scrolling with the page. The doc's test
+for it is the useful part: felt rather than seen, must not survive a screenshot
+at 50% zoom, and if you can describe it, it is too strong. Its two radial light
+washes are not adopted — the hero already carries `.bloom` doing that, and a
+second source at 90% white in the same corner reads as two washes rather than one
+page. Bands, cards and fields paint their own background, so the grain stops at
+their edges without a rule needed to stop it.
+
+**Motion.** One easing, `cubic-bezier(.2,.7,.3,1)`, replacing the site's own
+`cubic-bezier(.4,0,.2,1)` everywhere; the doc is right that the consistency is
+what reads as smooth rather than the curve. Four durations with jobs: 120 colour,
+180 hover, 340 height, 520 first arrival, where the site had 150/200/300 and no
+name for an arrival. The rail's fill was already written at 180ms on this exact
+curve before the doc was read, which is some evidence the numbers are sound.
+
+Arrivals now travel 10px rather than 18 and stagger 70ms within a group. The
+stagger is new behaviour in `site.js`: everything crossing the line in one
+observer batch used to arrive on the same frame, so a three-up appeared as one
+object. A batch is the group, so entries are bucketed by parent and delayed by
+index within their own bucket, sorted by document position first because the
+observer promises nothing about entry order. Capped at six so a long list does
+not leave its last item waiting most of a second. Verified against synthetic
+entries in Node, because `IntersectionObserver` does not fire in a pane that
+never composites.
+
+Press is `scale(.985)` on buttons and the rail disc, dropped under reduced
+motion. Focus is 2px accent at 3px offset everywhere; it had been 6px on the nav
+and 3px on the objections, which is two answers to one question.
+
+**The logotype.** The wordmark splits by weight rather than being set evenly:
+"one flow" at 300, the dot in terracotta, "first" at 600. The dot was already the
+accent; the weight split is what makes the mark say which half is the name. The
+SVG logomark stays, which the doc's wordmark does not have — it was chosen from a
+brand board, and the first-load animation and the head of the rail are both built
+on it.
+
+**Space.** The 4px scale is tokenised (`--s-xs` through `--s-3xl`) and the doc's
+one stated rhythm figure that was off, 28px between a heading and its body, is
+applied. The 1120px container is not: at 1140 the rail's x, the margin column,
+the bead placement and the travelling button's whole geometry are derived from
+the current measure, and 20px of container is not worth re-deriving all of it.
+
+**Do / don't.** Audited rather than assumed. Body copy runs 21–62ch against the
+doc's 62–68 ceiling, so nothing is over-long; every section already carries the
+ordinal / name / italic note rig the doc calls its one pattern; and the primary
+action now repeats its exact wording across hero, ride, closing button and foot
+disc on every page.
+
+The gradient on the primary button is gone, which two rules wanted
+independently: the doc forbids gradients, and the gradient was also the site's
+last contrast failure. White at 17.5px/600 needs 4.5:1 and the top stop #EA650F
+gave 3.30:1, so the label was under AA across the upper third of every button.
+The comment beside it claimed the top stop had been picked to keep every band
+above AA, which was wrong — measured 3.30, 3.75 and 4.40 down the three stops.
+Flat `--clay-400` is 5.19:1, and it is this site's ramp one step down rather than
+the doc's #B2461F, because the instruction was to keep this terracotta. The page
+now measures zero contrast failures, which it never has before.
+
+### Not adopted, and why
+
+- **The doc's accent `#B2461F` and paper `#FDF8EC`.** The instruction here was to
+  keep this site's terracotta, and the papers were chosen and measured against
+  every ink on the site. Two near-identical warm palettes is not an improvement.
+- **A 2px terracotta progress line at the top of the viewport.** This is listed
+  under "interaction patterns in use on this page" — it is the doc's own chrome,
+  not a prescription for the site. It would also undo the decision to take the
+  accent off the rail entirely and leave it to the button.
+- **"Hover is a lift, not a colour change."** True of cards, and the cards follow
+  it. The objections are no longer cards, and a shadow lifting a line of text is
+  the wrong gesture; that row deepens its rule instead.
+- **Structural radius.** The doc wants structure square, with radius only on
+  things you touch. Tinted bands still carry 20px and the steps 12px. Squaring
+  them is a real change to how the page reads and has not been asked for.
+- **Two tinted bands per page.** The home page has five. The doc's own colour
+  section sanctions banded sections as paper-rested but caps them at two, and it
+  is right that five is a rhythm rather than an emphasis. This is a content
+  decision about which three sections stop being special.
+- **"Diagrams are typographic or they don't exist."** The deliverable glyphs and
+  the phone line-drawings are illustration. They accompany sentences rather than
+  replacing them, which is the spirit of the rule, but they would not survive it
+  read strictly.
+- **A centred caption.** The sieve's caption is centred under a centred diagram.
+  The doc says left-align everything; this is the one place the page disagrees.
+- **"Light serif with one bold closing clause."** The doc says this in its
+  anatomy section and "no serif anywhere" in its type section. Followed the
+  latter.
+
+Two things in the doc are simply out of date: it reports the site carrying two
+brands, "the sprint" on the home page against "one flow first" elsewhere, and it
+quotes `#FEF6F0` as the theme colour. Both were true of an earlier build.
+
 ## Design notes
 
 - Warm palette on `#FEF6F0` paper with a `#CC5500` accent. The accent is split:

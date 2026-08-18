@@ -33,7 +33,11 @@ MARK = ('<svg class="mark" viewBox="0 0 32 32" aria-hidden="true">'
         '<path class="mark__lead" d="M18.6 16h11.2"/>'
         '<circle class="mark__core" cx="16" cy="16" r="3.7"/></svg>')
 
-WORDMARK = 'one flow<em>.</em>first'
+# Split so the two halves can differ in weight: the design system sets "one
+# flow" light and "first" semibold, with the dot as the accent, so the mark
+# says which half of it is the name. Kept inside the one <span> because
+# intro.js reveals '.top .name span'.
+WORDMARK = '<i>one flow</i><em>.</em><b>first</b>'
 
 GATE = '''<script>
 /* Decides, before anything paints, whether the first-load animation runs. It has

@@ -1447,3 +1447,152 @@ main{position:relative}
   html[data-ride] .hero-cta:not([data-handed="true"]) .act,
   html[data-ride] .close:not([data-handed="true"]) .act{pointer-events:none}
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FROM THE DESIGN SYSTEM (v1.0)
+   ───────────────────────────────────────────────────────────────────────────
+   Adopted from the One Flow First design system doc: the typefaces and their
+   settings, the paper grain, the 4px space scale, the logotype's weight split,
+   and the motion rules. What is not adopted, and why, is in the README — the doc
+   was derived from an older build of this site and several of its statements
+   contradict decisions since made and measured here.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Typefaces ──
+   IBM Plex Sans and IBM Plex Mono, a sans-only pairing. Already vendored for an
+   earlier experiment, so this costs no third-party request and no tracking; the
+   four files come to 126KB and are all served from here.
+   The variable sans covers 100–700, which is what the scale below needs: display
+   is set at 200 and 300, weights that would have meant two more files as static
+   cuts. Mono is two static cuts because it is only ever used at 11–12px in two
+   weights, where a variable axis would be paying for range nothing uses.
+   The old system stack stays behind each as the fallback, so a failed font
+   request degrades to what the site was last week rather than to Times. */
+@font-face{font-family:'Plex Sans';src:url('../fonts/plex-sans-var.woff2') format('woff2-variations');
+  font-weight:100 700;font-style:normal;font-display:swap}
+@font-face{font-family:'Plex Sans';src:url('../fonts/plex-sans-var-italic.woff2') format('woff2-variations');
+  font-weight:100 700;font-style:italic;font-display:swap}
+@font-face{font-family:'Plex Mono';src:url('../fonts/plex-mono-500.woff2') format('woff2');
+  font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Plex Mono';src:url('../fonts/plex-mono-600.woff2') format('woff2');
+  font-weight:600;font-style:normal;font-display:swap}
+
+:root{
+  --sys:'Plex Sans',ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,
+        "Helvetica Neue",Arial,sans-serif;
+  --mono:'Plex Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+
+  /* ── Motion ──
+     One easing for everything, which is the doc's point and a fair one: the
+     consistency is what reads as smooth, more than any single curve does. Fast
+     out, long settle.
+     Four durations, each with a job: colour, hover, height, first arrival. The
+     rail's fill was already written at 180ms on this exact curve before the doc
+     was read, which is some evidence the numbers are right. */
+  --ease-out:cubic-bezier(.2,.7,.3,1);
+  --t-fast:120ms;    /* colour */
+  --t-mid:180ms;     /* hover */
+  --t-slow:340ms;    /* anything that changes height */
+  --t-arrive:520ms;  /* a block's one and only entrance */
+
+  /* ── Space, 4px base ──
+     Named so the rhythm the doc specifies can be written as itself: 104 above a
+     section header, 44 below its rule, 28 between a heading and its body. */
+  --s-xs:4px; --s-sm:8px; --s-md:16px; --s-lg:28px;
+  --s-xl:44px; --s-2xl:72px; --s-3xl:104px;
+}
+
+/* ── The paper grain ──
+   Three repeating hairline weaves crossed at 0°, 90° and 37°, at a little over
+   1% opacity. The doc's rule for it is the useful part: it is felt rather than
+   seen, it must not survive a screenshot at 50% zoom, and if you can describe it
+   it is too strong.
+   On body, and left to scroll with the page, because it is the paper the page is
+   printed on — fixing it would slide the type over a stationary texture, which is
+   the one thing that would give it away.
+   The doc pairs the weaves with two soft radial washes. Those are not adopted:
+   the hero already carries .bloom doing that job, and a second light source at
+   90% white in the same corner reads as two washes rather than one page.
+   Tinted bands, cards and fields all paint their own background, so the grain
+   stops at their edges by construction, which is the doc's "never behind a card"
+   without needing a rule to enforce it. */
+body{
+  background-image:
+    repeating-linear-gradient(0deg,  rgba(23,27,52,.016) 0 1px, rgba(23,27,52,0) 1px 3px),
+    repeating-linear-gradient(90deg, rgba(23,27,52,.013) 0 1px, rgba(23,27,52,0) 1px 4px),
+    repeating-linear-gradient(37deg, rgba(120,92,40,.012) 0 1px, rgba(120,92,40,0) 1px 5px);
+}
+
+/* ── The type scale ──
+   The doc's weights and tracking, which are lighter and tighter than what was
+   here: display at 200 where it was 300, and tracking from -.02em out to -.03em
+   at the largest size. Plex at 200 is a genuinely thin face and only works
+   because the sizes are large — nothing below 34px is set at 200 anywhere.
+   The emphasis rule is untouched because it was already the site's own: every
+   heading is a light opening clause and one bold closing clause, and the promise
+   sits in the weight change rather than in a colour. */
+h1{font-weight:200;letter-spacing:-.03em;line-height:1.06}
+h2{font-weight:300;letter-spacing:-.025em;line-height:1.12;margin-bottom:var(--s-lg)}
+h3{font-weight:500;letter-spacing:-.015em;line-height:1.25}
+.deck,.lede{letter-spacing:-.005em}
+
+/* Eyebrows and readouts move to mono. The doc reserves it for section ordinals,
+   uppercase micro-labels and anything that reads as a measurement, always 11–12px
+   at .14em tracking — which is what every one of these already was in the sans,
+   with the tracking doing mono's job by hand. */
+.margin b,.step .n,.case__block .case__k,.verdict .k,.stair .k,
+.counter,.top nav a{font-family:var(--mono);letter-spacing:.14em}
+.margin b,.top nav a{font-size:11px}
+.step .n,.case__block .case__k{font-size:12px}
+
+/* ── The logotype ──
+   The doc splits the wordmark by weight instead of setting it evenly: "one flow"
+   light, the dot in terracotta, "first" semibold. The dot was already the accent
+   here; the weight split is new, and it is what makes the mark say which half of
+   it is the name. */
+.top .name i{font-style:normal;font-weight:300}
+.top .name b{font-weight:600}
+
+/* ── Press is felt ──
+   .985, which the doc calls barely visible and entirely noticeable. Buttons and
+   the rail disc only: a link inside a sentence has nothing to scale. */
+.act:active,.railcta:active,.ride:active{transform:scale(.985)}
+.act,.railcta{transition:transform var(--t-fast) var(--ease-out),
+  background var(--t-mid) var(--ease-out),box-shadow var(--t-mid) var(--ease-out)}
+
+/* Arrivals: 10px rather than 18, on the arrival duration, and staggered 70ms
+   within a group by site.js as each group crosses. */
+.rev{transform:translateY(10px);
+  transition:opacity var(--t-arrive) var(--ease-out),
+             transform var(--t-arrive) var(--ease-out)}
+
+/* Focus: 2px accent at 3px offset, everywhere. It was 6px on the nav and 3px on
+   the objections, which is two answers to one question. */
+.top nav a:focus-visible,.act:focus-visible,.asset button:focus-visible,
+.doubt:focus-visible,.railcta:focus-visible,.ride:focus-visible{
+  outline:2px solid var(--clay-600);outline-offset:3px}
+
+@media (prefers-reduced-motion:reduce){
+  .act:active,.railcta:active,.ride:active{transform:none}
+}
+
+/* ── The button loses its gradient ──
+   Two things pointed at the same fix. The design system's don't-list rules out
+   gradients outright, and the gradient was also the last contrast failure on the
+   site: white at 17.5px/600 needs 4.5:1, and the top stop #EA650F gave 3.30:1, so
+   the label was under AA across the upper third of every primary button. The note
+   beside it claimed the top stop was chosen to keep every band above AA, which was
+   simply wrong — measured 3.30, 3.75 and 4.40 down the three stops, so only the
+   bottom one passed.
+   Flat --clay-400, 5.19:1 against white. It is the site's own ramp one step down
+   from --clay-mark rather than the doc's #B2461F: the instruction was to keep this
+   terracotta, and this keeps it.
+   The inset highlight goes with the gradient. It existed to make a lit top edge
+   read against the darkening face, and on a flat colour it is a grey line. The
+   warm cast underneath stays, because the doc allows a shadow on hover and on
+   floating things, and the ride is both. */
+.act,.ride{background:var(--clay-400)}
+.act{box-shadow:0 1px 2px rgba(93,41,18,.20)}
+.act:hover{filter:none;background:var(--clay-500);
+  box-shadow:0 2px 6px rgba(93,41,18,.22)}
+.ride{box-shadow:0 6px 18px -6px rgba(93,41,18,.5)}

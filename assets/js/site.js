@@ -211,17 +211,42 @@
     revealTargets.forEach(function(t){t.setAttribute('data-in','true');});
     if(st) st.querySelectorAll('w').forEach(function(w){w.setAttribute('data-lit','true');});
   } else {
+    /* Staggered 70ms within a group, which the design system asks for and this did
+       not do: everything that crossed the line in one observer batch arrived on the
+       same frame, so a four-up grid appeared as one object rather than as four
+       things. A batch is the group -- the browser hands over everything that
+       crossed together -- so they are bucketed by parent and delayed by their index
+       within their own bucket. Sorted by document position first, because the
+       observer makes no promise about entry order and an unsorted stagger would
+       run a row in whatever sequence the intersections happened to be reported.
+       Capped at six, so a long list does not have its last item waiting most of a
+       second for its turn. */
+    var STAGGER = 0.07, STAGGER_MAX = 6;
     var io=new IntersectionObserver(function(es){
-      es.forEach(function(e){
-        if(!e.isIntersecting) return;
+      var arriving = es.filter(function(e){return e.isIntersecting;});
+      arriving.sort(function(a,b){
+        var r = a.target.compareDocumentPosition(b.target);
+        return (r & Node.DOCUMENT_POSITION_FOLLOWING) ? -1 : 1;
+      });
+      var seen = new Map();
+      arriving.forEach(function(e){
+        var group = e.target.parentElement || document.body;
+        var i = seen.get(group) || 0;
+        seen.set(group, i + 1);
+        /* Only if nothing has set one already: .rev pieces inside the intro are
+           handed their timing by intro.js, and overwriting it would desynchronise
+           the handover. */
+        if(i && !e.target.style.transitionDelay){
+          /* Rounded: 3 * 0.07 is 0.21000000000000002 in binary floating point, and
+             that lands in the DOM as the delay verbatim. */
+          e.target.style.transitionDelay =
+            (Math.min(i, STAGGER_MAX) * STAGGER).toFixed(3) + 's';
+        }
         e.target.setAttribute('data-in','true');
         io.unobserve(e.target);
       });
     },{rootMargin:'0px 0px -8% 0px',threshold:.12});
     revealTargets.forEach(function(t){io.observe(t);});
-    document.querySelectorAll('.steps').forEach(function(g){
-      g.querySelectorAll('.step').forEach(function(s,i){s.style.transitionDelay=(i*0.09)+'s';});
-    });
   }
 
   /* Each margin is its own marker. No second list to keep in sync.
