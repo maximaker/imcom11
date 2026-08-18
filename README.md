@@ -35,6 +35,19 @@ HTML directly for one-off copy changes.
   declarations in CSS (`.mark__ring`, `.mark__lead`, `.mark__core`), so it
   inherits the palette instead of hardcoding it. `assets/img/mark.svg` is the
   standalone copy for anywhere CSS cannot reach.
+- The masthead is the page ground, not glass. There is no blur anywhere else
+  here, and `saturate()` would quietly re-tint a palette whose ratios were
+  measured. Because it is opaque it has to be full width, so the bar is the
+  sticky element and its row is a `.doc`: the header's inner edges align with
+  every band by construction, and it inherits the same responsive gutter
+  instead of repeating 1140px and 26px. Vertical padding sits on `.top`, not on
+  the row, because `.doc`'s `padding` shorthand comes later in the sheet.
+- The nav belongs to the tracked-label register (`.margin b`, `.verdict .k`,
+  `.stair .k`), not to body copy: it is reference, and on a wide screen the rail
+  disc is the only thing asking to be clicked. Its size lives in the shared
+  label rule so it cannot drift from the rest of the meta layer. The current
+  page lights clay and keeps its underline, the same way an active margin label
+  lights its dot.
 - Two lockups. Below 1180px the mark sits beside the wordmark in the masthead.
   At 1180px and up the masthead drops its copy and the lockup moves to the rail
   cap, stacked, so it stays inside the rail's own column of air.

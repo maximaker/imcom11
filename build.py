@@ -96,13 +96,15 @@ def shell(slug, title, desc, body, close_heading, close_body,
 </div>
 
 <header class="top" id="top">
-  <a class="name" href="index.html">{MARK}<span>{WORDMARK}</span></a>
-  <button class="navtoggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="Open menu">
-    <span aria-hidden="true"></span><span aria-hidden="true"></span>
-  </button>
-  <nav id="nav" aria-label="Primary">
+  <div class="doc top__row">
+    <a class="name" href="index.html">{MARK}<span>{WORDMARK}</span></a>
+    <button class="navtoggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="Open menu">
+      <span aria-hidden="true"></span><span aria-hidden="true"></span>
+    </button>
+    <nav id="nav" aria-label="Primary">
       {nav}
-  </nav>
+    </nav>
+  </div>
 </header>
 
 <main id="main">

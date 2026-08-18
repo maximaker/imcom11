@@ -202,43 +202,55 @@ a{color:var(--clay-500)}
 a:hover .mark__lead{stroke:var(--clay-400);transform:translateX(1.5px)}
 @media (prefers-reduced-motion: reduce){a:hover .mark__lead{transform:none}}
 
-/* ── Masthead ── */
-.top{position:sticky;top:0;z-index:30;display:flex;justify-content:space-between;
-  align-items:baseline;gap:22px;padding:22px 26px;flex-wrap:wrap;max-width:1140px;margin:0 auto;
-  background:color-mix(in srgb,var(--sand-100) 80%,transparent);
-  backdrop-filter:blur(14px) saturate(1.3);-webkit-backdrop-filter:blur(14px) saturate(1.3);
-  border-bottom:1px solid transparent;transition:border-color var(--t-mid) var(--ease-out)}
-
+/* ── Masthead ──
+   The bar is the page ground, not glass. There is no blur anywhere else here,
+   and saturate() would quietly re-tint a palette whose ratios were measured.
+   Going opaque means the background has to be full width while the content
+   stays in the column, so the row uses .doc: the header's inner edges now
+   align with every band by construction, and it inherits the same responsive
+   gutter instead of repeating 26px and 1140px. */
+.top{position:sticky;top:0;z-index:30;background:var(--sand-100);
+  padding-top:20px;padding-bottom:20px;
+  border-bottom:1px solid transparent;
+  transition:border-color var(--t-mid) var(--ease-out)}
 .top[data-stuck="true"]{border-bottom-color:var(--sand-300)}
-/* On small screens the nav wraps, making the bar tall enough to sit over the
-   headline. Release the sticky there. The real build gets a menu button. */
-@media(max-width:760px){
-  .top{position:static;padding:20px 26px 16px}
-  .top nav{gap:18px;font-size:14px}
-  .top nav a{font-size:14px}
-}
+/* The bar owns its height, the row owns its alignment. Vertical padding cannot
+   live on .top__row: .doc sets `padding:0 20px` further down the sheet, and the
+   shorthand would zero it. */
+.top__row{display:flex;justify-content:space-between;align-items:center;gap:22px}
+
 .top .name{display:flex;align-items:center;gap:10px;
   font-family:var(--display);font-size:19px;font-weight:600;letter-spacing:-0.015em}
 .top .name .mark{width:24px;height:24px}
 @media(min-width:1180px){
   /* The lockup lives on the rail at this width, so the masthead drops its copy
-     and the nav moves right, clear of the rail cap. Declared after the base
-     rule above, or the base display would win. */
+     and the nav owns the right end of the bar. Declared after the base rules,
+     or source order would win on both. */
   .top .name{display:none}
+  .top__row{justify-content:flex-end}
 }
-.top nav{display:flex;gap:26px}
-.top nav a{position:relative;font-size:15px;color:var(--ink-2);text-decoration:none;
-  transition:color var(--t-fast) var(--ease-out)}
-.top nav a::after{content:'';position:absolute;left:0;right:0;bottom:-4px;height:1.5px;
-  background:var(--clay-500);transform:scaleX(0);transform-origin:right;
+
+/* The nav is reference, not action: the rail disc is the only thing on a wide
+   screen asking to be clicked. So the nav joins the tracked-label register the
+   whole site uses for its meta layer (.margin b, .verdict .k, .stair .k) rather
+   than sitting at body size, and the current page lights clay exactly the way
+   an active margin label does. Sizes come from the shared label rule further
+   down, so this never drifts from the rest of the system. */
+.top nav{display:flex;gap:30px}
+.top nav a{position:relative;font-family:var(--body);font-size:11px;font-weight:500;
+  text-transform:uppercase;letter-spacing:2.4px;color:var(--ink-3);
+  text-decoration:none;transition:color var(--t-mid) var(--ease-out)}
+/* right:2px, not 0: tracked type carries a trailing letter-space the rule
+   would otherwise sit under. */
+.top nav a::after{content:'';position:absolute;left:0;right:2px;bottom:-6px;height:1.5px;
+  background:var(--clay-mark);transform:scaleX(0);transform-origin:left;
   transition:transform var(--t-mid) var(--ease-out)}
 .top nav a:hover{color:var(--clay-500)}
-.top nav a:hover::after{transform:scaleX(1);transform-origin:left}
-/* Declared after the base rule, or space-between wins on source order.
-   With the wordmark on the rail, the nav owns the right end of the bar. */
-@media(min-width:1180px){
-  .top{justify-content:flex-end}
-}
+.top nav a[aria-current="page"]{color:var(--clay-500)}
+.top nav a:hover::after,
+.top nav a[aria-current="page"]::after{transform:scaleX(1)}
+.top nav a:focus-visible{outline:2px solid var(--clay-600);outline-offset:6px;
+  border-radius:2px}
 
 /* ── Hero ──
    The bloom used to live inside .open, which is only as wide as the text
@@ -596,8 +608,8 @@ h2{font-size:clamp(1.72rem,3.5vw,2.5rem);line-height:1.1;max-width:19ch;margin-b
 /* Mobile nav: a real menu button rather than a wrapping row of links. */
 .navtoggle{display:none}
 @media(max-width:760px){
-  .top{position:sticky;flex-wrap:nowrap;padding:14px 20px;
-    align-items:center;justify-content:space-between}
+  .top{padding-top:14px;padding-bottom:14px}
+  .top__row{flex-wrap:nowrap}
   .navtoggle{display:grid;place-content:center;gap:5px;width:44px;height:44px;
     margin-right:-8px;border:0;background:none;cursor:pointer;padding:0}
   .navtoggle span{display:block;width:20px;height:1.5px;background:var(--ink);
@@ -606,6 +618,8 @@ h2{font-size:clamp(1.72rem,3.5vw,2.5rem);line-height:1.1;max-width:19ch;margin-b
   .navtoggle[aria-expanded="true"] span:last-child{transform:translateY(-3.25px) rotate(-45deg)}
   /* 0fr only collapses the first grid row, and there are four links, so the
      menu sat open. max-height collapses the whole box. */
+  /* The panel hangs off .top, which is full width now, so its gutter is set to
+     match .doc at this breakpoint rather than guessed. */
   .top nav{position:absolute;left:0;right:0;top:100%;display:flex;
     flex-direction:column;gap:0;background:var(--sand-100);
     border-bottom:1px solid transparent;padding:0 20px;
@@ -615,9 +629,10 @@ h2{font-size:clamp(1.72rem,3.5vw,2.5rem);line-height:1.1;max-width:19ch;margin-b
                border-color 320ms var(--ease-out)}
   .top[data-open="true"] nav{max-height:70vh;padding:6px 20px 18px;
     border-bottom-color:var(--sand-300)}
-  .top nav a{min-height:52px;display:flex;align-items:center;font-size:17px;
+  .top nav a{min-height:52px;display:flex;align-items:center;
     border-bottom:1px solid var(--sand-300)}
   .top nav a:last-child{border-bottom:0}
+  /* No room for an underline in a stacked list, so colour carries the state. */
   .top nav a::after{display:none}
 }
 
@@ -759,9 +774,11 @@ main,.colo{position:relative;z-index:2}
    11px tracked labels are legible on a desktop monitor and not on a phone;
    tap targets under 44px fail on touch. Both are fixed at the source rather
    than per component. */
-.margin b,.verdict .k,.stair .k,.case__block h4,.fit__title,.caption i{font-size:12px}
+.margin b,.verdict .k,.stair .k,.case__block h4,.fit__title,.caption i,
+.top nav a{font-size:12px}
 @media(max-width:760px){
-  .margin b,.verdict .k,.stair .k,.case__block h4,.fit__title{font-size:12.5px;
+  .margin b,.verdict .k,.stair .k,.case__block h4,.fit__title,
+  .top nav a{font-size:12.5px;
     letter-spacing:2px}
   body{font-size:17px}
   .margin{font-size:14px;margin-bottom:4px}
