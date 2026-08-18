@@ -1,0 +1,87 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   Palette sample — the Claude Design system's surfaces and ink, on the layout we
+   already have, keeping the current terracotta orange as the accent.
+
+   Loaded after style.css and it only redefines colour: no size, spacing, type or
+   position is touched anywhere in this file. Verified by measuring both pages
+   side by side — every box lands on the same pixel and the document is the same
+   height, so what you are looking at is the current home page repainted.
+
+   Cut wood papers, dark indigo ink, the site's own orange. Every text colour is
+   measured against all three papers; where a value could not carry text the note
+   says so.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+:root{
+  /* ── Surfaces ──
+     Three states of one board, ageing. Fresh is the page, rested is a banded
+     section, dried is the other side of an argument. White stops being a page
+     and becomes a detail: fields, cards, hovered surfaces. */
+  --sand-50:#FFFFFF;    /* was #FFFCFA — white as a detail, never the page */
+  --sand-100:#FAF3E3;   /* was #FEF6F0 — paper, fresh cut. The page */
+  --sand-200:#F2E8D3;   /* was #F9EDE4 — paper, rested. The tinted bands */
+
+  /* The reference names one rule colour, #E0D1B2. This layout uses three line
+     weights, so the two heavier ones continue the reference's own ramp in the
+     direction it was already going, about -10,-14,-20 per step. Derived, not
+     quoted. */
+  --sand-300:#E0D1B2;   /* was #F0E1D5 — the rule. Every hairline */
+  --sand-400:#D6C39E;   /* was #E2CDBC — field borders, the rail track */
+  --sand-500:#CCB58A;   /* was #C9AE99 — the sieve dots, the mark's lead line */
+
+  /* ── Ink ──
+     Indigo rather than the warm near-black: cool against the wood, so the two
+     never muddy. Ratios are against paper-fresh, which is what it sits on. */
+  --ink:#171B34;        /* was #160B02 — 15.28:1 */
+  --ink-2:#2C3050;      /* was #4A3A2E — 11.54:1 */
+  --ink-3:#4E5372;      /* was #6E5B4C — 6.77:1, and 5.37:1 on dried. The
+                           reference's ink-muted. Its ink-faint #7E819B is
+                           3.45:1 on fresh and 2.74:1 on dried, and this token
+                           carries 12px labels, so faint is not available. */
+
+  /* ── Accent ──
+     Deliberately absent. The whole clay ramp stays exactly as it is, so the
+     orange you already have is the orange on the page and on the buttons.
+     Re-measured against the new papers, since it was calibrated against the old
+     one: clay-mark 3.90:1 (marks only, as before), clay-500 5.61 on fresh and
+     5.10 on rested, clay-600 6.85. All still fit for what they carry, and no
+     clay text lands on the dried paper. */
+
+  /* One exception, and only because the paper moved underneath it: the wash was
+     mixed for a pink-cream page and reads cool on wood. Same orange, 10% over
+     the new paper instead of the old. */
+  --clay-wash:#F5E3CC;  /* was #FBEADE */
+}
+
+/* ── Signals ───────────────────────────────────────────────────────────────
+   The reference reserves three colours for the three outcomes and nothing else:
+   sage for go, ochre for adjust, clay for stop. Today go borrows the accent,
+   which means the accent has to mean both "this is a link" and "this is a yes".
+   Colour only, and three lines to delete if you disagree. */
+.verdict.go .k{color:#4E6349}          /* 5.93:1 on fresh */
+.verdict.adjust .k{color:#7E5714}      /* the reference's #8F6417 is 4.31:1 on a
+                                          rested band, so the label is a step
+                                          darker at 5.29:1 */
+.verdict.stop .k{color:#8C3A24}        /* 6.92:1 */
+.case__block.kill h4{color:#7E5714}
+
+/* Form errors are the stop colour: darker than the accent, so an error and a
+   link never read as the same thing. */
+.field__error{color:#8C3A24}
+.field[data-invalid="true"] .input,
+.field[data-invalid="true"] .textarea{border-color:#8C3A24}
+
+/* ── The third paper ───────────────────────────────────────────────────────
+   Dried is reserved for the other side of an argument: what this isn't, what not
+   to do. The only place on this page that qualifies is the column of reasons it
+   might not be for you, which already carries its own padding, so this is a
+   background and a border and nothing else. Its text is ink-3 and ink-2, both
+   of which clear AA on this surface. */
+.fit__col.no{background:#E7D9BE;border-color:#D6C39E}
+
+/* The masthead docks over the text rather than beside it, so it takes white a
+   little more opaque on the darker paper. */
+.top[data-dock="true"]{background:rgba(255,255,255,.82)}
+@media(max-width:760px){
+  .top nav{background:var(--sand-100)}
+}

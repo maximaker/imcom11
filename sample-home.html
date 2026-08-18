@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Palette sample | One flow first</title>
+<meta name="description" content="In two weeks you own the one part that matters most, built for real, and a bar agreed before anyone sees it. Then real people tell you whether it holds.">
+<meta name="theme-color" content="#FAF3E3">
+<meta property="og:title" content="Is your idea worth building? | One flow first">
+<meta property="og:description" content="In two weeks you own the one part that matters most, built for real, and a bar agreed before anyone sees it. Then real people tell you whether it holds.">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="assets/css/style.css?v=efbe35f2">
+<link rel="stylesheet" href="assets/css/palette-sample.css?v=e9ac01c2">
+<meta name="robots" content="noindex">
+<script>
+/* Decides, before anything paints, whether the first-load animation runs. It has
+   to be inline and here: hiding the page from a deferred script means showing it
+   first and then snatching it back. */
+(function(){
+  var d=document.documentElement, force=false, hard=false;
+  try{
+    /* An explicit way in, for reviewing it on demand: ?intro or #intro. */
+    force = new URLSearchParams(location.search).has('intro') || location.hash === '#intro';
+    /* And a best effort at ctrl+shift+R. A page cannot read modifier keys on
+       load, but a hard reload bypasses the cache, so the document really comes
+       down the wire; a plain reload is answered from cache or with a 304.
+       transferSize is what tells them apart. encodedBodySize does not: it reports
+       the full body either way, so a plain reload looks like a download by that
+       measure and the animation would replay on every single one. Downloaded means
+       the bytes on the wire cover the body; from cache it is headers only. */
+    var nav = performance.getEntriesByType('navigation')[0];
+    hard = !!nav && nav.type === 'reload' &&
+           nav.transferSize > 0 && nav.transferSize >= nav.encodedBodySize;
+  }catch(e){}
+  try{
+    if(!force && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if(!force && !hard && true){
+      if(window.console) console.info(
+        'one flow first: first-load animation already seen. ' +
+        'A hard reload replays it, or add ?intro to the URL.');
+      return;
+    }
+    /* Written now rather than when the animation ends, so navigating away
+       halfway still counts as having seen it. */
+    localStorage.setItem('ofo.intro','1');
+  }catch(e){ if(!force) return; }   /* no storage, no animation: never twice */
+  d.setAttribute('data-intro','running');
+  /* Fetched here rather than linked in the markup: this runs once, and the other
+     99% of loads should not pay 72KB for it. async=false on an injected script
+     keeps execution order without blocking the parser. */
+  ['assets/js/vendor/gsap.min.js?v=fa1aeabc','assets/js/intro.js?v=35135974'].forEach(function(src){
+    var el=document.createElement('script');
+    el.src=src; el.async=false; d.appendChild(el);
+  });
+  /* If the script never arrives, the page must not stay hidden. Generous enough
+     that a slow connection still gets the animation, bounded enough that a
+     broken one is not a blank page. */
+  setTimeout(function(){
+    if(d.getAttribute('data-intro')==='running' && !window.__introStarted){
+      d.removeAttribute('data-intro');
+      document.dispatchEvent(new Event('intro:ready'));
+    }
+  },3000);
+})();
+</script>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23171B34'/><path d='M24.3 21.6A10 10 0 1 1 24.3 10.4' fill='none' stroke='%23FAF3E3' stroke-width='3' stroke-linecap='round'/><circle cx='16' cy='16' r='3.5' fill='%23C4522C'/></svg>">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<div class="surface" aria-hidden="true"></div>
+
+<div class="intro" id="intro" aria-hidden="true">
+  <svg class="intro__mark" id="intro-mark" viewBox="0 0 32 32">
+    <g id="intro-swarm"></g>
+    <path class="mark__ring" id="intro-ring" d="M25.1 22.2A11 11 0 1 1 25.1 9.8"/>
+    <path class="mark__lead" id="intro-lead" d="M18.6 16h11.2"/>
+    <circle class="mark__core" id="intro-core" cx="16" cy="16" r="3.7"/>
+  </svg>
+</div>
+
+<div class="spine" aria-hidden="true">
+  <div class="track"></div><div class="fill" id="spinefill"></div>
+</div>
+
+<header class="top" id="top">
+  <div class="doc top__row">
+    <a class="name" href="index.html"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><path class="mark__ring" d="M25.1 22.2A11 11 0 1 1 25.1 9.8"/><path class="mark__lead" d="M18.6 16h11.2"/><circle class="mark__core" cx="16" cy="16" r="3.7"/></svg><span>one flow<em>.</em>first</span></a>
+    <button class="navtoggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="Open menu">
+      <span aria-hidden="true"></span><span aria-hidden="true"></span>
+    </button>
+    <nav id="nav" aria-label="Primary">
+      <a href="how-it-works.html">How it works</a>
+      <a href="what-ive-built.html">What I've built</a>
+      <a href="about.html">About</a>
+      <a href="start.html">Start</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<div class="heroband" id="heroband">
+  <div class="bloom" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="lamp" aria-hidden="true"></div>
+  <div class="doc">
+  <section class="open" id="hero">
+    <div class="inner">
+      <div class="margin"><b>The offer</b>Two weeks<em>Fixed scope. Fixed price. The bar agreed before the build.</em></div>
+      <div>
+        <h1>
+          <span class="rise"><span>Is your idea</span></span>
+          <span class="rise"><span><strong>worth building?</strong></span></span>
+        </h1>
+        <p class="deck rev">In two weeks you own <b>the one part that matters most</b>, built for real, and a bar agreed before anyone sees it.</p>
+
+        <p class="principle rev">One flow first. <span>Nothing else yet.</span></p>
+
+        <p class="hero-cta rev"><a class="act" href="start.html"><span>Tell me about your idea</span>
+          <span class="chip" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13m0 0l-5.5-5.5M18 12l-5.5 5.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></p>
+        <p class="act-note rev">Twenty minutes. You'll get a straight read on whether this fits, either way.</p>
+
+        <div class="stats rev">
+          <div class="stat"><b>20 years</b><span>Deciding what to build, and what to cut.</span></div>
+          <div class="stat"><b>9 apps</b><span>Built and shipped in the last few months.</span></div>
+          <div class="stat"><b>2 weeks</b><span>From an idea in a doc to something real to test.</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  </div>
+</div>
+
+<div class="doc">
+  <section class="band band--scene" data-node="The shape of it">
+    <div class="margin"><b>Figure</b>The shape of it<em>Most of what you could build never needed building.</em></div>
+    <div class="scene" id="scene">
+      <div class="pin">
+        <svg viewBox="0 0 1000 420" role="img" aria-label="Forty possible things to build narrow in stages to the single one worth testing">
+          <g id="dots"></g>
+          <circle class="halo" id="halo" cx="500" cy="210" r="34"/>
+        </svg>
+        <div class="caption" id="caption">
+          <span data-i="0"><b>Everything you could build</b><i>Every feature, every version, every direction the idea could take.</i></span>
+          <span data-i="1"><b>Plausible</b><i>The ones that survive a hard look at the customer and the money.</i></span>
+          <span data-i="2"><b>Worth testing</b><i>Few enough to put in front of real people at all.</i></span>
+          <span data-i="3" data-key="true" data-final="true"><b>The one that decides it</b><i>Built for real, tested against a bar you set in advance.</i></span>
+        </div>
+        <div class="ticks" aria-hidden="true">
+          <i data-k="0"></i><i data-k="1"></i><i data-k="2"></i><i data-k="3"></i>
+          <span class="counter" id="counter">40 possible</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="tinted">
+  <div class="doc">
+    <section class="band " data-node="The bind">
+      <div class="margin"><b>One</b>The bind<em>Most ideas die of the wrong question, not the wrong code.</em></div>
+      <div>
+      <h2>The scary part isn't building it. <strong>It's building the wrong thing.</strong></h2>
+      <p class="lede">Your idea has probably been sitting in a doc for a while. Not because you're lazy, but because committing real money to it feels like a leap and you can't quite see where you'd land.</p>
+      <p class="lede">That instinct is right. Most ideas don't fail because nobody could build them. They fail because someone spent months and a pile of money before finding out that nobody wanted the thing that got built.</p>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="doc">
+    <section class="band " data-node="Doubts">
+      <div class="margin"><b>Two</b>Said out loud<em>The three things people think and rarely say.</em></div>
+      <div>
+      <h2 class="rev">You might be <strong>thinking</strong></h2>
+      <div class="doubts">
+        <div class="doubt rev"><p class="q">"What if it's a bad idea and I find out too late."</p><p class="a">You find out first, before anything gets built.</p></div>
+        <div class="doubt rev"><p class="q">"I'm not technical. I won't understand what's happening."</p><p class="a">You don't need to be. You'll get it explained clearly enough to decide with confidence.</p></div>
+        <div class="doubt rev"><p class="q">"I don't want to be talked into a build I don't need."</p><p class="a">You won't be. You'll get an honest answer even when the honest answer is no.</p></div>
+      </div>
+      </div>
+    </section>
+</div>
+
+<div class="tinted">
+  <div class="doc">
+    <section class="band " data-node="After">
+      <div class="margin"><b>Three</b>After<em>The difference between hoping and being able to find out.</em></div>
+      <div>
+      <h2 class="rev">In two weeks, guessing turns into <strong>something you can test</strong></h2>
+      <p class="lede">Instead of a doc full of hope and a knot in your stomach, you have something real in your hands and a bar you agreed to before you saw a single result.</p>
+      <p class="lede">You can walk into a room and show it, not describe it. And when you put it in front of real people, you already know what a good result looks like, so the answer can't quietly become whatever you were hoping for.</p>
+      <p class="lede">If it's a go, you know exactly what to build next. If it's a stop, you kept your money and a year of your life.</p>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="doc">
+    <section class="band " data-node="Method">
+      <div class="margin"><b>Four</b>Method<em>Three steps. The first one can end the project, cheaply.</em></div>
+      <div>
+      <h2 class="rev">Three steps, <strong>start to answer</strong></h2>
+      <div class="steps">
+        <div class="step"><span class="n">Step one</span><h3>Find out if it's worth building.</h3><p>You bring the idea. Together you find the one thing that has to be true for it to work, and you get a straight call. If there's a fatal flaw, you find it here, cheaply, before anything gets built.</p></div>
+        <div class="step"><span class="n">Step two</span><h3>Get a real version of the part that matters.</h3><p>One working flow that real people can actually use. Not a mockup. Something you can put in front of users.</p></div>
+        <div class="step"><span class="n">Step three</span><h3>Test it and decide, with a clear rule.</h3><p>The bar gets set inside the two weeks, before anyone sees the build. The sessions themselves run when your people are actually free, and the playbook tells you exactly how. Or they can be run for you.</p></div>
+      </div>
+      <p class="rev" style="margin-top:34px"><a class="quiet" href="how-it-works.html">See how it works in detail <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13m0 0l-5.5-5.5M18 12l-5.5 5.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
+      </div>
+    </section>
+</div>
+
+<div class="tinted">
+  <div class="doc">
+    <section class="band " data-node="Deliverables">
+      <div class="margin"><b>Five</b>Deliverables<em>Named things. Yours to keep, extend, or hand to any team.</em></div>
+      <div>
+      <h2 class="rev">What you <strong>own</strong> at the end</h2>
+      <div class="assets">
+        <div class="asset" data-open="false">
+          <button type="button" aria-expanded="false" aria-controls="a1">
+            <svg class="glyph" viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M9.5 8.5h5M9.5 12h5M9.5 15.5h2.5"/></svg>
+            <span class="nm">The working build</span>
+            <span class="sm">One real flow through the core of your idea, usable on a phone.</span>
+            <span class="sign" aria-hidden="true"></span>
+          </button>
+          <div class="more" id="a1"><div><p>Yours to keep, extend, or hand to any team. No license, no lock-in, no dependency on me continuing to exist. If you take it to another developer tomorrow, everything they need is in the repository.</p></div></div>
+        </div>
+        <div class="asset" data-open="false">
+          <button type="button" aria-expanded="false" aria-controls="a2">
+            <svg class="glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 3.5h9l4 4v13h-13z"/><path d="M14.5 3.5v4h4"/><path d="M8.5 14l2.5 2.5 4.5-5"/></svg>
+            <span class="nm">The decision brief</span>
+            <span class="sm">The riskiest assumption, the bar it has to clear, and how to read what comes back.</span>
+            <span class="sign" aria-hidden="true"></span>
+          </button>
+          <div class="more" id="a2"><div><p>Short enough to read in one sitting and written so a co-founder or an investor can read it too. It states the question and the bar first, then how to tell a go from an adjust from a stop. Once the sessions are done the call goes at the top, with the evidence behind it. If the two ever disagree, trust the evidence.</p></div></div>
+        </div>
+        <div class="asset" data-open="false">
+          <button type="button" aria-expanded="false" aria-controls="a3">
+            <svg class="glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 17.5l5-5 3.5 3 4-6.5"/><circle cx="8.5" cy="12.5" r="1.6"/><circle cx="12" cy="15.5" r="1.6"/><circle cx="16" cy="9" r="1.6"/></svg>
+            <span class="nm">The testing playbook</span>
+            <span class="sm">How to find the right people and run sessions that stay honest.</span>
+            <span class="sign" aria-hidden="true"></span>
+          </button>
+          <div class="more" id="a3"><div><p>Where to find people with the problem rather than people who like you, how many you actually need (fewer than you would expect), and how to keep politeness from quietly ruining your results. Reusable on every idea you have after this one.</p></div></div>
+        </div>
+      </div>
+      <p class="lede rev" style="margin-top:26px">That last one matters more than it looks. It's the part that keeps working long after the two weeks end.</p>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="doc">
+    <section class="band " data-node="Terms">
+      <div class="margin"><b>Six</b>Terms<em>The unusual promise.</em></div>
+      <div>
+      <p class="statement" id="statement" data-key="never stuck with me.">You should never be stuck with me.</p>
+      <p class="lede rev">Plenty of people in this business are quietly hoping you'll stay. This works the other way round. When the two weeks end, you can read your own evidence, make your own call, and move forward or walk away without another opinion. You keep the build, the brief, and the method.</p>
+      <p class="lede rev">People do come back. Usually with the next idea, or the same one pointed somewhere new. That's a choice, not a dependency, and it's the only kind worth having.</p>
+      </div>
+    </section>
+</div>
+
+<div class="tinted">
+  <div class="doc">
+    <section class="band " data-node="Trust">
+      <div class="margin"><b>Seven</b>Why trust it<em>Competence, stated as what you get.</em></div>
+      <div>
+      <h2 class="rev">Why you can <strong>trust the answer</strong></h2>
+      <div class="grid3">
+        <div class="rev"><h3>You get judgment, not just a build.</h3><p>Anyone can generate an app now. The hard part is knowing what to make and what to cut, and that's the part you're paying for.</p></div>
+        <div class="rev"><h3>You get advice from someone who isn't paid to say yes.</h3><p>When the honest answer is "don't build this," you'll hear it. That's only possible because the value here is the clarity, not the code.</p></div>
+        <div class="rev"><h3>You get speed without losing the thinking.</h3><p>The idea gets real in days, with a designer's read on how people actually behave built in.</p></div>
+      </div>
+      <p class="lede rev" style="margin-top:30px">The judgment comes from 20 years of deciding what to build and what to cut. The speed comes from nine working apps built in the last few months. If you want that story, it's on the <a href="about.html">about page</a>.</p>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="doc">
+    <section class="band " data-node="Proof">
+      <div class="margin"><b>Eight</b>Proof<em>Not theory. Things that run.</em></div>
+      <div>
+      <h2 class="rev">Nine apps, and <strong>what each one taught me</strong></h2>
+      <p class="lede">These were built for real ideas, with the same tools and the same speed you'd get. What matters isn't that they work. It's what got cut to make them work.</p>
+      <div class="proofs">
+        <div class="proof rev">
+          <h3>Slate</h3>
+          <p>A booking page for independent physios who ran everything through WhatsApp.</p>
+          <p class="kill"><b>What I'd kill</b>The week view. Four days of work, used by two of ten people.</p>
+        </div>
+        <div class="proof rev">
+          <h3>[APP NAME 2]</h3>
+          <p>[ONE LINE]</p>
+          <p class="kill"><b>What I'd kill</b>[WHAT I'D KILL]</p>
+        </div>
+        <div class="proof rev">
+          <h3>[APP NAME 3]</h3>
+          <p>[ONE LINE]</p>
+          <p class="kill"><b>What I'd kill</b>[WHAT I'D KILL]</p>
+        </div>
+      </div>
+      <p class="rev" style="margin-top:34px"><a class="quiet" href="what-ive-built.html">See the full thinking behind them <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13m0 0l-5.5-5.5M18 12l-5.5 5.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
+      </div>
+    </section>
+</div>
+
+<div class="doc">
+    <section class="band " data-node="Fit">
+      <div class="margin"><b>Nine</b>Fit<em>A quick call sorts it out in twenty minutes.</em></div>
+      <div>
+      <h2 class="rev">Who this <strong>works for</strong></h2>
+      <div class="fit">
+        <div class="fit__col rev">
+          <p class="fit__title yes">This fits if</p>
+          <ul class="checklist">
+            <li>You have an idea you believe in but can't build yourself.</li>
+            <li>You'd rather hear a hard truth early than a comfortable one late.</li>
+            <li>You're ready to put something in front of real people in the next month or two.</li>
+          </ul>
+        </div>
+        <div class="fit__col no rev">
+          <p class="fit__title no">This probably isn't it if</p>
+          <ul class="checklist cross">
+            <li>You already know exactly what you want built and just need hands.</li>
+            <li>You need a finished, scalable product rather than something to learn from.</li>
+            <li>You'd rather not hear that the idea has a problem.</li>
+          </ul>
+        </div>
+      </div>
+      <p class="lede rev" style="margin-top:26px">No hard feelings either way.</p>
+      </div>
+    </section>
+</div>
+
+<div class="tinted">
+  <div class="doc">
+    <section class="band " data-node="Pricing">
+      <div class="margin"><b>Ten</b>Pricing<em>You'll see the whole staircase before you take the first step.</em></div>
+      <div>
+      <h2 class="rev">How <strong>pricing works</strong></h2>
+      <div class="stairs">
+        <div class="stair rev"><p class="k">Step one</p><h3>Is this worth building?</h3><p>A small fixed price, set so it's worth it even when the answer is "don't build."</p></div>
+        <div class="stair rev"><p class="k">Step two</p><h3>The build</h3><p>Scoped after step one, once you both know what's actually needed. No surprise numbers, no big commitment before you have proof.</p></div>
+        <div class="stair rev"><p class="k">Optional</p><h3>The testing, run for you</h3><p>Finding the right people and getting them in front of it takes real calendar time, which is why it sits outside the two weeks. Run it yourself with the playbook, or have it added on.</p></div>
+      </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="doc">
+    <section class="band " data-node="Questions">
+      <div class="margin"><b>Eleven</b>Questions<em>The ones that actually get asked.</em></div>
+      <div>
+      <h2 class="rev">Questions <strong>people ask</strong></h2>
+      <div class="faq rev">
+        <details><summary>What if you tell me my idea is bad?<i aria-hidden="true"></i></summary><div><p>Then you've saved months and a fortune, and you'll get a clear reason why, not a vague no.</p></div></details>
+        <details><summary>Do I need to understand the tech?<i aria-hidden="true"></i></summary><div><p>No. You need to understand your customer. The rest is handled.</p></div></details>
+        <details><summary>Who owns what gets built?<i aria-hidden="true"></i></summary><div><p>You do. It's yours to take anywhere.</p></div></details>
+        <details><summary>Is this a full product?<i aria-hidden="true"></i></summary><div><p>No, and that's the point. It's the smallest real thing that answers the biggest question. Building the full product before that answer is exactly the expensive mistake this avoids.</p></div></details>
+        <details><summary>How long until I actually have an answer?<i aria-hidden="true"></i></summary><div><p>The build and the bar take two weeks. The answer takes as long as it takes to get the right people in front of it, usually a week or two more, and that part nobody can promise. Which is exactly why the sessions sit outside the fixed scope: putting them inside would mean either padding the timeline or rushing the recruiting, and rushed recruiting is how you end up testing on whoever was available instead of whoever has the problem.</p></div></details>
+        <details><summary>What if I already know it's a good idea?<i aria-hidden="true"></i></summary><div><p>Then step one is quick and you'll have saved nothing but a little time. Most people who are certain turn out to be certain about the wrong part.</p></div></details>
+      </div>
+      </div>
+    </section>
+</div>
+
+  <div class="doc">
+  <section class="close rev" data-node="Start">
+    <div class="margin"><b>Next</b>One call<em>Twenty minutes. It sorts out fit either way.</em></div>
+    <div>
+      <h2>Let's find out if your idea is <strong>real</strong></h2>
+      <p class="lede" style="margin-bottom:32px">One call. You talk through your idea, you hear honestly whether this fits. No pitch, no pressure.</p>
+      <a class="act" href="start.html" id="cta"><span>Book a free intro call</span>
+        <span class="chip" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13m0 0l-5.5-5.5M18 12l-5.5 5.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+    </div>
+  </section>
+
+  </div>
+
+  <div class="doc">
+  <div class="railfoot">
+    <a class="railcta" href="start.html">
+      <span class="lbl">Book a free intro call</span>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13m0 0l-5.5-5.5M18 12l-5.5 5.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+  </div>
+</main>
+
+<footer class="colo">
+  <span>&copy; 2026 One flow first</span>
+  <span><a href="mailto:hello@oneflowfirst.com">hello@oneflowfirst.com</a></span>
+</footer>
+
+<script src="assets/js/site.js?v=e9e3bf56" defer></script>
+</body>
+</html>
