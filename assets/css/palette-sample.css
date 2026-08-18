@@ -123,7 +123,7 @@
      them. */
   .spine .bead{background:var(--sand-300);
     box-shadow:0 0 0 4px var(--sand-100)}
-  .spine .bead[data-on="true"]{background:var(--clay-mark)}
+  .spine .bead[data-lit="true"]{background:var(--clay-mark)}
 }
 
 /* The docked masthead needs nothing here: style.css now mixes it from

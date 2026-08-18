@@ -170,6 +170,15 @@ label whose row it belongs to, so it follows the type scale for free. If you tou
 this, the thing to check is not the arithmetic: it is whether the bead is a child
 of `.spine`.
 
+A bead lights when the rule reaches it, not when its section is centred. The fill
+is the rail's full length scaled from the top, so its tip is that length times the
+scroll fraction, in the same viewport coordinates the beads are placed in; a bead
+is lit when its own y is above that tip. It carries `data-lit` rather than sharing
+the margin's `data-on`, because the two say different things: the label says this
+is the section you are reading, the bead says the rule has got this far, and they
+are allowed to disagree. The colour takes 820ms, which is slow on purpose — at
+200ms it read as a click rather than an arrival.
+
 One bead per margin, not per numbered section. The hero carries a margin without
 being a numbered section, so keying the list to `[data-node]` left the first label
 on the page as the only one with no bead beside it. Its section is null and it

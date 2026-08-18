@@ -295,19 +295,28 @@
 
       var mid=window.scrollY+window.innerHeight/2;
       var railTop=railEl ? parseFloat(getComputedStyle(railEl).top) || 0 : 0;
+      /* Where the fill has actually got to, in the same viewport coordinates the
+         beads are placed in: the fill is the rail's full length scaled from its
+         top, so its tip is that length times the scroll fraction. */
+      var fillTip=railTop + p * Math.max(0, window.innerHeight - railTop);
       marks.forEach(function(m,i){
         var on = !!m.sec && mid>=m.a && mid<m.b;
         m.note.setAttribute('data-on', on ? 'true':'false');
         var bead=beads[i];
         if(bead){
-          /* Taken from the label, so the bead sits on the row the label, the dot
+          /* Taken from the label, so the bead sits on the row the label, the bead
              and the heading already share, whatever the type scale does. */
           var lbl=m.note.querySelector('b');
           if(lbl){
             var r=lbl.getBoundingClientRect();
-            bead.style.top=(r.top + r.height/2 - railTop)+'px';
+            var y=r.top + r.height/2;
+            bead.style.top=(y - railTop)+'px';
+            /* Lit when the line reaches it, which is a different statement from
+               the label's: the label says this is the section you are reading, the
+               bead says the rule has got this far. Kept on its own attribute so
+               the two can disagree, because they mean different things. */
+            bead.setAttribute('data-lit', y <= fillTip ? 'true':'false');
           }
-          bead.setAttribute('data-on', on ? 'true':'false');
         }
       });
 

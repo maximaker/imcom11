@@ -129,10 +129,12 @@ a{color:var(--clay-500)}
     box-sizing:border-box;border-radius:50%;
     transform:translate(-50%,-50%);
     background:var(--sand-100);border:2px solid var(--sand-400);
-    transition:background var(--t-mid) var(--ease-out),
-               border-color var(--t-mid) var(--ease-out),
-               transform var(--t-mid) var(--ease-spring)}
-  .spine .bead[data-on="true"]{background:var(--clay-mark);border-color:var(--clay-mark);
+    /* Slow on purpose. The bead is reporting that the rule has reached it, and a
+       200ms flip made that read as a click rather than an arrival. */
+    transition:background 820ms var(--ease-out),
+               border-color 820ms var(--ease-out),
+               transform 560ms var(--ease-spring)}
+  .spine .bead[data-lit="true"]{background:var(--clay-mark);border-color:var(--clay-mark);
     transform:translate(-50%,-50%) scale(1.2)}
   /* scaleY rather than height: compositor-only, no layout on every scroll frame. */
   .spine .fill{position:absolute;left:0;top:0;width:1px;height:100%;
