@@ -48,12 +48,18 @@ HTML directly for one-off copy changes.
   label rule so it cannot drift from the rest of the meta layer. The current
   page lights clay and keeps its underline, the same way an active margin label
   lights its dot.
-- Two lockups. Below 1180px the mark sits beside the wordmark in the masthead.
-  At 1180px and up the masthead drops its copy and the lockup moves to the rail
-  cap, stacked, so it stays inside the rail's own column of air.
-- The left rail carries the wordmark at its top and the call to action at its
-  foot. Below 1180px the rail is hidden and the inline button in the closing
-  section takes over.
+- One lockup, in the masthead, at every width. It briefly moved onto the rail
+  above 1180px, which needed a 124px opaque plate centred on the rule to break
+  it: that plate punched a hole through whatever band was behind it and
+  overlapped both the margin label and the heading. The bar is where a brand
+  mark belongs. The rail is structure, and its only furniture is the foot disc,
+  because a circle can sit on a rule without cutting a rectangle out of the page.
+- The left rail is a progress rule that starts at the masthead's lower edge and
+  carries the call to action at its foot. It sits under the bar (z-20) so the
+  opaque masthead clips its head and it reads as running out from beneath the
+  chrome. `--spine-top` is measured in JS rather than hardcoded, or differing
+  font metrics would leave a sliver or a gap. Below 1180px the rail is hidden
+  and the inline button in the closing section takes over.
 - The hero carries its own button ("Tell me about your idea") at every width,
   so the promise is never separated from the action. The rail disc and the
   closing button both read "Book a free intro call".

@@ -88,11 +88,8 @@ def shell(slug, title, desc, body, close_heading, close_body,
 
 <div class="surface" aria-hidden="true"></div>
 
-<div class="spine">
-  <div class="track" aria-hidden="true"></div><div class="fill" id="spinefill" aria-hidden="true"></div>
-  <div class="cap cap--top">
-    <a class="railmark" href="index.html">{MARK}<span>{WORDMARK}</span></a>
-  </div>
+<div class="spine" aria-hidden="true">
+  <div class="track"></div><div class="fill" id="spinefill"></div>
 </div>
 
 <header class="top" id="top">

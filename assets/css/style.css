@@ -95,21 +95,21 @@ a{color:var(--clay-500)}
   :root{--margin-gap:128px}
   /* left is set in JS from the real column edge: 50vw includes the scrollbar
      but the centred container does not, so vw math drifts by half a scrollbar. */
-  /* Above the masthead (z-30): the rail is the primary chrome now, so its
-     wordmark cap must not be covered by the sticky header. */
-  .spine{display:block;position:fixed;top:0;bottom:0;width:1px;z-index:40;
-    pointer-events:none;left:-100px}
+  /* Under the masthead (z-30) and over main (z-2): the opaque bar clips the
+     head of the rule, so it reads as running out from beneath the chrome
+     instead of colliding with it. */
+  /* --spine-top is the measured masthead height, set in JS: hardcoding it would
+     leave a sliver or a gap the moment font metrics differ. Starting the rule at
+     the bar's lower edge also means the progress fill maps to the length the
+     reader can actually see. */
+  .spine{display:block;position:fixed;top:var(--spine-top,0px);bottom:0;width:1px;
+    z-index:20;pointer-events:none;left:-100px}
   .spine .track{position:absolute;inset:0;background:var(--sand-400);opacity:.85}
   /* scaleY rather than height: compositor-only, no layout on every scroll frame. */
   .spine .fill{position:absolute;left:0;top:0;width:1px;height:100%;
     background:var(--clay-mark);transform:scaleY(0);transform-origin:top;
     transition:transform 90ms linear}
 
-  /* The line is furniture: the wordmark caps its top end, the ask caps its
-     bottom. Both sit on the page ground so the rule appears to run into them. */
-  .spine .cap{position:absolute;left:0;transform:translateX(-50%);
-    background:var(--sand-100);pointer-events:auto;display:grid;place-items:center}
-  .spine .cap--top{top:0;padding:22px 14px 14px}
 
   /* Not fixed: the disc sits at the foot of the page on the rail's line and
      scrolls away with everything else. Container is transparent. */
@@ -117,17 +117,11 @@ a{color:var(--clay-500)}
   .railfoot a{position:absolute;bottom:8px;left:var(--rail-x,50%);
     transform:translateX(-50%)}
 
-  .railmark{display:grid;justify-items:center;gap:10px;
-    font-family:var(--display);font-weight:640;font-size:17px;
-    letter-spacing:-0.02em;color:var(--ink);text-decoration:none;white-space:nowrap;
-    transition:color var(--t-slow) var(--ease-out)}
-  .railmark .mark{width:28px;height:28px}
-  .railmark:hover{color:var(--clay-500)}
-  .railmark em{font-style:normal;color:var(--clay-500)}
 
-  /* The disc is the only call to action on wide screens. It sits on the line
-     and blooms into the full button on hover: width and corner radius are the
-     only things that move, so the centre stays pinned to the rule. */
+  /* The disc is the rail's only furniture, and the only call to action on wide
+     screens. A circle can sit on a rule without cutting a rectangle out of the
+     page. It blooms into the full button on hover: width and corner radius are
+     the only things that move, so the centre stays pinned to the rule. */
   .railcta{position:relative;display:flex;align-items:center;justify-content:center;
     gap:0;width:58px;height:58px;border-radius:999px;overflow:hidden;
     color:#fff;text-decoration:none;font-family:var(--body);
@@ -222,13 +216,11 @@ a:hover .mark__lead{stroke:var(--clay-400);transform:translateX(1.5px)}
 .top .name{display:flex;align-items:center;gap:10px;
   font-family:var(--display);font-size:19px;font-weight:600;letter-spacing:-0.015em}
 .top .name .mark{width:24px;height:24px}
-@media(min-width:1180px){
-  /* The lockup lives on the rail at this width, so the masthead drops its copy
-     and the nav owns the right end of the bar. Declared after the base rules,
-     or source order would win on both. */
-  .top .name{display:none}
-  .top__row{justify-content:flex-end}
-}
+/* The lockup stays in the masthead at every width. It used to move onto the
+   rail above 1180px, which meant a 124px opaque plate centred on the rule,
+   punching a hole through whatever band was behind it and overlapping both the
+   margin label and the heading. A brand mark belongs in the bar: one place,
+   aligned to the column, predictable at every width. The rail is structure. */
 
 /* The nav is reference, not action: the rail disc is the only thing on a wide
    screen asking to be clicked. So the nav joins the tracked-label register the

@@ -176,6 +176,11 @@
   var railEl = document.querySelector('.spine');
 
   function placeRail(){
+    /* The rule runs out from under the masthead, so it has to know how tall the
+       bar is. Measured rather than hardcoded. */
+    var bar = document.getElementById('top');
+    if(bar) document.documentElement.style
+              .setProperty('--spine-top', bar.offsetHeight + 'px');
     if(!railEl || getComputedStyle(railEl).display === 'none') return;
     var col = document.querySelector('.band .margin');
     if(!col) return;
