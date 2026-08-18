@@ -445,8 +445,14 @@ html[data-intro="running"] .spine{opacity:0}
 .scene .d.final{fill:var(--clay-mark)}
 .scene .halo{fill:none;stroke:var(--clay-mark);stroke-width:1;opacity:0;
   transform-box:fill-box;transform-origin:center}
-.scene .halo.on{animation:ping 4s var(--ease-out) infinite}
-@keyframes ping{0%{opacity:.6;transform:scale(.4)}70%{opacity:0;transform:scale(1.35)}100%{opacity:0;transform:scale(1.35)}}
+/* Twice, then done. This was an infinite loop, which put permanent motion on a
+   section the reader has arrived at to read: the scene holds its answer from 0.86
+   to the end of the scroll on purpose, and a ring pulsing under it forever is the
+   opposite of holding. Nothing else on the page has idle motion -- the travelling
+   button stops the frame it settles -- and this was the exception. Two pulses
+   announce the answer and hand the moment to the dot, which stays. */
+.scene .halo.on{animation:ping 3.2s var(--ease-out) 2}
+@keyframes ping{0%{opacity:.55;transform:scale(.4)}70%{opacity:0;transform:scale(1.35)}100%{opacity:0;transform:scale(1.35)}}
 
 /* One caption at a time, crossfading with the stage. */
 .caption{position:relative;height:104px;width:100%;text-align:center}

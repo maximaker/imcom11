@@ -80,7 +80,14 @@
         p1:k12>=0?gridPos(k12,12,3,500,210,62,58):null,
         p2:k4 >=0?gridPos(k4,4,2,500,210,86,76):null,
         p3:i===keep1?{x:500,y:210}:null,
-        seed:rnd(i,3)
+        seed:rnd(i,3),
+        /* Separate draws. Reusing seed would have made the dots that arrive last
+           also the ones that leave last, and a field that culls in the same order
+           it filled reads as a list being processed rather than a sieve. */
+        cull:rnd(i,4),
+        drift:rnd(i,5),
+        away:rnd(i,6),
+        last:{t:'',r:'',o:'',f:null}
       };
     });
 
@@ -97,6 +104,29 @@
     function seg(p,a,b){return smooth((p-a)/(b-a));}
     function lerp(a,b,t){return a+(b-a)*t;}
 
+    /* A dot's own clock inside a stage. The stage runs 0..1; this hands each dot a
+       slightly later start according to its seed, and widens the run so every one
+       of them still finishes exactly at 1 rather than being cut off mid-move.
+       The entrance already did this and the culls did not, which was the whole
+       problem: forty dots arrived one at a time and then twenty-eight left in a
+       single block, so the field filled like a crowd and emptied like a curtain. */
+    function own(t,seed,spread){ return clamp(t*(1+spread)-seed*spread); }
+
+    /* Culled dots are pushed out of the field rather than dropped down it. Every one
+       of them used to travel the same 26 units straight down, which reads as gravity
+       -- the same thing happening to all of them -- where a sieve is supposed to be
+       rejecting each one on its own account. Radially outward from the centre says
+       discarded, the distance varies per dot, and a little downward bias keeps it
+       from looking like an explosion. pushX carries the x out, since a JS function
+       returns one value and this is called in an expression. */
+    var pushX=0;
+    function push(x,y,g,d,scale){
+      var dx=x-500, dy=y-210, len=Math.sqrt(dx*dx+dy*dy)||1;
+      var dist=g*(20+d.drift*34)*scale;
+      pushX=x+(dx/len)*dist*(0.7+d.away*0.6);
+      return y+(dy/len)*dist+g*12;
+    }
+
     var A=[0.00,0.16], B=[0.16,0.36], C=[0.36,0.54], D=[0.54,0.70], E=[0.70,0.86];
     /* 0.86 → 1.00 is deliberately empty: the answer holds for a beat before
        the section releases, instead of resolving and vanishing. */
@@ -107,25 +137,47 @@
 
       dots.forEach(function(d){
         var x=d.scatter.x, y=d.scatter.y;
-        var settle=clamp(tB*1.35-d.seed*0.35);
+        var settle=own(tB,d.seed,0.35);
         x=lerp(x,d.p0.x,settle); y=lerp(y,d.p0.y,settle);
 
-        var alive=1, r=4.6*dotScale;
-        if(d.p1){ x=lerp(x,d.p1.x,tC); y=lerp(y,d.p1.y,tC); }
-        else if(tC>0){ alive=1-tC; y+=tC*26; }
+        var alive=1, r=4.6*dotScale, g;
+        /* Survivors regroup on a light stagger. The formation still has to read as
+           a formation, so this is a quarter of what the culls get: enough that the
+           dots do not arrive as one piece, not enough to lose the shape. */
+        if(d.p1){ g=own(tC,d.seed,0.22); x=lerp(x,d.p1.x,g); y=lerp(y,d.p1.y,g); }
+        else if(tC>0){ g=own(tC,d.cull,0.6); alive=1-g; y=push(x,y,g,d,1); x=pushX; }
 
-        if(d.p2){ x=lerp(x,d.p2.x,tD); y=lerp(y,d.p2.y,tD); }
-        else if(d.p1&&tD>0){ alive=1-tD; y+=tD*26; }
+        if(d.p2){ g=own(tD,d.seed,0.22); x=lerp(x,d.p2.x,g); y=lerp(y,d.p2.y,g); }
+        else if(d.p1&&tD>0){ g=own(tD,d.cull,0.6); alive=1-g; y=push(x,y,g,d,1); x=pushX; }
 
         if(d.p3){ x=lerp(x,d.p3.x,tE); y=lerp(y,d.p3.y,tE);
-                  r=lerp(4.6*dotScale, 13*Math.min(dotScale,1.7), tE); }
-        else if(d.p2&&tE>0){ alive=1-tE; y+=tE*26; }
+                  /* Past full size and back. The one that survives should arrive
+                     with some weight rather than easing to a halt for the whole
+                     segment and stopping dead on the last frame.
+                     The growth is compressed into the first four fifths so there is
+                     something for the overshoot to ride past: a bump that has to be
+                     zero at tE=1 cannot exceed a size the dot only reaches at tE=1,
+                     which is why the earlier attempt at this cleared its target by
+                     2% by accident rather than by 7.5% on purpose. Peaks at 13.97,
+                     settles on 13.00. */
+                  var R=13*Math.min(dotScale,1.7);
+                  r=lerp(4.6*dotScale, R, smooth(clamp(tE/0.8)))
+                    + R*0.075*Math.sin(Math.PI*clamp((tE-0.55)/0.45)); }
+        else if(d.p2&&tE>0){ g=own(tE,d.cull,0.6); alive=1-g; y=push(x,y,g,d,1); x=pushX; }
 
         var entry=clamp(seg(p,A[0],A[1])*1.6-d.seed*0.25);
-        d.el.setAttribute('transform','translate('+x.toFixed(1)+','+y.toFixed(1)+')');
-        d.el.setAttribute('r',r.toFixed(1));
-        d.el.style.opacity=(alive*(0.25+0.75*entry)).toFixed(3);
-        d.el.classList.toggle('final', !!(d.p3&&tE>0.55));
+        /* Written only when the value actually changes. Three attributes across
+           forty dots is a hundred and twenty writes a frame, and the radius is
+           identical on thirty-nine of them for the whole scroll: setting an SVG
+           attribute costs a string parse whether or not it differs. */
+        var ts='translate('+x.toFixed(1)+','+y.toFixed(1)+')',
+            rs=r.toFixed(1),
+            os=(alive*(0.25+0.75*entry)).toFixed(3),
+            fs=!!(d.p3&&tE>0.55);
+        if(ts!==d.last.t){ d.el.setAttribute('transform',ts); d.last.t=ts; }
+        if(rs!==d.last.r){ d.el.setAttribute('r',rs); d.last.r=rs; }
+        if(os!==d.last.o){ d.el.style.opacity=os; d.last.o=os; }
+        if(fs!==d.last.f){ d.el.classList.toggle('final',fs); d.last.f=fs; }
       });
 
       halo.classList.toggle('on', tE>0.9);
