@@ -198,17 +198,15 @@ a:hover .mark__lead{stroke:var(--clay-400);transform:translateX(1.5px)}
 @media (prefers-reduced-motion: reduce){a:hover .mark__lead{transform:none}}
 
 /* ── Masthead ──
-   The bar is the page ground, not glass. There is no blur anywhere else here,
-   and saturate() would quietly re-tint a palette whose ratios were measured.
-   Going opaque means the background has to be full width while the content
-   stays in the column, so the row uses .doc: the header's inner edges now
-   align with every band by construction, and it inherits the same responsive
-   gutter instead of repeating 26px and 1140px. */
-.top{position:sticky;top:0;z-index:30;background:var(--sand-100);
-  padding-top:20px;padding-bottom:20px;
-  border-bottom:1px solid transparent;
-  transition:border-color var(--t-mid) var(--ease-out)}
-.top[data-stuck="true"]{border-bottom-color:var(--sand-300)}
+   No ground of its own: it sits on the page like the first band, and so it does
+   not travel. A transparent bar that follows the reader is a bar the page
+   scrolls straight through, so dropping the background means dropping the
+   sticky with it, along with the hairline that only existed to separate the two.
+   Still position:relative rather than static, because the mobile menu is
+   absolutely positioned against it. The row uses .doc, so the header's inner
+   edges align with every band by construction and it inherits the same
+   responsive gutter instead of repeating 26px and 1140px. */
+.top{position:relative;padding-top:20px;padding-bottom:20px}
 /* The bar owns its height, the row owns its alignment. Vertical padding cannot
    live on .top__row: .doc sets `padding:0 20px` further down the sheet, and the
    shorthand would zero it. */
@@ -236,7 +234,9 @@ a:hover .mark__lead{stroke:var(--clay-400);transform:translateX(1.5px)}
      auto-placement would push a column-1 sibling onto a second row. */
   .top .name span{grid-row:1;grid-column:1;justify-self:end;text-align:right}
   .top .name .mark{grid-row:1;grid-column:2;justify-self:center;width:30px;height:30px}
-  .top nav{grid-column:3;justify-self:end}
+  /* Left, on the text column's own edge: the menu starts where every headline
+     and paragraph below it starts. */
+  .top nav{grid-column:3;justify-self:start}
 }
 
 /* The nav is reference, not action: the rail disc is the only thing on a wide
@@ -786,7 +786,6 @@ h2{font-size:clamp(1.72rem,3.5vw,2.5rem);line-height:1.1;max-width:19ch;margin-b
 /* Everything above the texture layers. The rail is deliberately excluded:
    it must keep position:fixed and its own z-index. */
 main,.colo{position:relative;z-index:2}
-.top{position:sticky;z-index:30}
 
 /* ── Mobile refinements ────────────────────────────────────────────────
    11px tracked labels are legible on a desktop monitor and not on a phone;

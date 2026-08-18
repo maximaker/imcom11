@@ -174,17 +174,20 @@
   function absTop(el){ return el.getBoundingClientRect().top + window.scrollY; }
 
   var railEl = document.querySelector('.spine');
+  /* Document coordinate of the rule's head: the masthead does not travel now, so
+     the mark scrolls away and the rule has to pin to the top of the viewport
+     once it does. Set here, resolved against scroll position in onScroll. */
+  var railHead = 0;
 
   function placeRail(){
-    /* The rule starts at the logomark's lower edge, so the mark caps it. The bar
-       is sticky at the top of the viewport, so this rect does not move on
-       scroll. Falls back to the bar's height where there is no mark. */
+    /* The rule starts at the logomark's lower edge, so the mark caps it. In
+       document coordinates, because the bar scrolls away with the page. */
     var bar = document.getElementById('top');
     if(bar){
       var glyph = bar.querySelector('.name .mark');
-      var head = glyph ? glyph.getBoundingClientRect().bottom : bar.offsetHeight;
-      document.documentElement.style
-        .setProperty('--spine-top', Math.round(head) + 'px');
+      railHead = glyph
+        ? glyph.getBoundingClientRect().bottom + window.scrollY
+        : bar.offsetHeight;
     }
     if(!railEl || getComputedStyle(railEl).display === 'none') return;
     var col = document.querySelector('.band .margin');
@@ -215,7 +218,9 @@
       var h=document.documentElement.scrollHeight-window.innerHeight;
       var p=h>0?Math.min(Math.max(window.scrollY/h,0),1):0;
       if(fill) fill.style.transform='scaleY('+p.toFixed(4)+')';
-      document.getElementById('top').setAttribute('data-stuck', window.scrollY>10?'true':'false');
+      /* The head of the rule rides down with the mark, then holds at the top. */
+      document.documentElement.style.setProperty('--spine-top',
+        Math.max(0, Math.round(railHead - window.scrollY)) + 'px');
 
       var mid=window.scrollY+window.innerHeight/2;
       marks.forEach(function(m){
