@@ -234,18 +234,25 @@ a:hover .mark__ring{transform:rotate(90deg)}
    further right. */
 a:hover .mark__lead{stroke:var(--clay-400);transform:rotate(90deg) translateX(1.5px)}
 
-/* The pulse. A short gradient of the mark's own clay, travelling the length of
-   the rule once per hover. It sits under the beads, so a bead occludes it as it
-   passes rather than being crossed by a 1px line. */
-.spine .pulse{position:absolute;left:0;top:0;width:1px;height:104px;
-  background:linear-gradient(180deg,transparent 0%,var(--clay-mark) 50%,transparent 100%);
+/* The pulse. A short comet of the mark's own clay, travelling the length of the
+   rule once per hover, brightest at its leading edge so it reads as sent rather
+   than as a band sliding past.
+   It starts at the logo, which is where the rule starts, so it needs clipping at
+   that end: the clip is a 1px box the length of the rail, and the pulse begins its
+   run entirely inside it and above the cut. Without it the comet's tail hangs over
+   the mark before the run begins, and the line appears to carry on above the logo,
+   which is the one thing the rail must never look like. The clip is 1px wide and
+   the pulse is 1px wide, so nothing is lost sideways, and the beads stay outside
+   it because they are 13px and would be sliced. */
+.spine .pulseclip{position:absolute;inset:0;width:1px;overflow:hidden;
+  pointer-events:none}
+.spine .pulse{position:absolute;left:0;top:0;width:1px;height:96px;
+  background:linear-gradient(180deg,transparent 0%,var(--clay-mark) 100%);
   opacity:0;pointer-events:none}
 .spine[data-pulse="true"] .pulse{animation:railpulse 1150ms var(--ease-out) 1}
 @keyframes railpulse{
-  0%{transform:translateY(-104px);opacity:0}
-  10%{opacity:1}
-  85%{opacity:1}
-  100%{transform:translateY(100vh);opacity:0}
+  0%{transform:translateY(-96px);opacity:1}
+  100%{transform:translateY(100vh);opacity:1}
 }
 
 @media (prefers-reduced-motion: reduce){

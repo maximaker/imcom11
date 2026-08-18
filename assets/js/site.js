@@ -190,10 +190,13 @@
      Restarted by taking the attribute off and forcing a reflow, or a second hover
      inside the first would do nothing. */
   if(railEl && !reduce){
+    var clip = document.createElement('i');
+    clip.className = 'pulseclip';
+    clip.setAttribute('aria-hidden', 'true');
     var pulse = document.createElement('i');
     pulse.className = 'pulse';
-    pulse.setAttribute('aria-hidden', 'true');
-    railEl.appendChild(pulse);
+    clip.appendChild(pulse);
+    railEl.appendChild(clip);
     var lockup = document.querySelector('.top .name');
     if(lockup){
       lockup.addEventListener('mouseenter', function(){

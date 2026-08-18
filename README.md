@@ -213,10 +213,15 @@ kept only because it is built.
   and sends a pulse down the rail. The gap is the whole idea of the mark, so moving
   it says something rather than just lighting up. `transform-box:view-box` is not
   optional: on an SVG element the origin is otherwise measured from that element's
-  own bounding box, and the ring's box is not the mark's centre. The pulse is a
-  child of the rail, built before the beads so a bead occludes it as it passes, and
-  restarted by dropping the attribute and forcing a reflow so a second hover is not
-  a no-op. Reduced motion skips both.
+  own bounding box, and the ring's box is not the mark's centre. The pulse starts at
+  the logo, where the rule starts, and is clipped there: a 1px box the length of the
+  rail with `overflow:hidden`, so the comet begins its run above the cut and emerges
+  from the mark's lower edge rather than flying in from the top. Without the clip its
+  tail hangs over the mark and the line appears to carry on above the logo, which is
+  the one thing the rail must never look like. The clip sits before the beads so a
+  bead occludes the pulse as it passes, and the beads stay outside it because they
+  are 13px and would be sliced by a 1px clip. Restarted by dropping the attribute and
+  forcing a reflow, so a second hover is not a no-op. Reduced motion skips both.
 - The logomark is an open ring with one point of focus at its centre and one
   line running out through the gap. The gap is the idea, so nothing may close
   it: no background plate, no containing circle, no second dot. Three
