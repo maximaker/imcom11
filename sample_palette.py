@@ -44,5 +44,10 @@ out = (out.replace("fill='%23160B02'", "fill='%23171B34'")
 # the tokens, so it follows the new palette wherever it does run.
 out = out.replace("localStorage.getItem('ofo.intro') === '1'", 'true', 1)
 
+# The ride is sample-only behaviour, so it is added here rather than in the shell.
+rv = hashlib.sha1(pathlib.Path('assets/js/sample-ride.js').read_bytes()).hexdigest()[:8]
+tag = '<script src="assets/js/sample-ride.js?v=' + rv + '" defer></script>'
+out = out.replace('</body>', tag + chr(10) + '</body>', 1)
+
 OUT.write_text(out, encoding='utf-8')
 print(f'wrote {OUT} from {SRC} (+{CSS}?v={ver})')

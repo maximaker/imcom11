@@ -192,6 +192,21 @@ share a row (its heading is far bigger than a section's, so the hero scopes its
 own `--lead-centre` at `.7` of the h1 size), and four claims in the body copy are
 marked with `<strong>`, which is a weight change to full ink and never a colour.
 
+`assets/js/sample-ride.js` is the one piece of sample behaviour that is not in the
+stylesheet. Past the hero the call to action compacts to a dot on the rail and
+travels with the reader, lagging by easing toward a target rather than being pinned
+to it. Through the last third it grows into the disc the foot of the rail used to
+carry, and when the closing section's own button comes into view it flies to that
+button's box, becomes a pill, and hands over: the ride goes to opacity 0 and
+`pointer-events:none`, the real button in the markup goes to opacity 1, both at
+270x74 in the same place. What the reader ends up with is a link inside a section,
+not something floating.
+
+The loop stops when it has caught up and nothing is moving, because the page should
+be still when the reader is; scrolling wakes it. It reverses if you scroll back up.
+Below 1180px, and under reduced motion, none of it is built and the closing button
+simply shows itself. The live site's hero button and foot disc are untouched.
+
 `sample-layout.html` is a second, further experiment: the same content rebuilt in
 the reference's editorial layout, with IBM Plex vendored in `assets/fonts`. It
 changes structure as well as colour, which is more than was asked for, and it is
