@@ -144,7 +144,16 @@ crowded columns, one hover for every card (white plus a wood shadow, where the
 deliverable rows used to hover to the accent wash and steps inside a tinted band
 hovered to cream), the opened deliverable text moved back under its own title
 instead of 280px to the right, a numeral on each step from a CSS counter, and the
-margin notes set in Caveat, vendored in `assets/fonts`.
+quotes set in Caveat, vendored in `assets/fonts` — the quotes only, because they
+are the one place on the page where the words are someone else's.
+
+Two notes on the rail, both of which looked like stacking bugs and were not. The
+marginalia dot is painted over the rail (`elementsFromPoint` at its centre returns
+the margin, then the track, then the spine) and centred on it to 0.00. What made
+it look otherwise was colour: the dot was a ring with a cream hole, and cream
+against the white track is 1.11:1, so the eye joined the line straight through it.
+The dot is filled in the sample now, the rule colour when idle and clay when
+active, so it interrupts the line it sits on.
 
 Two of those fixes went into `style.css` instead, because they are wrong on the
 live site too: the hero's label, its dot and the first line of its headline now

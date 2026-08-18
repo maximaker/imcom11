@@ -99,6 +99,14 @@
 @media(min-width:1180px){
   .spine .track{background:var(--sand-50);opacity:1}
   .spine .fill{transition:transform 180ms cubic-bezier(.2,.7,.3,1)}
+
+  /* The dot is painted over the rail and centred on it to the pixel, but with a
+     white track it did not look like it: the dot was a ring with a cream hole,
+     and cream against white is 1.11:1, so the eye joined the line straight
+     through it. Filled, it interrupts the line it sits on. Inactive is the rule
+     colour, active stays clay, so the state still reads as colour. */
+  .margin::after{background:var(--sand-300)}
+  .margin[data-on="true"]::after{background:var(--clay-mark)}
 }
 
 /* The docked masthead needs nothing here: style.css now mixes it from
@@ -112,21 +120,20 @@
    Design changes, sample only
    ═════════════════════════════════════════════════════════════════════════════ */
 
-/* A legible handwriting face for the margin notes, vendored like the rest. The
-   note is the one voice in the system with a point of view rather than a job, so
-   it reads as something written in the margin by hand. Caveat runs small for its
-   point size, so it is set up a step and given a little more line. */
-@font-face{font-family:'Margin Hand';src:url('../fonts/caveat-var.woff2') format('woff2-variations');
+/* A legible handwriting face, vendored like the rest, for the quotes only. These
+   are the one place on the page where the words are someone else's, said out
+   loud, so a hand is doing something no weight or size could. Everything else
+   stays typeset: the margin notes are the site's own voice, not a quotation.
+   Caveat's x-height is small for its point size, so it is set well up from the
+   size it replaces. */
+@font-face{font-family:'Quote Hand';src:url('../fonts/caveat-var.woff2') format('woff2-variations');
   font-weight:400 700;font-style:normal;font-display:swap}
 
-.margin em{font-family:'Margin Hand','Segoe Script',cursive;font-style:normal;
-  /* 1.45em, not 1.22: Caveat's x-height is small for its point size, and at the
-     note's 13px base it was setting to under 16px. */
-  font-size:1.45em;line-height:1.4;letter-spacing:.005em;color:var(--ink-3)}
-@media(min-width:920px){
-  /* Hand-written text hangs differently from type: a hair more room above the
-     rule it sits under, and the tracking eased off. */
-  .margin em{margin-top:16px;padding-top:14px}
+.doubt .q,.quote p{font-family:'Quote Hand','Segoe Script',cursive;
+  font-weight:600;font-size:1.62rem;line-height:1.32;letter-spacing:.006em;
+  color:var(--ink)}
+@media(max-width:520px){
+  .doubt .q,.quote p{font-size:1.48rem}
 }
 
 /* ── Air ───────────────────────────────────────────────────────────────────
@@ -157,14 +164,28 @@
    summary rather than under its own title.
    Both fixed: hover matches the cards, and the body sits under the name at the
    same left edge, which is where the system puts body copy everywhere else. */
-/* One hover for every card on the page, which is what the reference asks for:
-   move to white and rise, with a wood-coloured shadow, and hold the text colour
-   so nothing flickers as the cursor crosses it. Inside a tinted band the steps
-   were hovering to the page cream instead of white, so they are brought in too. */
-.asset button:hover,
+/* One hover for every card: move to white with the wood-coloured shadow, and
+   hold the text colour so nothing flickers as the cursor crosses it. Inside a
+   tinted band the steps were hovering to page cream instead of white. */
 .step:hover,
 .tinted .step:hover{background:var(--sand-50);
   box-shadow:0 6px 22px -12px rgba(74,58,26,.26)}
+
+/* The deliverable row is the surface, not its header. That header is 18px wider
+   than the row and carries a 12px radius, so hovering it drew a rounded white
+   card overhanging the row while the text it had just opened sat outside that
+   card, on the band, orphaned. The surface is painted behind the whole row now,
+   square and flush, so the body is on the same ground as the name that opened
+   it, and an open row stays lifted whether the cursor is on it or not. */
+.asset{position:relative}
+.asset::before{content:'';position:absolute;inset:0 -18px;z-index:0;
+  pointer-events:none;background:transparent;
+  transition:background var(--t-hover) var(--ease)}
+.asset:hover::before,
+.asset[data-open="true"]::before{background:var(--sand-50)}
+.asset > *{position:relative;z-index:1}
+.asset button{border-radius:0}
+.asset button:hover{background:transparent}
 .asset button:hover .nm{transform:translateX(4px)}
 
 @media(min-width:780px){
