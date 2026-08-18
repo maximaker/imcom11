@@ -186,6 +186,24 @@
 
   var railEl = document.querySelector('.spine');
 
+  /* The pulse, built before the beads so the beads paint over it as it passes.
+     Restarted by taking the attribute off and forcing a reflow, or a second hover
+     inside the first would do nothing. */
+  if(railEl && !reduce){
+    var pulse = document.createElement('i');
+    pulse.className = 'pulse';
+    pulse.setAttribute('aria-hidden', 'true');
+    railEl.appendChild(pulse);
+    var lockup = document.querySelector('.top .name');
+    if(lockup){
+      lockup.addEventListener('mouseenter', function(){
+        railEl.removeAttribute('data-pulse');
+        void railEl.offsetWidth;
+        railEl.setAttribute('data-pulse', 'true');
+      });
+    }
+  }
+
   /* One bead per section, living on the rail. See the .spine .bead note in the
      stylesheet for why they are not pseudo-elements of the margins. */
   var beads = marks.map(function(){

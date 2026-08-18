@@ -218,8 +218,41 @@ a{color:var(--clay-500)}
   transition:stroke var(--t-slow) var(--ease-out),transform var(--t-slow) var(--ease-out)}
 .mark__core{fill:var(--clay-mark)}
 /* The lead extends on hover: the flow moves, the focus does not. */
-a:hover .mark__lead{stroke:var(--clay-400);transform:translateX(1.5px)}
-@media (prefers-reduced-motion: reduce){a:hover .mark__lead{transform:none}}
+/* Hovering the mark turns its opening from the right round to the bottom, and the
+   line it points down carries a pulse away with it. The gap is the whole idea of
+   this mark, so moving it is the one gesture available that says something rather
+   than just lighting up.
+   transform-box:view-box, not the default border-box: on an SVG element the origin
+   is otherwise measured from the element's own bounding box, and the ring's box is
+   not the mark's centre. This is the same trap that put the intro's core 7 units
+   off centre. */
+.mark__ring,.mark__lead{transform-box:view-box;transform-origin:16px 16px;
+  transition:transform 620ms var(--ease-spring)}
+a:hover .mark__ring{transform:rotate(90deg)}
+/* The lead turns with the gap, and its nudge goes with it: translateX after the
+   rotation runs along the new direction, so it reaches further down rather than
+   further right. */
+a:hover .mark__lead{stroke:var(--clay-400);transform:rotate(90deg) translateX(1.5px)}
+
+/* The pulse. A short gradient of the mark's own clay, travelling the length of
+   the rule once per hover. It sits under the beads, so a bead occludes it as it
+   passes rather than being crossed by a 1px line. */
+.spine .pulse{position:absolute;left:0;top:0;width:1px;height:104px;
+  background:linear-gradient(180deg,transparent 0%,var(--clay-mark) 50%,transparent 100%);
+  opacity:0;pointer-events:none}
+.spine[data-pulse="true"] .pulse{animation:railpulse 1150ms var(--ease-out) 1}
+@keyframes railpulse{
+  0%{transform:translateY(-104px);opacity:0}
+  10%{opacity:1}
+  85%{opacity:1}
+  100%{transform:translateY(100vh);opacity:0}
+}
+
+@media (prefers-reduced-motion: reduce){
+  a:hover .mark__ring{transform:none}
+  a:hover .mark__lead{transform:none}
+  .spine[data-pulse="true"] .pulse{animation:none}
+}
 
 /* ── First-load animation ──
    The stage is only ever built on a first visit, and only for a reader who has

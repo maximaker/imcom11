@@ -209,6 +209,14 @@ kept only because it is built.
 - Paper texture is two layers of inline SVG turbulence. No image requests.
 - The wordmark is `one flow.first`, the clay dot carrying the accent. Styling is
   deliberately quiet: one weight, one colored mark.
+- Hovering the lockup turns the mark's opening from the right round to the bottom,
+  and sends a pulse down the rail. The gap is the whole idea of the mark, so moving
+  it says something rather than just lighting up. `transform-box:view-box` is not
+  optional: on an SVG element the origin is otherwise measured from that element's
+  own bounding box, and the ring's box is not the mark's centre. The pulse is a
+  child of the rail, built before the beads so a bead occludes it as it passes, and
+  restarted by dropping the attribute and forcing a reflow so a second hover is not
+  a no-op. Reduced motion skips both.
 - The logomark is an open ring with one point of focus at its centre and one
   line running out through the gap. The gap is the idea, so nothing may close
   it: no background plate, no containing circle, no second dot. Three
