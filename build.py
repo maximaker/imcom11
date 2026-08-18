@@ -21,30 +21,52 @@ WORDMARK = 'one flow<em>.</em>first'
 GATE = '''<script>
 /* Decides, before anything paints, whether the first-load animation runs. It has
    to be inline and here: hiding the page from a deferred script means showing it
-   first and then snatching it back. The flag is written now rather than when the
-   animation ends, so navigating away mid-way still counts as having seen it. */
+   first and then snatching it back. */
 (function(){
-  var d=document.documentElement;
+  var d=document.documentElement, force=false, hard=false;
   try{
-    if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    if(localStorage.getItem('ofo.intro')==='1') return;
+    /* An explicit way in, for reviewing it on demand: ?intro or #intro. */
+    force = new URLSearchParams(location.search).has('intro') || location.hash === '#intro';
+    /* And a best effort at ctrl+shift+R. A page cannot read modifier keys on
+       load, but a hard reload bypasses the cache, so the document really comes
+       down the wire; a plain reload is answered from cache or with a 304.
+       transferSize is what tells them apart. encodedBodySize does not: it reports
+       the full body either way, so a plain reload looks like a download by that
+       measure and the animation would replay on every single one. Downloaded means
+       the bytes on the wire cover the body; from cache it is headers only. */
+    var nav = performance.getEntriesByType('navigation')[0];
+    hard = !!nav && nav.type === 'reload' &&
+           nav.transferSize > 0 && nav.transferSize >= nav.encodedBodySize;
+  }catch(e){}
+  try{
+    if(!force && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if(!force && !hard && localStorage.getItem('ofo.intro') === '1'){
+      if(window.console) console.info(
+        'one flow first: first-load animation already seen. ' +
+        'A hard reload replays it, or add ?intro to the URL.');
+      return;
+    }
+    /* Written now rather than when the animation ends, so navigating away
+       halfway still counts as having seen it. */
     localStorage.setItem('ofo.intro','1');
-  }catch(e){ return; }              /* no storage, no animation: never twice */
+  }catch(e){ if(!force) return; }   /* no storage, no animation: never twice */
   d.setAttribute('data-intro','running');
-  /* Fetched here rather than linked in the markup: this runs once ever, and the
-     other 99% of loads should not pay 72KB for it. async=false on an injected
-     script keeps execution order without blocking the parser. */
+  /* Fetched here rather than linked in the markup: this runs once, and the other
+     99% of loads should not pay 72KB for it. async=false on an injected script
+     keeps execution order without blocking the parser. */
   ['assets/js/vendor/gsap.min.js','assets/js/intro.js'].forEach(function(src){
     var el=document.createElement('script');
     el.src=src; el.async=false; d.appendChild(el);
   });
-  /* If the script that runs it never arrives, the page must not stay hidden. */
+  /* If the script never arrives, the page must not stay hidden. Generous enough
+     that a slow connection still gets the animation, bounded enough that a
+     broken one is not a blank page. */
   setTimeout(function(){
     if(d.getAttribute('data-intro')==='running' && !window.__introStarted){
       d.removeAttribute('data-intro');
       document.dispatchEvent(new Event('intro:ready'));
     }
-  },2200);
+  },3000);
 })();
 </script>'''
 

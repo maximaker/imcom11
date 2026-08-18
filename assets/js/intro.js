@@ -69,7 +69,11 @@
   var ringLen = ring.getTotalLength(), leadLen = lead.getTotalLength();
   gsap.set(ring, { strokeDasharray: ringLen, strokeDashoffset: ringLen });
   gsap.set(lead, { strokeDasharray: leadLen, strokeDashoffset: leadLen });
-  gsap.set(core, { attr: { r: 1.5 }, fill: INK, scale: 0, transformOrigin: '16px 16px' });
+  /* The core keeps its final radius and is scaled instead. Animating the r
+     attribute re-rasterises the SVG every frame; a transform does not, and the
+     dot is small enough that the two look identical. */
+  var SEED = 1.5 / 3.7;
+  gsap.set(core, { attr: { r: 3.7 }, fill: INK, scale: 0, transformOrigin: '16px 16px' });
   gsap.set(els, { fill: SAND, opacity: 0, scale: 0.6, transformOrigin: 'center' });
   els.forEach(function (el, n) { gsap.set(el, { x: dots[n].from.x, y: dots[n].from.y }); });
 
@@ -119,7 +123,7 @@
     document.dispatchEvent(new Event('intro:ready'));   /* the headline rises */
 
     gsap.to(pieces, {
-      opacity: 1, y: 0, duration: 0.5, ease: 'power2.out', stagger: 0.055,
+      opacity: 1, y: 0, duration: 0.65, ease: 'power2.out', stagger: 0.075,
       onComplete: function () {
         gsap.set(pieces, { clearProps: 'opacity,transform' });
         stage.remove();
@@ -131,43 +135,53 @@
 
   var tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
 
-  /* One idea. */
-  tl.to(core, { scale: 1, duration: 0.40, ease: 'back.out(2.2)' }, 0)
+  /* Unhurried on purpose: every phase overlaps the next, so nothing starts from a
+     standstill, and the eases are gentle rather than snappy. Absolute start times
+     rather than relative ones, so the overlaps stay where they are put. */
 
-    /* Then the others, from everywhere. */
-    .to(els, { opacity: 1, scale: 1, duration: 0.32, stagger: 0.026 }, 0.20)
+  /* One idea. */
+  tl.to(core, { scale: SEED, duration: 0.65, ease: 'back.out(1.5)' }, 0)
+
+    /* Then the others, from everywhere, in no particular order. */
+    .to(els, { opacity: 1, scale: 1, duration: 0.55,
+      stagger: { each: 0.04, from: 'random' } }, 0.40)
 
     /* They come around it. The group turns as they close in, so it reads as
        gathering rather than snapping onto marks. */
-    .fromTo(swarm, { rotation: -26 },
-      { rotation: 0, duration: 0.70, ease: 'power3.inOut',
-        transformOrigin: '16px 16px' }, 0.45)
+    .fromTo(swarm, { rotation: -30 },
+      { rotation: 0, duration: 1.15, ease: 'power2.inOut',
+        transformOrigin: '16px 16px' }, 0.95)
     .to(els, {
       x: function (n) { return dots[n].to.x; },
       y: function (n) { return dots[n].to.y; },
-      duration: 0.70, ease: 'power3.inOut', stagger: 0.02
-    }, 0.45)
+      duration: 1.15, ease: 'power2.inOut',
+      stagger: { each: 0.03, from: 'random' }
+    }, 0.95)
 
-    /* The circle hardens: the stroke draws through them as they give way. */
-    .to(ring, { strokeDashoffset: 0, duration: 0.55, ease: 'power2.inOut' }, 1.10)
-    .to(els, { opacity: 0, scale: 0.4, duration: 0.34, stagger: 0.014 }, 1.20)
+    /* The circle hardens: the stroke draws steadily through them as they give
+       way, so there is no frame where the ring is neither dots nor line. */
+    .to(ring, { strokeDashoffset: 0, duration: 0.95, ease: 'power1.inOut' }, 2.15)
+    .to(els, { opacity: 0, scale: 0.4, duration: 0.45,
+      stagger: { each: 0.025 } }, 2.40)
 
     /* One dot remains, lit, and the line runs out through the gap. */
-    .to(core, { attr: { r: 3.7 }, fill: CLAY, duration: 0.40,
-      ease: 'back.out(1.6)' }, 1.54)
-    .to(lead, { strokeDashoffset: 0, duration: 0.30 }, 1.58)
+    .to(core, { scale: 1, fill: CLAY, duration: 0.55, ease: 'back.out(1.4)' }, 2.95)
+    .to(lead, { strokeDashoffset: 0, duration: 0.45 }, 3.10)
 
-    /* Its place on the page, at the size it lives at. The ground goes first, so
-       the mark is already travelling across the real page. */
-    .to(stage, { backgroundColor: 'rgba(0,0,0,0)', duration: 0.38 }, 2.00)
+    /* A beat with the finished mark, before it goes anywhere. */
+
+    /* Then its place on the page, at the size it lives at. The ground goes first,
+       so the mark is already travelling across the real page. */
+    .to(stage, { backgroundColor: 'rgba(0,0,0,0)', duration: 0.50 }, 3.90)
     .to(svg, { scale: end.scale, x: end.x, y: end.y,
-      duration: 0.75, ease: 'power3.inOut' }, 2.00)
+      duration: 1.05, ease: 'power2.inOut' }, 3.90)
 
     /* Only once it has landed. */
-    .add(bringPageIn, 2.75);
+    .add(bringPageIn, 4.95);
 
-  /* A first-time visitor who starts scrolling or tapping has told you enough. */
-  function hurry() { gsap.to(tl, { timeScale: 5, duration: 0.25, overwrite: true }); }
+  /* A first-time visitor who starts scrolling or tapping has told you enough.
+     Sped up rather than cut, so the mark still lands where it belongs. */
+  function hurry() { gsap.to(tl, { timeScale: 4, duration: 0.4, overwrite: true }); }
   ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(function (ev) {
     addEventListener(ev, hurry, { once: true, passive: true });
   });

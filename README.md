@@ -51,12 +51,25 @@ Four things are load-bearing:
   the end of the stagger hands them back to that rule and they disappear, the
   button among them.
 
-Reduced motion skips it. So does a missing GSAP, a failed timeline, and a
-2.2 second failsafe in the gate: the page must never stay hidden. Any scroll,
-tap or keypress speeds it up rather than jumping, so the mark still lands where
-it belongs.
+It runs unhurried: 4.95s to the mark landing, another 1.5s for the page, with
+every phase overlapping the next so nothing starts from a standstill. The core's
+size is a transform rather than its `r` attribute, which keeps it off the
+rasteriser. Any scroll, tap or keypress speeds the timeline up rather than
+jumping it, so the mark still lands where it belongs.
 
-To see it again, clear `ofo.intro` from localStorage.
+Reduced motion skips it. So does a missing GSAP, a failed timeline, and a three
+second failsafe in the gate: the page must never stay hidden.
+
+**To watch it again:** a hard reload (ctrl+shift+R), or add `?intro` to the URL.
+`#intro` works too, and `?intro` overrides reduced motion, since asking for it is
+asking for it. The hard-reload check is the one heuristic here: a page cannot read
+modifier keys on load, but a hard reload bypasses the cache, so the document
+really comes down the wire while a plain reload is answered from cache or with a
+304. `transferSize` is what separates them, and it must be compared against
+`encodedBodySize` rather than simply being non-zero. `encodedBodySize` alone
+reports the full body either way, so an earlier version of this replayed the
+animation on every ordinary reload. Measured here: 300 bytes against 25,305 from
+cache, 25,605 against 25,305 downloaded.
 
 ## Design notes
 
