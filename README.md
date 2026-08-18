@@ -137,6 +137,21 @@ Three things the reference cannot have as written, each noted at the token:
 To promote it, fold the tokens into `style.css` `:root` and delete the three
 sample files. To drop it, delete the three sample files.
 
+The second half of `palette-sample.css` is no longer colour. It carries the
+design changes asked for on top of the palette, all still confined to that one
+file: hairline-separated three-up grids with capped measures instead of three
+crowded columns, one hover for every card (white plus a wood shadow, where the
+deliverable rows used to hover to the accent wash and steps inside a tinted band
+hovered to cream), the opened deliverable text moved back under its own title
+instead of 280px to the right, a numeral on each step from a CSS counter, and the
+margin notes set in Caveat, vendored in `assets/fonts`.
+
+Two of those fixes went into `style.css` instead, because they are wrong on the
+live site too: the hero's label, its dot and the first line of its headline now
+share a row (its heading is far bigger than a section's, so the hero scopes its
+own `--lead-centre` at `.7` of the h1 size), and four claims in the body copy are
+marked with `<strong>`, which is a weight change to full ink and never a colour.
+
 `sample-layout.html` is a second, further experiment: the same content rebuilt in
 the reference's editorial layout, with IBM Plex vendored in `assets/fonts`. It
 changes structure as well as colour, which is more than was asked for, and it is

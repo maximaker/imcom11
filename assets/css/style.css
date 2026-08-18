@@ -361,7 +361,14 @@ html[data-intro="running"] .spine{opacity:0}
   .open .inner{grid-template-columns:var(--margin-col) minmax(0,1fr);
     gap:var(--margin-gap);align-items:start}
 }
-.open .inner>.margin{padding-top:10px}
+/* The hero's own row. Its heading is far bigger than a section's, so the centre
+   of its first line is nowhere near where --lead-centre puts a section's: .rise
+   sets a 1.4 line, which places the ink centre .7 of the font size down. Scoped
+   to the hero, and the dot follows because it reads the same variable. */
+.open .inner{--lead-centre:calc(.7 * clamp(2.7rem,6.6vw,4.7rem))}
+@media(min-width:920px){
+  .open .inner>.margin{padding-top:calc(var(--lead-centre) - var(--label-half))}
+}
 .close{display:grid;gap:22px}
 @media(min-width:920px){
   .close{grid-template-columns:var(--margin-col) minmax(0,1fr);
@@ -577,6 +584,9 @@ body[data-ready="true"] .rise>span{transform:translateY(0)}
 
 h2{font-size:clamp(1.72rem,3.5vw,2.5rem);line-height:1.1;max-width:19ch;margin-bottom:26px}
 .lede{font-size:1.06rem;color:var(--ink-2)}
+/* Emphasis, not colour, carries meaning: bold marks the claim a reader would
+   repeat, and takes the text up to full ink rather than tinting it. */
+.lede strong{font-weight:640;color:var(--ink)}
 
 /* ── Steps ── */
 .steps{display:grid;gap:36px}

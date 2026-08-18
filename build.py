@@ -280,7 +280,7 @@ HOME = HOME_HERO + "\n\n" + band(
     "The bind", "One", "The bind", "Most ideas die of the wrong question, not the wrong code.",
     '''      <h2>The scary part isn't building it. <strong>It's building the wrong thing.</strong></h2>
       <p class="lede">Your idea has probably been sitting in a doc for a while. Not because you're lazy, but because committing real money to it feels like a leap and you can't quite see where you'd land.</p>
-      <p class="lede">That instinct is right. Most ideas don't fail because nobody could build them. They fail because someone spent months and a pile of money before finding out that nobody wanted the thing that got built.</p>''',
+      <p class="lede">That instinct is right. Most ideas don't fail because nobody could build them. They fail because someone spent months and a pile of money before finding out that <strong>nobody wanted the thing that got built</strong>.</p>''',
     tinted=True) + "\n\n" + band(
     "Doubts", "Two", "Said out loud", "The three things people think and rarely say.",
     '''      <h2 class="rev">You might be <strong>thinking</strong></h2>
@@ -291,7 +291,7 @@ HOME = HOME_HERO + "\n\n" + band(
       </div>''') + "\n\n" + band(
     "After", "Three", "After", "The difference between hoping and being able to find out.",
     '''      <h2 class="rev">In two weeks, guessing turns into <strong>something you can test</strong></h2>
-      <p class="lede">Instead of a doc full of hope and a knot in your stomach, you have something real in your hands and a bar you agreed to before you saw a single result.</p>
+      <p class="lede">Instead of a doc full of hope and a knot in your stomach, you have something real in your hands and <strong>a bar you agreed to before you saw a single result</strong>.</p>
       <p class="lede">You can walk into a room and show it, not describe it. And when you put it in front of real people, you already know what a good result looks like, so the answer can't quietly become whatever you were hoping for.</p>
       <p class="lede">If it's a go, you know exactly what to build next. If it's a stop, you kept your money and a year of your life.</p>''',
     tinted=True) + "\n\n" + band(
@@ -334,12 +334,12 @@ HOME = HOME_HERO + "\n\n" + band(
           <div class="more" id="a3"><div><p>Where to find people with the problem rather than people who like you, how many you actually need (fewer than you would expect), and how to keep politeness from quietly ruining your results. Reusable on every idea you have after this one.</p></div></div>
         </div>
       </div>
-      <p class="lede rev" style="margin-top:26px">That last one matters more than it looks. It's the part that keeps working long after the two weeks end.</p>''',
+      <p class="lede rev" style="margin-top:26px">That last one matters more than it looks. It's <strong>the part that keeps working long after the two weeks end</strong>.</p>''',
     tinted=True) + "\n\n" + band(
     "Terms", "Six", "Terms", "The unusual promise.",
     '''      <p class="statement" id="statement" data-key="never stuck with me.">You should never be stuck with me.</p>
       <p class="lede rev">Plenty of people in this business are quietly hoping you'll stay. This works the other way round. When the two weeks end, you can read your own evidence, make your own call, and move forward or walk away without another opinion. You keep the build, the brief, and the method.</p>
-      <p class="lede rev">People do come back. Usually with the next idea, or the same one pointed somewhere new. That's a choice, not a dependency, and it's the only kind worth having.</p>''') + "\n\n" + band(
+      <p class="lede rev">People do come back. Usually with the next idea, or the same one pointed somewhere new. That's <strong>a choice, not a dependency</strong>, and it's the only kind worth having.</p>''') + "\n\n" + band(
     "Trust", "Seven", "Why trust it", "Competence, stated as what you get.",
     '''      <h2 class="rev">Why you can <strong>trust the answer</strong></h2>
       <div class="grid3">

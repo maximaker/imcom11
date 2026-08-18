@@ -1,6 +1,12 @@
 /* ─────────────────────────────────────────────────────────────────────────────
-   Palette sample — the Claude Design system's surfaces and ink, on the layout we
-   already have, keeping the current terracotta orange as the accent.
+   Sample — the Claude Design system's surfaces and ink on the layout we already
+   have, keeping the current terracotta orange as the accent, plus the design
+   changes asked for on top of it.
+
+   It started as colour only. The second half of this file is no longer that: it
+   gives sections more air, rebuilds the deliverable rows, numbers the steps, and
+   sets the margin notes in a handwriting face. All of it is still confined to
+   this one stylesheet, so the live site is untouched.
 
    Loaded after style.css and it only redefines colour: no size, spacing, type or
    position is touched anywhere in this file. Verified by measuring both pages
@@ -99,4 +105,88 @@
    --sand-100, so it follows the paper wherever the paper goes. */
 @media(max-width:760px){
   .top nav{background:var(--sand-100)}
+}
+
+
+/* ═════════════════════════════════════════════════════════════════════════════
+   Design changes, sample only
+   ═════════════════════════════════════════════════════════════════════════════ */
+
+/* A legible handwriting face for the margin notes, vendored like the rest. The
+   note is the one voice in the system with a point of view rather than a job, so
+   it reads as something written in the margin by hand. Caveat runs small for its
+   point size, so it is set up a step and given a little more line. */
+@font-face{font-family:'Margin Hand';src:url('../fonts/caveat-var.woff2') format('woff2-variations');
+  font-weight:400 700;font-style:normal;font-display:swap}
+
+.margin em{font-family:'Margin Hand','Segoe Script',cursive;font-style:normal;
+  /* 1.45em, not 1.22: Caveat's x-height is small for its point size, and at the
+     note's 13px base it was setting to under 16px. */
+  font-size:1.45em;line-height:1.4;letter-spacing:.005em;color:var(--ink-3)}
+@media(min-width:920px){
+  /* Hand-written text hangs differently from type: a hair more room above the
+     rule it sits under, and the tracking eased off. */
+  .margin em{margin-top:16px;padding-top:14px}
+}
+
+/* ── Air ───────────────────────────────────────────────────────────────────
+   The three-up read as one crowded block: three measures of body copy with 26px
+   between them and nothing to separate them. Hairlines and the reference's
+   28-32px of inner padding do the separating now, and the measure is capped so
+   the columns breathe rather than fill. */
+.grid3{gap:34px}
+@media(min-width:820px){
+  .grid3{gap:0;grid-template-columns:repeat(3,minmax(0,1fr));
+    border-top:1px solid var(--sand-300);border-bottom:1px solid var(--sand-300)}
+  .grid3 > *{padding:30px 32px;border-left:1px solid var(--sand-300)}
+  .grid3 > *:first-child{border-left:0;padding-left:0}
+  .grid3 > *:last-child{padding-right:0}
+}
+.grid3 h3{margin-bottom:12px;line-height:1.3}
+.grid3 p{font-size:1rem;line-height:1.72;max-width:36ch}
+
+/* Doubts and steps get the same treatment: room, not boxes. */
+.doubts{gap:22px}
+.doubt{padding:26px 28px}
+.steps{gap:44px}
+
+/* ── The deliverable rows ──────────────────────────────────────────────────
+   Two problems. The hover was the accent wash while every other card on the page
+   hovers to white, so this one row looked like a different kind of object. And
+   the opened text was pushed 280px right, into a narrow ragged column under the
+   summary rather than under its own title.
+   Both fixed: hover matches the cards, and the body sits under the name at the
+   same left edge, which is where the system puts body copy everywhere else. */
+/* One hover for every card on the page, which is what the reference asks for:
+   move to white and rise, with a wood-coloured shadow, and hold the text colour
+   so nothing flickers as the cursor crosses it. Inside a tinted band the steps
+   were hovering to the page cream instead of white, so they are brought in too. */
+.asset button:hover,
+.step:hover,
+.tinted .step:hover{background:var(--sand-50);
+  box-shadow:0 6px 22px -12px rgba(74,58,26,.26)}
+.asset button:hover .nm{transform:translateX(4px)}
+
+@media(min-width:780px){
+  .asset .more p{padding-left:48px;padding-right:26px;max-width:66ch}
+}
+.asset .more p{padding-bottom:30px}
+
+/* ── The steps, marked ─────────────────────────────────────────────────────
+   "Step one" in 13px was the only thing distinguishing them. A numeral carries
+   it now: large, light, in the accent, with the words kept as the label. The
+   count comes from a CSS counter, so the markup stays as it is. */
+.steps{counter-reset:step}
+.step{counter-increment:step}
+.step .n{position:relative;min-height:38px;padding-left:52px;
+  display:flex;align-items:center}
+.step .n::before{content:counter(step);position:absolute;left:0;top:50%;
+  transform:translateY(-50%);
+  font-family:var(--display);font-size:38px;font-weight:300;line-height:1;
+  letter-spacing:-.03em;color:var(--clay-mark)}
+/* The rule that already tops each step becomes its baseline, so the numeral sits
+   on the same line the eye follows across the three. */
+.step::before{height:2px}
+@media(min-width:820px){
+  .step{padding-top:24px}
 }
