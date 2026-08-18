@@ -616,11 +616,83 @@ START = '''<div class="doc">
       <div class="form-card rev">
         <div class="form-status" id="form-status" tabindex="-1" role="status" aria-live="polite">
           <div>
-            <h3>That's in. Talk soon.</h3>
-            <p>You'll get a reply within one working day with a couple of times to pick from. If the idea line tells me straight away that this isn't a fit, you'll hear that instead, along with a better direction.</p>
+            <h3>Here it is. It's yours either way.</h3>
+            <p>Nothing has been sent yet — this site has no server to send it to, and
+              a form that says "sent" when it means "discarded" is worse than no form.
+              Copy it or open it in your mail app, and it reaches me the moment you hit
+              send. Keep a copy regardless: the answers are more use to you than to me.</p>
+            <label class="field__label" for="brief">Your brief</label>
+            <textarea class="textarea" id="brief" rows="14" readonly></textarea>
+            <div class="briefacts">
+              <button class="act act--block" type="button" id="brief-mail"><span>Open in your mail app</span></button>
+              <button class="quiet" type="button" id="brief-copy">Copy it instead</button>
+            </div>
           </div>
         </div>
-        <form id="intro-form" novalidate>
+        <form class="intake" id="intake" novalidate>
+          <p class="intake__lead">Ten questions, then your details. They are the same
+            ones I would ask on the call, so answering them here means the call starts
+            at the interesting part. Only the idea and your email are needed — skip
+            anything you would rather talk through.</p>
+          <ol class="intake__steps">
+        <li class="qstep" id="q-idea-step" data-q="1">
+          <label class="field__label" for="q-idea">What's the idea? <span class="req" aria-hidden="true">*</span></label>
+          <span class="field__hint">One or two sentences. Rough is fine — this is not a pitch.</span>
+          <textarea class="textarea" id="q-idea" name="idea" required aria-describedby="q-idea-error" rows="3" placeholder="It's a…"></textarea>
+          <p class="field__error" id="q-idea-error">A sentence is enough, but it needs to be a sentence.</p>
+        </li>
+        <li class="qstep" id="q-who-step" data-q="2">
+          <label class="field__label" for="q-who">Who is it for, specifically? <span class="qstep__opt">Optional</span></label>
+          <span class="field__hint">Not everyone. The narrower you can make this, the more useful the two weeks are.</span>
+          <textarea class="textarea" id="q-who" name="who" rows="3" placeholder="It's for…"></textarea>
+        </li>
+        <li class="qstep" id="q-instead-step" data-q="3">
+          <label class="field__label" for="q-instead">What do they do instead today? <span class="qstep__opt">Optional</span></label>
+          <span class="field__hint">Whatever you'd be replacing, even if it's a spreadsheet, a WhatsApp thread, or nothing.</span>
+          <textarea class="textarea" id="q-instead" name="instead" rows="3" placeholder="Right now they…"></textarea>
+        </li>
+        <li class="qstep" id="q-true-step" data-q="4">
+          <p class="qstep__frame">This is the one the two weeks gets built around.</p>
+          <label class="field__label" for="q-true">What has to be true for this to work? <span class="qstep__opt">Optional</span></label>
+          <span class="field__hint">The one thing that, if it turned out false, would make the rest pointless.</span>
+          <textarea class="textarea" id="q-true" name="assumption" rows="3" placeholder="It only works if…"></textarea>
+        </li>
+        <li class="qstep" id="q-unsure-step" data-q="5">
+          <label class="field__label" for="q-unsure">Which part are you least sure about? <span class="qstep__opt">Optional</span></label>
+          <span class="field__hint">It's usually not the part that's hardest to build.</span>
+          <textarea class="textarea" id="q-unsure" name="unsure" rows="3" placeholder="I'm least sure that…"></textarea>
+        </li>
+        <li class="qstep" id="q-wrong-step" data-q="6">
+          <label class="field__label" for="q-wrong">How would you know you were wrong? <span class="qstep__opt">Optional</span></label>
+          <span class="field__hint">A number, a behaviour, anything you could actually watch happen.</span>
+          <textarea class="textarea" id="q-wrong" name="wrong" rows="3" placeholder="I'd know if…"></textarea>
+        </li>
+        <li class="qstep" id="q-no-step" data-q="7">
+          <p class="qstep__frame">An honest answer here is worth more than a polite one.</p>
+          <label class="field__label" for="q-no">What would you do if the answer came back no? <span class="qstep__opt">Optional</span></label>
+          <textarea class="textarea" id="q-no" name="ifno" rows="3" placeholder="If it's a no, I'd…"></textarea>
+        </li>
+        <li class="qstep" id="q-sitting-step" data-q="8">
+          <label class="field__label" for="q-sitting">How long has this been sitting? <span class="qstep__opt">Optional</span></label>
+          <span class="field__hint">A doc, a note, a conversation you keep having.</span>
+          <textarea class="textarea" id="q-sitting" name="sitting" rows="3" placeholder="About…"></textarea>
+        </li>
+        <li class="qstep" id="q-pressure-step" data-q="9">
+          <label class="field__label" for="q-pressure">What's the pressure? <span class="qstep__opt">Optional</span></label>
+          <span class="field__hint">A date, a competitor, money running out, a person waiting on you. Or none.</span>
+          <textarea class="textarea" id="q-pressure" name="pressure" rows="3" placeholder="The pressure is…"></textarea>
+        </li>
+        <li class="qstep" id="q-want-step" data-q="10">
+          <fieldset class="qfield">
+            <legend class="field__label">What do you want out of the two weeks? <span class="qstep__opt">Optional</span></legend>
+            <label class="pick"><input type="radio" name="want" value="yes-no"><span>A straight yes or no</span></label>
+            <label class="pick"><input type="radio" name="want" value="built"><span>Something built I can put in front of people</span></label>
+            <label class="pick"><input type="radio" name="want" value="rule"><span>A rule I can trust for the next decision</span></label>
+            <label class="pick"><input type="radio" name="want" value="unsure"><span>Not sure yet</span></label>
+          </fieldset>
+        </li>
+        <li class="qstep" id="q-contact-step" data-q="11">
+          <p class="qstep__frame">I read every one of these myself.</p>
           <div class="field">
             <label class="field__label" for="name">Your name <span class="req" aria-hidden="true">*</span></label>
             <input class="input" type="text" id="name" name="name" autocomplete="name" required aria-describedby="name-error">
@@ -631,15 +703,15 @@ START = '''<div class="doc">
             <input class="input" type="email" id="email" name="email" autocomplete="email" inputmode="email" required aria-describedby="email-error">
             <p class="field__error" id="email-error">Please enter an email address I can reply to.</p>
           </div>
-          <div class="field">
-            <label class="field__label" for="idea">Your idea, in one line <span class="req" aria-hidden="true">*</span></label>
-            <span class="field__hint">Who it's for and what it does for them. Rough is fine.</span>
-            <textarea class="textarea" id="idea" name="idea" required minlength="12" aria-describedby="idea-error" placeholder="A booking tool for independent physios who currently run everything through WhatsApp."></textarea>
-            <p class="field__error" id="idea-error">A sentence is enough, but it needs to be a sentence.</p>
+        </li>
+          </ol>
+          <div class="intake__bar" hidden>
+            <button class="quiet intake__back" type="button">Back</button>
+            <p class="intake__count" aria-live="polite"></p>
           </div>
           <button class="act act--block" type="submit"><span>Send it over</span></button>
           <p class="fineprint">I read every one of these myself. No scoring, no auto-reply, no chatbot in between.
-            Your details are used to reply to you about this call and nothing else. No list, no sequence.</p>
+            Your answers stay in this browser until you send them, and are used to reply to you about this call and nothing else. No list, no sequence.</p>
         </form>
       </div>
     </div>
@@ -819,5 +891,11 @@ PAGES = [
 for page in PAGES:
     slug, title, desc, body, ch, cb = page[:6]
     opts = page[6] if len(page) > 6 else {}
-    pathlib.Path(slug).write_text(shell(slug, title, desc, body, ch, cb, **opts))
+    # encoding is not optional. write_text without it uses the platform's locale
+    # codepage, which on Windows is cp1252, and every page declares utf-8. It went
+    # unnoticed for as long as the pages happened to be pure ASCII; the first
+    # ellipsis in a placeholder came out as a single 0x97 byte and rendered as a
+    # question mark in the browser.
+    pathlib.Path(slug).write_text(
+        shell(slug, title, desc, body, ch, cb, **opts), encoding='utf-8')
     print("wrote", slug)

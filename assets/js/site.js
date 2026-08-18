@@ -493,15 +493,32 @@
     },{passive:true});
   }
 
-  /* Intro-call form: validate on blur, never on keystroke, and keep the error
-     next to the field it belongs to. */
-  var form=document.getElementById('intro-form');
+  /* ── The intake ──
+     A real form in the markup, one long column of questions, which this turns into
+     one question per screen. Built that way round on purpose: with scripting off it
+     is still a complete form that works, so there is no second copy of any question
+     anywhere and nothing to keep in sync.
+     There is no server. The old version of this faked a send with a 700ms timer and
+     then said "That's in. Talk soon.", which is worse than having no form: it told
+     the reader their words had arrived when they had been dropped on the floor. What
+     happens now is the answers are composed into a brief the reader can read, copy,
+     and hand over themselves, and the page says plainly that nothing has moved until
+     they do. Which is also the better version of the idea: the answers are worth more
+     to them than to me, so they get them either way. */
+  var form=document.getElementById('intake');
   if(form){
     var status=document.getElementById('form-status');
     var submit=form.querySelector('button[type="submit"]');
-    var inputs=form.querySelectorAll('input,textarea');
+    var submitLabel=submit.querySelector('span')||submit;
+    var inputs=[].slice.call(form.querySelectorAll('input,textarea'));
+    var steps=[].slice.call(form.querySelectorAll('.qstep'));
+    var bar=form.querySelector('.intake__bar');
+    var back=form.querySelector('.intake__back');
+    var count=form.querySelector('.intake__count');
+    var KEY='ofo.intake';
+    var at=0;
 
-    function wrap(el){return el.closest('.field');}
+    function wrap(el){return el.closest('.field')||el.closest('.qstep');}
     function check(el){
       var w=wrap(el); if(!w) return true;
       var ok=el.checkValidity();
@@ -509,34 +526,181 @@
       el.setAttribute('aria-invalid', ok?'false':'true');
       return ok;
     }
+    /* Validated on blur and never on keystroke: telling someone their email is
+       invalid while they are still on the fourth character is not help. */
     inputs.forEach(function(el){
       el.addEventListener('blur',function(){check(el);});
       el.addEventListener('input',function(){
         var w=wrap(el);
         if(w && w.getAttribute('data-invalid')==='true') check(el);
+        save();
       });
+      el.addEventListener('change',save);
     });
+
+    /* Kept in this browser, not sent anywhere. Eleven questions is more than anyone
+       finishes in one sitting if the phone rings, and losing them to a closed tab
+       would be the whole point of the thing thrown away. */
+    function save(){
+      try{
+        var d={};
+        inputs.forEach(function(el){
+          if(el.type==='radio'){ if(el.checked) d[el.name]=el.value; }
+          else if(el.value) d[el.name]=el.value;
+        });
+        d.__at=at;
+        localStorage.setItem(KEY, JSON.stringify(d));
+      }catch(e){}
+    }
+    function restore(){
+      try{
+        var d=JSON.parse(localStorage.getItem(KEY)||'{}');
+        inputs.forEach(function(el){
+          if(!(el.name in d)) return;
+          if(el.type==='radio'){ el.checked = (el.value===d[el.name]); }
+          else el.value=d[el.name];
+        });
+        return typeof d.__at==='number' ? d.__at : 0;
+      }catch(e){ return 0; }
+    }
+
+    function paint(){
+      steps.forEach(function(s,i){ s.hidden = (i!==at); });
+      var last = at===steps.length-1;
+      submitLabel.textContent = last ? 'Send it over' : 'Next';
+      submit.setAttribute('data-role', last ? 'send' : 'next');
+      back.hidden = at===0;
+      count.textContent = (at+1) + ' of ' + steps.length;
+      bar.hidden = false;
+      form.setAttribute('data-step', String(at+1));
+    }
+    function go(to){
+      at = Math.max(0, Math.min(steps.length-1, to));
+      paint(); save();
+      var f = steps[at].querySelector('textarea,input:not([type=radio]),input');
+      if(f) f.focus({preventScroll:true});
+      /* The card, not the field: scrolling a focused field to centre on a short
+         step jumps the page for no reason. */
+      var card=form.closest('.form-card')||form;
+      var r=card.getBoundingClientRect();
+      if(r.top<0||r.top>window.innerHeight*0.5){
+        window.scrollTo({top:r.top+window.scrollY-100,
+                         behavior:reduce?'auto':'smooth'});
+      }
+    }
+    /* Only what the current step requires can block leaving it. Every question but
+       the idea and the address is optional, so an empty field is an answer. */
+    function stepOk(){
+      var bad=null;
+      [].slice.call(steps[at].querySelectorAll('input,textarea')).forEach(function(el){
+        if(!check(el) && !bad) bad=el;
+      });
+      if(bad){ bad.focus(); return false; }
+      return true;
+    }
+
+    back.addEventListener('click',function(){ go(at-1); });
+
+    /* Ctrl or Cmd with Enter, which is the convention for committing a textarea, and
+       plain Enter in the single-line fields where it means the same thing. */
+    form.addEventListener('keydown',function(e){
+      if(e.key!=='Enter') return;
+      var t=e.target;
+      if(t.tagName==='TEXTAREA'){
+        if(e.ctrlKey||e.metaKey){ e.preventDefault(); if(stepOk()) advance(); }
+      } else if(t.tagName==='INPUT' && t.type!=='radio'){
+        e.preventDefault(); if(stepOk()) advance();
+      }
+    });
+
+    function advance(){
+      if(at<steps.length-1){ go(at+1); return; }
+      finish();
+    }
+
+    /* The brief. Plain text on purpose: it has to survive being pasted into a mail
+       client, a doc, or a notes app without carrying markup into any of them. */
+    function compose(){
+      var lines=['Idea intake — one flow first',''];
+      steps.forEach(function(s){
+        var legend=s.querySelector('legend');
+        if(legend){
+          var picked=s.querySelector('input[type=radio]:checked');
+          if(picked){
+            lines.push(legend.textContent.replace(/Optional$/,'').trim());
+            lines.push(picked.parentElement.textContent.trim(), '');
+          }
+          return;
+        }
+        /* Every field on the step, not the first one. The contact step carries two,
+           and taking only the first quietly composed a brief with a name and no
+           address on it -- the one field the whole thing exists to collect. */
+        [].slice.call(s.querySelectorAll('textarea,input:not([type=radio])'))
+          .forEach(function(field){
+            if(!field.value.trim()) return;
+            var lbl=s.querySelector('label[for="'+field.id+'"]')||s.querySelector('label');
+            var q=lbl?lbl.textContent.replace(/\*/g,'').replace(/Optional$/,'').trim()
+                    :field.name;
+            lines.push(q, field.value.trim(), '');
+          });
+      });
+      return lines.join('\n');
+    }
+
+    function finish(){
+      var bad=null;
+      inputs.forEach(function(el){ if(!check(el) && !bad) bad=el; });
+      if(bad){
+        /* A required field can only be on a step other than this one if the reader
+           got here before filling it, so go to it rather than reporting it. */
+        var owner=bad.closest('.qstep');
+        var i=steps.indexOf(owner);
+        if(i>=0 && i!==at){ go(i); }
+        bad.focus();
+        return;
+      }
+      var brief=compose();
+      var box=document.getElementById('brief');
+      if(box) box.value=brief;
+
+      var mail=document.getElementById('brief-mail');
+      if(mail){
+        mail.addEventListener('click',function(){
+          var to='hello@oneflowfirst.com';
+          var subj='Idea intake — '+(document.getElementById('name').value||'').trim();
+          /* Long bodies are truncated by some mail clients at around 2000
+             characters, so the address is opened with the brief and the copy button
+             stays on screen as the way that never loses a word. */
+          location.href='mailto:'+to+'?subject='+encodeURIComponent(subj)+
+                        '&body='+encodeURIComponent(brief);
+        });
+      }
+      var copy=document.getElementById('brief-copy');
+      if(copy){
+        copy.addEventListener('click',function(){
+          var done=function(){
+            var t=copy.textContent; copy.textContent='Copied';
+            window.setTimeout(function(){copy.textContent=t;},1400);
+          };
+          if(navigator.clipboard && navigator.clipboard.writeText){
+            navigator.clipboard.writeText(brief).then(done,function(){box.select();});
+          } else { box.select(); document.execCommand('copy'); done(); }
+        });
+      }
+      form.hidden=true;
+      if(status){ status.setAttribute('data-visible','true'); status.focus(); }
+      try{ localStorage.removeItem(KEY); }catch(e){}
+    }
 
     form.addEventListener('submit',function(e){
       e.preventDefault();
-      var firstBad=null;
-      inputs.forEach(function(el){ if(!check(el) && !firstBad) firstBad=el; });
-      if(firstBad){
-        firstBad.focus();
-        firstBad.scrollIntoView({block:'center',behavior:reduce?'auto':'smooth'});
-        return;
-      }
-      submit.disabled=true;
-      var label=submit.querySelector('span')||submit;
-      var original=label.textContent;
-      label.textContent='Sending';
-      /* No backend yet: swap this for a real endpoint or a scheduler embed. */
-      window.setTimeout(function(){
-        form.hidden=true;
-        if(status){ status.setAttribute('data-visible','true'); status.focus(); }
-        submit.disabled=false; label.textContent=original;
-      },700);
+      if(!stepOk()) return;
+      advance();
     });
+
+    at=restore();
+    if(at>steps.length-1) at=0;
+    paint();
   }
 
   /* Mobile menu. */
