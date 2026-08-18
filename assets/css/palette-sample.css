@@ -36,15 +36,24 @@
   --sand-500:#CCB58A;   /* was #C9AE99 — the sieve dots, the mark's lead line */
 
   /* ── The rail ──
-     Deliberately below the accent. The travelling call to action is a 16px orange
-     dot on this line, and it was the same colour as the fill behind it and the
-     section beads beside it, so the one mark on the page that wants to be found
-     was competing with two dozen that do not. These are both quiet, and the accent
-     is left to the button alone.
-     Ratios against paper-fresh: the orange dot is 3.90, the fill 1.95, a passed
-     bead 2.55. The order is the point, not the numbers. */
-  --rail-fill:#C0AF86;  /* was --clay-mark, 3.90 — the line as it advances */
-  --rail-mark:#A8996F;  /* was --clay-mark, 3.90 — a bead the fill has reached */
+     Deliberately below the accent. The travelling call to action is an orange dot
+     on this line, and it was once the same colour as the fill behind it and the
+     beads beside it, so the one mark on the page that wants to be found was
+     competing with two dozen that do not. The accent is the button's alone.
+     Muted twice. The first pass took them off the accent and onto warm neutrals;
+     this one halves the saturation again and lightens with it, which is what muting
+     actually needs — desaturating alone walks a light warm colour toward mid-grey
+     and comes out darker, not quieter. Held back from full neutral on purpose: at
+     a few percent saturation these read cold against cream, and the rail should
+     look like a line drawn on this paper rather than on some other.
+     All three moved together so the rail stays one material. Ratios against
+     paper-fresh, and the order matters rather than the numbers: the button's dot
+     3.39, a passed bead 2.05, the fill 1.52, a bead still ahead 1.32, the track
+     1.11. A passed bead is 1.55 from one ahead of the fill, which is the smallest
+     step that still reads, and it has the scale and the halo besides. */
+  --rail-fill:#CEC7B5;   /* 1.95 -> 1.52, saturation 32% -> 20% */
+  --rail-mark:#B3AC97;   /* 2.55 -> 2.05, saturation 25% -> 16% */
+  --rail-ahead:#DDD5C4;  /* was --sand-300 at 43% — a bead the fill has not reached */
 
   /* ── Ink ──
      Indigo rather than the warm near-black: cool against the wood, so the two
@@ -147,7 +156,7 @@
      ring it replaced; 10px keeps it lighter than what it replaces rather than
      heavier. */
   .spine .bead{width:10px;height:10px;border:0;
-    background:var(--sand-300);
+    background:var(--rail-ahead);
     box-shadow:0 0 0 4px var(--sand-100)}
   /* A deepening rather than a change of colour, which is how the statement's words
      light too: the bead stays the same material and simply darkens once the fill
