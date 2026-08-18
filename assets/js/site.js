@@ -8,7 +8,7 @@
 
   /* Split the statement into words so it can be read by the scroll. */
   var st = document.getElementById('statement');
-  var keyWords = {"don't":1,'need':1,'me':1,'again.':1};
+  var keyWords = {'never':1,'stuck':1,'with':1,'me.':1};
   if (st){
     var words = st.textContent.trim().split(/\s+/);
     st.textContent='';

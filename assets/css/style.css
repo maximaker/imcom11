@@ -369,6 +369,16 @@ body[data-ready="true"] .rise>span{transform:translateY(0)}
 
 .act-note{font-size:15px;color:var(--ink-3);margin-top:18px}
 
+/* ── Hero principle line. A statement of method, not a tagline: small, quiet,
+   set apart by a rule rather than by weight or colour. ── */
+.principle{display:flex;align-items:center;gap:11px;margin:32px 0 0;
+  font-family:var(--display);font-size:14.5px;font-weight:500;letter-spacing:.01em;
+  color:var(--ink-2)}
+.principle::before{content:'';flex:none;width:26px;height:1px;background:var(--clay-mark)}
+.principle span{font-weight:400;color:var(--ink-3)}
+
+.hero-cta{margin:34px 0 0}
+
 /* ── Stat row. Three plain numbers, hairline-separated. ── */
 .stats{display:grid;gap:0;border-top:1px solid var(--sand-300);
   border-bottom:1px solid var(--sand-300);margin-top:56px}
@@ -382,6 +392,20 @@ body[data-ready="true"] .rise>span{transform:translateY(0)}
 .stat b{display:block;font-family:var(--display);font-weight:550;
   font-size:clamp(1.5rem,3vw,2rem);letter-spacing:-0.024em;margin-bottom:4px}
 .stat span{font-size:14.5px;color:var(--ink-3)}
+
+/* ── Home proof cards. The kill line is the load-bearing part, so it gets the
+   rule and the accent label; the app name stays plain. ── */
+.proofs{display:grid;gap:18px;margin-top:30px}
+@media(min-width:860px){.proofs{grid-template-columns:repeat(3,1fr);gap:22px}}
+.proof{display:flex;flex-direction:column;padding:22px 24px;background:var(--sand-50);
+  border:1px solid var(--sand-300);border-radius:var(--r-md)}
+.proof h3{font-size:1.05rem;font-weight:640;line-height:1.25;margin:0 0 8px}
+.proof p{margin:0;color:var(--ink-2);font-size:.97rem}
+.proof .kill{margin-top:auto;padding-top:14px;border-top:1px solid var(--sand-300)}
+.proof p.kill{margin-top:16px}
+@media(min-width:860px){.proof p.kill{margin-top:auto}}
+.proof .kill b{display:block;font-size:11px;text-transform:uppercase;letter-spacing:2.2px;
+  font-weight:600;color:var(--clay-500);margin-bottom:5px}
 
 /* ── Bands ── */
 .band{display:grid;grid-template-columns:1fr;gap:22px;padding:80px 0}

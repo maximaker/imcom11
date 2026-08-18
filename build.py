@@ -65,12 +65,12 @@ def shell(slug, title, desc, body, close_heading, close_body):
 <div class="spine">
   <div class="track" aria-hidden="true"></div><div class="fill" id="spinefill" aria-hidden="true"></div>
   <div class="cap cap--top">
-    <a class="railmark" href="index.html">the<em>.</em>sprint</a>
+    <a class="railmark" href="index.html">one flow<em>.</em>first</a>
   </div>
 </div>
 
 <header class="top" id="top">
-  <a class="name" href="index.html">the<em>.</em>sprint</a>
+  <a class="name" href="index.html">one flow<em>.</em>first</a>
   <button class="navtoggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="Open menu">
     <span aria-hidden="true"></span><span aria-hidden="true"></span>
   </button>
@@ -106,8 +106,8 @@ def shell(slug, title, desc, body, close_heading, close_body):
 </main>
 
 <footer class="colo">
-  <span>&copy; 2026 The discovery sprint</span>
-  <span><a href="mailto:hello@example.com">hello@example.com</a></span>
+  <span>&copy; 2026 One flow first</span>
+  <span><a href="mailto:hello@oneflowfirst.com">hello@oneflowfirst.com</a></span>
 </footer>
 
 <script src="assets/js/site.js" defer></script>
@@ -124,7 +124,7 @@ HOME_HERO = '''<div class="heroband" id="heroband">
   <div class="doc">
   <section class="open" id="hero">
     <div class="inner">
-      <div class="margin"><b>The sprint</b>Two weeks<em>Fixed scope. Fixed price. One decision at the end.</em></div>
+      <div class="margin"><b>The offer</b>Two weeks<em>Fixed scope. Fixed price. One decision at the end.</em></div>
       <div>
         <h1>
           <span class="rise"><span>Know whether your idea</span></span>
@@ -133,6 +133,12 @@ HOME_HERO = '''<div class="heroband" id="heroband">
           <span class="rise"><span>months finding out.</span></span>
         </h1>
         <p class="deck rev">In two weeks you own <b>a working version of the one part that matters most</b>, evidence from real users, and a straight answer: keep going, or stop.</p>
+
+        <p class="principle rev">One flow first. <span>Nothing else yet.</span></p>
+
+        <p class="hero-cta rev"><a class="act" href="start.html"><span>Tell me about your idea</span>
+          <span class="chip" aria-hidden="true">''' + ARROW + '''</span></a></p>
+        <p class="act-note rev">Twenty minutes. You'll get a straight read on whether this fits, either way.</p>
 
         <div class="stats rev">
           <div class="stat"><b>20 years</b><span>Deciding what to build, and what to cut.</span></div>
@@ -182,7 +188,13 @@ HOME = HOME_HERO + "\n\n" + band(
         <div class="doubt rev"><p class="q">"I'm not technical. I won't understand what's happening."</p><p class="a">You don't need to be. You'll get it explained clearly enough to decide with confidence.</p></div>
         <div class="doubt rev"><p class="q">"I don't want to be talked into a build I don't need."</p><p class="a">You won't be. You'll get an honest answer even when the honest answer is no.</p></div>
       </div>''') + "\n\n" + band(
-    "Method", "Three", "Method", "Three steps. The first one can end the project, cheaply.",
+    "After", "Three", "After", "The difference between hoping and knowing.",
+    '''      <h2 class="rev">In two weeks, you go from <strong>guessing to knowing</strong></h2>
+      <p class="lede">Instead of a doc full of hope and a knot in your stomach, you have something real in your hands and evidence about whether it works.</p>
+      <p class="lede">You can walk into a room and show it, not describe it. You can point at what real people did with it, not at what you hope they'd do. And you can make the next call, spend or stop, with your eyes open.</p>
+      <p class="lede">If it's a go, you know exactly what to build next. If it's a stop, you kept your money and a year of your life.</p>''',
+    tinted=True) + "\n\n" + band(
+    "Method", "Four", "Method", "Three steps. The first one can end the project, cheaply.",
     '''      <h2 class="rev">Three steps, <strong>start to answer</strong></h2>
       <div class="steps">
         <div class="step"><span class="n">Step one</span><h3>Find out if it's worth building.</h3><p>You bring the idea. Together you find the one thing that has to be true for it to work, and you get a straight call. If there's a fatal flaw, you find it here, cheaply, before anything gets built.</p></div>
@@ -190,7 +202,7 @@ HOME = HOME_HERO + "\n\n" + band(
         <div class="step"><span class="n">Step three</span><h3>Test it and decide, with a clear rule.</h3><p>Before testing, you agree what result means go, what means adjust, what means stop. Then you decide with evidence instead of a gut feeling.</p></div>
       </div>
       <p class="rev" style="margin-top:34px"><a class="quiet" href="how-it-works.html">See how it works in detail ''' + ARROW + '''</a></p>''') + "\n\n" + band(
-    "Deliverables", "Four", "Deliverables", "Named things. Yours to keep, extend, or hand to any team.",
+    "Deliverables", "Five", "Deliverables", "Named things. Yours to keep, extend, or hand to any team.",
     '''      <h2 class="rev">What you <strong>own</strong> at the end</h2>
       <div class="assets">
         <div class="asset" data-open="false">
@@ -200,7 +212,7 @@ HOME = HOME_HERO + "\n\n" + band(
             <span class="sm">One real flow through the core of your idea, usable on a phone.</span>
             <span class="sign" aria-hidden="true"></span>
           </button>
-          <div class="more" id="a1"><div><p>Yours to keep, extend, or hand to any team. No licence, no lock-in, no dependency on me continuing to exist. If you take it to another developer tomorrow, everything they need is in the repository.</p></div></div>
+          <div class="more" id="a1"><div><p>Yours to keep, extend, or hand to any team. No license, no lock-in, no dependency on me continuing to exist. If you take it to another developer tomorrow, everything they need is in the repository.</p></div></div>
         </div>
         <div class="asset" data-open="false">
           <button type="button" aria-expanded="false" aria-controls="a2">
@@ -221,12 +233,13 @@ HOME = HOME_HERO + "\n\n" + band(
           <div class="more" id="a3"><div><p>Where to find people with the problem rather than people who like you, how many you actually need (fewer than you would expect), and how to keep politeness from quietly ruining your results. Reusable on every idea you have after this one.</p></div></div>
         </div>
       </div>
-      <p class="lede rev" style="margin-top:26px">That last one matters more than it looks. It's the part that keeps working long after the sprint ends.</p>''',
+      <p class="lede rev" style="margin-top:26px">That last one matters more than it looks. It's the part that keeps working long after the two weeks end.</p>''',
     tinted=True) + "\n\n" + band(
-    "Terms", "Five", "Terms", "The unusual promise.",
-    '''      <p class="statement" id="statement">The goal is that you don't need me again.</p>
-      <p class="lede rev">Plenty of people in this business are quietly hoping you'll stay. This works the other way round. When the sprint ends, you can read your own evidence, make your own call, and either move forward or walk away without another opinion. You keep the build, the brief, and the method.</p>''') + "\n\n" + band(
-    "Trust", "Six", "Why trust it", "Competence, stated as what you get.",
+    "Terms", "Six", "Terms", "The unusual promise.",
+    '''      <p class="statement" id="statement">You should never be stuck with me.</p>
+      <p class="lede rev">Plenty of people in this business are quietly hoping you'll stay. This works the other way round. When the two weeks end, you can read your own evidence, make your own call, and move forward or walk away without another opinion. You keep the build, the brief, and the method.</p>
+      <p class="lede rev">People do come back. Usually with the next idea, or the same one pointed somewhere new. That's a choice, not a dependency, and it's the only kind worth having.</p>''') + "\n\n" + band(
+    "Trust", "Seven", "Why trust it", "Competence, stated as what you get.",
     '''      <h2 class="rev">Why you can <strong>trust the answer</strong></h2>
       <div class="grid3">
         <div class="rev"><h3>You get judgment, not just a build.</h3><p>Anyone can generate an app now. The hard part is knowing what to make and what to cut, and that's the part you're paying for.</p></div>
@@ -235,7 +248,28 @@ HOME = HOME_HERO + "\n\n" + band(
       </div>
       <p class="lede rev" style="margin-top:30px">The judgment comes from 20 years of deciding what to build and what to cut. The speed comes from nine working apps built in the last few months. If you want that story, it's on the <a href="about.html">about page</a>.</p>''',
     tinted=True) + "\n\n" + band(
-    "Fit", "Seven", "Fit", "A quick call sorts it out in twenty minutes.",
+    "Proof", "Eight", "Proof", "Not theory. Things that run.",
+    '''      <h2 class="rev">Nine apps, and <strong>what each one taught me</strong></h2>
+      <p class="lede">These were built for real ideas, with the same tools and the same speed you'd get. What matters isn't that they work. It's what got cut to make them work.</p>
+      <div class="proofs">
+        <div class="proof rev">
+          <h3>[APP NAME 1]</h3>
+          <p>[ONE LINE]</p>
+          <p class="kill"><b>What I'd kill</b>[WHAT I'D KILL]</p>
+        </div>
+        <div class="proof rev">
+          <h3>[APP NAME 2]</h3>
+          <p>[ONE LINE]</p>
+          <p class="kill"><b>What I'd kill</b>[WHAT I'D KILL]</p>
+        </div>
+        <div class="proof rev">
+          <h3>[APP NAME 3]</h3>
+          <p>[ONE LINE]</p>
+          <p class="kill"><b>What I'd kill</b>[WHAT I'D KILL]</p>
+        </div>
+      </div>
+      <p class="rev" style="margin-top:34px"><a class="quiet" href="what-ive-built.html">See the full thinking behind them ''' + ARROW + '''</a></p>''') + "\n\n" + band(
+    "Fit", "Nine", "Fit", "A quick call sorts it out in twenty minutes.",
     '''      <h2 class="rev">Who this <strong>works for</strong></h2>
       <div class="fit">
         <div class="fit__col rev">
@@ -256,7 +290,7 @@ HOME = HOME_HERO + "\n\n" + band(
         </div>
       </div>
       <p class="lede rev" style="margin-top:26px">No hard feelings either way.</p>''') + "\n\n" + band(
-    "Pricing", "Eight", "Pricing", "You'll see the whole staircase before you take the first step.",
+    "Pricing", "Ten", "Pricing", "You'll see the whole staircase before you take the first step.",
     '''      <h2 class="rev">How <strong>pricing works</strong></h2>
       <div class="stairs">
         <div class="stair rev"><p class="k">Step one</p><h3>Is this worth building?</h3><p>A small fixed price, set so it's worth it even when the answer is "don't build."</p></div>
@@ -264,7 +298,7 @@ HOME = HOME_HERO + "\n\n" + band(
         <div class="stair rev"><p class="k">Optional</p><h3>Testing, done for you</h3><p>Prefer not to run the testing yourself? That can be added on.</p></div>
       </div>''',
     tinted=True) + "\n\n" + band(
-    "Questions", "Nine", "Questions", "The ones that actually get asked.",
+    "Questions", "Eleven", "Questions", "The ones that actually get asked.",
     '''      <h2 class="rev">Questions <strong>people ask</strong></h2>
       <div class="faq rev">
         <details><summary>What if you tell me my idea is bad?<i aria-hidden="true"></i></summary><div><p>Then you've saved months and a fortune, and you'll get a clear reason why, not a vague no.</p></div></details>
@@ -328,13 +362,15 @@ HOWITWORKS = '''<div class="doc">
       </ul>
       <p class="lede" style="margin-top:24px">It's included as guidance you can run yourself. If you'd rather not, the testing can be done for you as an add-on.</p>''',
     tinted=True) + "\n\n" + band(
-    "After", "Six", "After the decision", "All three outcomes beat not knowing.",
-    '''      <h2 class="rev">Three <strong>futures</strong></h2>
+    "After", "Six", "What happens after", "All three outcomes beat not knowing.",
+    '''      <h2 class="rev">What <strong>happens after</strong></h2>
+      <p class="lede">Three ways this ends.</p>
       <div class="verdicts">
-        <div class="verdict go rev"><p class="k">Continue</p><p>The work can carry on in short cycles while the product finds its shape. Or you take the build to any team you like. It's yours.</p></div>
-        <div class="verdict adjust rev"><p class="k">Pivot</p><p>You get told specifically what to change: the customer, the moment, or the promise. A named change, not a vague "try again."</p></div>
-        <div class="verdict stop rev"><p class="k">Stop</p><p>A real stop, with the reason written down. Not "try harder." You keep the money you didn't spend and the method for the next idea.</p></div>
-      </div>''')
+        <div class="verdict go rev"><p class="k">Continue</p><p>The core assumption held. You know what to build next, and you can build it with anyone, including me.</p></div>
+        <div class="verdict adjust rev"><p class="k">Pivot</p><p>Part of it held and part of it didn't. The idea points somewhere new, and the same two weeks can run again on the changed version. New question, same method.</p></div>
+        <div class="verdict stop rev"><p class="k">Stop</p><p>It didn't hold. You'll get a clear reason why it's a real stop and not "try harder", and you'll have kept the money you would have spent finding out the long way.</p></div>
+      </div>
+      <p class="lede rev" style="margin-top:26px">Some people come back after a pivot, or later with a different idea. None of that is decided up front. The two weeks stand on their own.</p>''')
 
 BUILT = '''<div class="doc">
   <section class="open">
@@ -457,26 +493,26 @@ START = '''<div class="doc">
 </div>'''
 
 PAGES = [
-    ("index.html", "Know whether your idea is worth building | The discovery sprint",
+    ("index.html", "Know whether your idea is worth building | One flow first",
      "In two weeks you own a working version of the one part that matters most, evidence from real users, and a straight answer: keep going, or stop.",
      HOME, "Let's find out if your idea is <strong>real</strong>",
      "One call. You talk through your idea, you hear honestly whether this fits. No pitch, no pressure."),
-    ("how-it-works.html", "How it works | The discovery sprint",
+    ("how-it-works.html", "How it works | One flow first",
      "Exactly what happens across the two weeks: the qualifying questions, the decision rule, the build, the brief, the playbook, and what comes after.",
      HOWITWORKS, "Ready to <strong>find out?</strong>",
      "One call. You talk through your idea, you hear honestly whether this fits."),
-    ("what-ive-built.html", "What I've built | The discovery sprint",
+    ("what-ive-built.html", "What I've built | One flow first",
      "Real apps, built for real ideas. The thinking behind them, including what I'd change and what I'd kill.",
      BUILT, "Let's find out if your idea is <strong>real</strong>",
      "One call. You talk through your idea, you hear honestly whether this fits."),
-    ("about.html", "About | The discovery sprint",
+    ("about.html", "About | One flow first",
      "Twenty years of deciding what to build and what to cut, and why the work is scoped, small, and honest about where the value stops.",
      ABOUT, "Let's find out if your idea is <strong>real</strong>",
      "One call. You talk through your idea, you hear honestly whether this fits."),
-    ("start.html", "Let's talk about your idea | The discovery sprint",
+    ("start.html", "Let's talk about your idea | One flow first",
      "A free 20 to 30 minute call. You share the idea, you hear honestly whether this fits and what step one would look like for you.",
      START, "Prefer <strong>email?</strong>",
-     "Write to hello@example.com with the same one line about your idea."),
+     "Write to hello@oneflowfirst.com with the same one line about your idea."),
 ]
 
 for slug, title, desc, body, ch, cb in PAGES:
