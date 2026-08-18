@@ -155,6 +155,13 @@ against the white track is 1.11:1, so the eye joined the line straight through i
 The dot is filled in the sample now, the rule colour when idle and clay when
 active, so it interrupts the line it sits on.
 
+The dot and the rail are also snapped to the same whole pixel. Both agreed
+exactly in CSS and both landed on a half pixel, where a 1px rule is drawn across
+two device pixels and a 13px circle rounds separately, so they read as a pixel
+apart however well the arithmetic agrees. `placeRail` rounds the rail's x and
+hands the dot the difference as `--dot-right`; the calc in the stylesheet is the
+fallback for before that runs.
+
 Two of those fixes went into `style.css` instead, because they are wrong on the
 live site too: the hero's label, its dot and the first line of its headline now
 share a row (its heading is far bigger than a section's, so the hero scopes its

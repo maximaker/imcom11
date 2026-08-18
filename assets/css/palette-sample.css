@@ -177,13 +177,19 @@
    card, on the band, orphaned. The surface is painted behind the whole row now,
    square and flush, so the body is on the same ground as the name that opened
    it, and an open row stays lifted whether the cursor is on it or not. */
-.asset{position:relative}
-.asset::before{content:'';position:absolute;inset:0 -18px;z-index:0;
+.asset{position:relative;isolation:isolate}
+/* z-index:-1 inside an isolated row, not z-index:0 with positioned children.
+   The header button carries all:unset in style.css, which resets position and
+   outranks any `.asset > *` rule on specificity, so the button stayed
+   unpositioned and this surface painted straight over its name, glyph and
+   summary. The minus sign survived only because it sets its own position.
+   Isolating the row puts the surface behind its in-flow content without needing
+   the content positioned at all. */
+.asset::before{content:'';position:absolute;inset:0 -18px;z-index:-1;
   pointer-events:none;background:transparent;
   transition:background var(--t-hover) var(--ease)}
 .asset:hover::before,
 .asset[data-open="true"]::before{background:var(--sand-50)}
-.asset > *{position:relative;z-index:1}
 .asset button{border-radius:0}
 .asset button:hover{background:transparent}
 .asset button:hover .nm{transform:translateX(4px)}

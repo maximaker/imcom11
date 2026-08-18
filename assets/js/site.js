@@ -217,8 +217,17 @@
     if(!col) return;
     var gap = parseFloat(getComputedStyle(document.documentElement)
                 .getPropertyValue('--margin-gap')) || 64;
-    var x = col.getBoundingClientRect().right + gap / 2;
+    /* Snapped to a whole pixel. A 1px rule sitting on x.5 is drawn across two
+       device pixels, and the dot beside it rounds separately, so the two look a
+       pixel apart however exactly the maths agrees. */
+    var edge = col.getBoundingClientRect().right;
+    var x = Math.round(edge + gap / 2);
     railEl.style.left = x + 'px';
+    /* The dot is placed from its own margin box, which sits wherever the centred
+       container leaves it. Handing it the difference puts its centre on the rail's
+       centre exactly: its right edge goes 7px past the rail's left edge, which is
+       half the rail plus half the dot. */
+    document.documentElement.style.setProperty('--dot-right', (edge - x - 7) + 'px');
     /* The foot disc is absolutely positioned inside .railfoot, so its `left`
        resolves against that box, not the viewport. Convert the coordinate. */
     var foot = document.querySelector('.railfoot');

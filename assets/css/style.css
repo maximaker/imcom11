@@ -173,12 +173,13 @@ a{color:var(--clay-500)}
   .margin{position:sticky;z-index:21}
   .margin::after{content:'';position:absolute;
     top:calc(var(--lead-centre) - 6.5px);   /* half the 9px dot plus its 2px ring */
-    /* Centred on the rail, not near it. The rail's centre is half the gap plus
-       half its own 1px from the margin's right edge, and the dot has to put its
-       own centre there: half the gap, plus 0.5 for the rail, plus 6.5 for half
-       the dot. It was 5px, which left the dot 1.5px to the left and the line
-       grazing it off-centre instead of being capped by it. */
-    right:calc((var(--margin-gap) / 2 + 0.5px + 6.5px) * -1);
+    /* Centred on the rail, not near it: half the gap, plus 0.5 for the rail's own
+       width, plus 6.5 for half the dot. --dot-right is the same figure worked out
+       in JS against the rail's snapped position, because both of these otherwise
+       land on a half pixel and antialias independently, which reads as a dot
+       sitting beside the line rather than on it. The calc is the fallback for
+       before that runs. */
+    right:var(--dot-right, calc((var(--margin-gap) / 2 + 0.5px + 6.5px) * -1));
     width:9px;height:9px;border-radius:50%;
     background:var(--sand-100);border:2px solid var(--sand-400);
     transition:border-color var(--t-mid) var(--ease-out),
