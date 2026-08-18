@@ -40,13 +40,18 @@ HTML directly for one-off copy changes.
   declarations in CSS (`.mark__ring`, `.mark__lead`, `.mark__core`), so it
   inherits the palette instead of hardcoding it. `assets/img/mark.svg` is the
   standalone copy for anywhere CSS cannot reach.
-- The masthead is the page ground, not glass. There is no blur anywhere else
-  here, and `saturate()` would quietly re-tint a palette whose ratios were
-  measured. Because it is opaque it has to be full width, so the bar is the
-  sticky element and its row is a `.doc`: the header's inner edges align with
-  every band by construction, and it inherits the same responsive gutter
-  instead of repeating 1140px and 26px. Vertical padding sits on `.top`, not on
-  the row, because `.doc`'s `padding` shorthand comes later in the sheet.
+- The masthead has no ground of its own. It sits on the page like the first
+  band, and therefore it does not travel: a transparent bar that follows the
+  reader is a bar the page scrolls straight through, so there is no sticky and
+  no hairline either, since the hairline only existed to separate the two. It
+  stays `position:relative` rather than static, because the mobile menu is
+  absolutely positioned against it, and that menu keeps its own opaque ground
+  because it does overlay content. There is no blur anywhere on this site, and
+  `saturate()` on a bar would quietly re-tint a palette whose ratios were
+  measured. The row is a `.doc`, so the header's inner edges align with every
+  band by construction and it inherits the same responsive gutter instead of
+  repeating 1140px and 26px. Vertical padding sits on `.top`, not on the row,
+  because `.doc`'s `padding` shorthand comes later in the sheet.
 - The nav belongs to the tracked-label register (`.margin b`, `.verdict .k`,
   `.stair .k`), not to body copy: it is reference, and on a wide screen the rail
   disc is the only thing asking to be clicked. Its size lives in the shared
@@ -56,20 +61,21 @@ HTML directly for one-off copy changes.
 - Above 1180px the masthead adopts the same three columns as every band, so
   nothing in it is positioned by eye: the logotype right-aligns where every
   margin label ends, the logomark centres in the gutter the rail runs down and
-  caps the rule, and the nav ends where the text column ends. The mark needs no
-  plate behind it because the bar is the page ground, not a hole cut in a band.
+  caps the rule, and the nav left-aligns on the text column's own edge, where
+  every headline and paragraph below it starts.
 - One lockup, in the masthead, at every width. It briefly moved onto the rail
   above 1180px, which needed a 124px opaque plate centred on the rule to break
   it: that plate punched a hole through whatever band was behind it and
   overlapped both the margin label and the heading. The bar is where a brand
   mark belongs. The rail is structure, and its only furniture is the foot disc,
   because a circle can sit on a rule without cutting a rectangle out of the page.
-- The left rail is a progress rule that starts at the masthead's lower edge and
-  carries the call to action at its foot. It sits under the bar (z-20) so the
-  opaque masthead clips its head and it reads as running out from beneath the
-  chrome. `--spine-top` is measured in JS rather than hardcoded, or differing
-  font metrics would leave a sliver or a gap. Below 1180px the rail is hidden
-  and the inline button in the closing section takes over.
+- The left rail is a progress rule headed by the logomark, carrying the call to
+  action at its foot. `--spine-top` is measured in JS rather than hardcoded, or
+  differing font metrics would leave a sliver or a gap, and it is resolved
+  against scroll position rather than measured once: the masthead scrolls away,
+  so the head rides down with the mark and holds at the top of the viewport once
+  the mark has gone. Below 1180px the rail is hidden and the inline button in the
+  closing section takes over.
 - The hero carries its own button ("Tell me about your idea") at every width,
   so the promise is never separated from the action. The rail disc and the
   closing button both read "Book a free intro call".
