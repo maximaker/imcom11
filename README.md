@@ -42,8 +42,8 @@ HTML directly for one-off copy changes.
   standalone copy for anywhere CSS cannot reach.
 - The masthead has no ground of its own. It sits on the page like the first
   band, and therefore it does not travel: a transparent bar that follows the
-  reader is a bar the page scrolls straight through, so there is no sticky and
-  no hairline either, since the hairline only existed to separate the two. It
+  reader is a bar the page scrolls straight through, so at rest it neither
+  sticks nor draws a hairline. It earns both back only when it docks (below). It
   stays `position:relative` rather than static, because the mobile menu is
   absolutely positioned against it, and it keeps `z-index:30`: `main` carries
   `z-2`, so without one the page paints over the header and the open menu panel
@@ -54,6 +54,21 @@ HTML directly for one-off copy changes.
   band by construction and it inherits the same responsive gutter instead of
   repeating 1140px and 26px. Vertical padding sits on `.top`, not on the row,
   because `.doc`'s `padding` shorthand comes later in the sheet.
+- Past the hero the bar docks: it leaves the flow, waits just above the
+  viewport, and drops in when the reader scrolls back up, lifting away again when
+  they carry on down. It docks only while already off-screen and undocks only at
+  the very top, where the docked and in-flow positions coincide, so neither
+  switch is visible. 24px of travel in one direction before it responds,
+  accumulated rather than per-frame, so slow scrolls still trigger it and a
+  jittery trackpad does not flap it. An open mobile menu pins it open. Docked it
+  does take a ground and a hairline, because there it is over the text rather
+  than beside it.
+- Leaving the flow would pull the whole page up by the bar's height, so `main`
+  takes that height back as padding (`--bar-h`, measured while undocked). The
+  fixed bar then contributes nothing to layout, main's padding contributes
+  exactly what the bar used to, and the document height and every scroll offset
+  stay put. If you touch either half, check a band's document position across the
+  switch: it must not move.
 - The nav belongs to the tracked-label register (`.margin b`, `.verdict .k`,
   `.stair .k`), not to body copy: it is reference, and on a wide screen the rail
   disc is the only thing asking to be clicked. Its size lives in the shared
@@ -76,8 +91,10 @@ HTML directly for one-off copy changes.
   differing font metrics would leave a sliver or a gap, and it is resolved
   against scroll position rather than measured once: the masthead scrolls away,
   so the head rides down with the mark and holds at the top of the viewport once
-  the mark has gone. Below 1180px the rail is hidden and the inline button in the
-  closing section takes over.
+  the mark has gone. The spine sits under the bar (z-20), which costs nothing
+  while the bar is transparent and lets the docked bar clip the head of the rule.
+  Below 1180px the rail is hidden and the inline button in the closing section
+  takes over.
 - The hero carries its own button ("Tell me about your idea") at every width,
   so the promise is never separated from the action. The rail disc and the
   closing button both read "Book a free intro call".
