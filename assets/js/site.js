@@ -179,16 +179,32 @@
      once it does. Set here, resolved against scroll position in onScroll. */
   var railHead = 0;
 
+  /* The bar comes back on the way up, once the hero is behind you. It docks only
+     while off-screen, and undocks only at the very top, where the docked and
+     in-flow positions coincide, so neither switch is ever visible. */
+  var topBarEl = document.getElementById('top');
+  var heroEnd = 0, lastY = window.scrollY, upBy = 0, downBy = 0,
+      docked = false, shown = false;
+  var TRIGGER = 24;   /* travel in one direction before the bar responds */
+
   function placeRail(){
     /* The rule starts at the logomark's lower edge, so the mark caps it. In
        document coordinates, because the bar scrolls away with the page. */
-    var bar = document.getElementById('top');
+    var bar = topBarEl;
     if(bar){
       var glyph = bar.querySelector('.name .mark');
       railHead = glyph
         ? glyph.getBoundingClientRect().bottom + window.scrollY
         : bar.offsetHeight;
+      /* Measured undocked, which is the height main has to give back. Docking
+         while this runs would read the fixed height instead. */
+      if(!docked) document.documentElement.style
+                    .setProperty('--bar-h', bar.offsetHeight + 'px');
     }
+    var heroEl = document.querySelector('.open');
+    heroEnd = heroEl
+      ? heroEl.getBoundingClientRect().bottom + window.scrollY
+      : 600;
     if(!railEl || getComputedStyle(railEl).display === 'none') return;
     var col = document.querySelector('.band .margin');
     if(!col) return;
@@ -221,6 +237,25 @@
       /* The head of the rule rides down with the mark, then holds at the top. */
       document.documentElement.style.setProperty('--spine-top',
         Math.max(0, Math.round(railHead - window.scrollY)) + 'px');
+
+      if(topBarEl){
+        var y = window.scrollY, dy = y - lastY;
+        if(dy < 0){ upBy -= dy; downBy = 0; }
+        else if(dy > 0){ downBy += dy; upBy = 0; }
+        lastY = y;
+
+        if(!docked && y > heroEnd){ docked = true; shown = false; }
+        else if(docked && y <= 2){ docked = false; shown = false; }
+
+        if(docked){
+          if(upBy > TRIGGER) shown = true;
+          else if(downBy > TRIGGER) shown = false;
+          /* An open menu is not something to whisk away underneath a thumb. */
+          if(topBarEl.getAttribute('data-open') === 'true') shown = true;
+        }
+        topBarEl.setAttribute('data-dock', docked ? 'true' : 'false');
+        topBarEl.setAttribute('data-reveal', shown ? 'true' : 'false');
+      }
 
       var mid=window.scrollY+window.innerHeight/2;
       marks.forEach(function(m){

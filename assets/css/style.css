@@ -95,16 +95,15 @@ a{color:var(--clay-500)}
   :root{--margin-gap:128px}
   /* left is set in JS from the real column edge: 50vw includes the scrollbar
      but the centred container does not, so vw math drifts by half a scrollbar. */
-  /* Over the masthead (z-30), because the rule now starts at the mark's lower
-     edge and has to cross the rest of the bar to get out. A 1px line crossing
-     an opaque bar is a rule with a head on it; the plate that used to live here
-     is what cut a hole in the page, not the line. */
+  /* Under the masthead (z-30). At rest the bar has no ground, so nothing is
+     hidden by that; once the bar docks and gains one, it clips the head of the
+     rule and the line reads as running out from beneath it. */
   /* --spine-top is the measured masthead height, set in JS: hardcoding it would
      leave a sliver or a gap the moment font metrics differ. Starting the rule at
      the bar's lower edge also means the progress fill maps to the length the
      reader can actually see. */
   .spine{display:block;position:fixed;top:var(--spine-top,0px);bottom:0;width:1px;
-    z-index:35;pointer-events:none;left:-100px}
+    z-index:20;pointer-events:none;left:-100px}
   .spine .track{position:absolute;inset:0;background:var(--sand-400);opacity:.85}
   /* scaleY rather than height: compositor-only, no layout on every scroll frame. */
   .spine .fill{position:absolute;left:0;top:0;width:1px;height:100%;
@@ -209,6 +208,25 @@ a:hover .mark__lead{stroke:var(--clay-400);transform:translateX(1.5px)}
    with every band by construction and it inherits the same responsive gutter
    instead of repeating 26px and 1140px. */
 .top{position:relative;z-index:30;padding-top:20px;padding-bottom:20px}
+
+/* Docked: past the hero the bar leaves the flow and waits just above the
+   viewport, dropping in when the reader scrolls back up and lifting away when
+   they carry on down. It only ever docks while it is already off-screen, so the
+   switch out of flow is never seen.
+   Leaving the flow would otherwise pull the whole page up by the bar's height,
+   so main takes that height back as padding: the fixed bar contributes nothing
+   to layout, main's padding contributes exactly what it used to, and the
+   document height and every scroll offset stay where they were.
+   Docked it does need a ground. It is over the text now, not beside it. */
+.top[data-dock="true"]{position:fixed;top:0;left:0;right:0;
+  background:var(--sand-100);border-bottom:1px solid var(--sand-300);
+  transform:translateY(-100%);
+  transition:transform 380ms var(--ease-out)}
+.top[data-dock="true"][data-reveal="true"]{transform:none}
+.top[data-dock="true"] ~ main{padding-top:var(--bar-h,0px)}
+@media (prefers-reduced-motion: reduce){
+  .top[data-dock="true"]{transition:none}
+}
 /* The bar owns its height, the row owns its alignment. Vertical padding cannot
    live on .top__row: .doc sets `padding:0 20px` further down the sheet, and the
    shorthand would zero it. */
