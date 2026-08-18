@@ -35,6 +35,20 @@ HTML directly for one-off copy changes.
   so the promise is never separated from the action. The rail disc and the
   closing button both read "Book a free intro call".
 
+## Scope, and the one thing the copy must not promise
+
+The two weeks covers the risky assumption, the decision rule, one working flow,
+and the playbook. It does **not** cover running the sessions. Recruiting the
+right people takes real calendar time and depends on strangers being free, so
+promising evidence inside a fixed two weeks would mean either padding the
+timeline or rushing the recruiting. The sessions are an add-on.
+
+That constraint shapes copy on every page: the hero promises a bar and a method,
+not evidence; the after-state section says guessing turns into something
+testable; the decision brief states the question and the bar, and the call gets
+written once the sessions are done. If a line ever implies testing happens
+inside the two weeks, it is wrong.
+
 ## The case study template
 
 `case-slate.html` is a worked example and the pattern for every one after it.
@@ -62,4 +76,6 @@ illustrative. Both come off in one line each once a real case replaces it.
 4. Proof cards 2 and 3 on `index.html`, and App 02 and App 03 on
    `what-ive-built.html`, are still bracketed placeholders.
 5. `case-slate.html` carries invented session counts and quotes. Replace them,
-   drop the hero margin note, and remove `robots` from its `PAGES` entry.
+   drop the hero margin note, and remove `robots` from its `PAGES` entry. The
+   page says up front that Slate is a self-built app whose testers were already
+   reachable, which is why its timeline is faster than a client engagement's.

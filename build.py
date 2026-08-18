@@ -143,7 +143,7 @@ HOME_HERO = '''<div class="heroband" id="heroband">
   <div class="doc">
   <section class="open" id="hero">
     <div class="inner">
-      <div class="margin"><b>The offer</b>Two weeks<em>Fixed scope. Fixed price. One decision at the end.</em></div>
+      <div class="margin"><b>The offer</b>Two weeks<em>Fixed scope. Fixed price. The bar agreed before the build.</em></div>
       <div>
         <h1>
           <span class="rise"><span>Know whether your idea</span></span>
@@ -151,7 +151,7 @@ HOME_HERO = '''<div class="heroband" id="heroband">
           <span class="rise"><span>before you spend</span></span>
           <span class="rise"><span>months finding out.</span></span>
         </h1>
-        <p class="deck rev">In two weeks you own <b>a working version of the one part that matters most</b>, evidence from real users, and a straight answer: keep going, or stop.</p>
+        <p class="deck rev">In two weeks you own <b>a working version of the one part that matters most</b>, a bar agreed before anyone sees it, and the method to get a straight answer out of real people.</p>
 
         <p class="principle rev">One flow first. <span>Nothing else yet.</span></p>
 
@@ -162,7 +162,7 @@ HOME_HERO = '''<div class="heroband" id="heroband">
         <div class="stats rev">
           <div class="stat"><b>20 years</b><span>Deciding what to build, and what to cut.</span></div>
           <div class="stat"><b>9 apps</b><span>Built and shipped in the last few months.</span></div>
-          <div class="stat"><b>2 weeks</b><span>From an idea in a doc to a straight answer.</span></div>
+          <div class="stat"><b>2 weeks</b><span>From an idea in a doc to something real to test.</span></div>
         </div>
       </div>
     </div>
@@ -182,7 +182,7 @@ HOME_HERO = '''<div class="heroband" id="heroband">
         <div class="caption" id="caption">
           <span data-i="0"><b>Everything you could build</b><i>Every feature, every version, every direction the idea could take.</i></span>
           <span data-i="1"><b>Plausible</b><i>The ones that survive a hard look at the customer and the money.</i></span>
-          <span data-i="2"><b>Worth testing</b><i>Few enough to put in front of real people in two weeks.</i></span>
+          <span data-i="2"><b>Worth testing</b><i>Few enough to put in front of real people at all.</i></span>
           <span data-i="3" data-key="true" data-final="true"><b>The one that decides it</b><i>Built for real, tested against a bar you set in advance.</i></span>
         </div>
         <div class="ticks" aria-hidden="true">
@@ -207,10 +207,10 @@ HOME = HOME_HERO + "\n\n" + band(
         <div class="doubt rev"><p class="q">"I'm not technical. I won't understand what's happening."</p><p class="a">You don't need to be. You'll get it explained clearly enough to decide with confidence.</p></div>
         <div class="doubt rev"><p class="q">"I don't want to be talked into a build I don't need."</p><p class="a">You won't be. You'll get an honest answer even when the honest answer is no.</p></div>
       </div>''') + "\n\n" + band(
-    "After", "Three", "After", "The difference between hoping and knowing.",
-    '''      <h2 class="rev">In two weeks, you go from <strong>guessing to knowing</strong></h2>
-      <p class="lede">Instead of a doc full of hope and a knot in your stomach, you have something real in your hands and evidence about whether it works.</p>
-      <p class="lede">You can walk into a room and show it, not describe it. You can point at what real people did with it, not at what you hope they'd do. And you can make the next call, spend or stop, with your eyes open.</p>
+    "After", "Three", "After", "The difference between hoping and being able to find out.",
+    '''      <h2 class="rev">In two weeks, guessing turns into <strong>something you can test</strong></h2>
+      <p class="lede">Instead of a doc full of hope and a knot in your stomach, you have something real in your hands and a bar you agreed to before you saw a single result.</p>
+      <p class="lede">You can walk into a room and show it, not describe it. And when you put it in front of real people, you already know what a good result looks like, so the answer can't quietly become whatever you were hoping for.</p>
       <p class="lede">If it's a go, you know exactly what to build next. If it's a stop, you kept your money and a year of your life.</p>''',
     tinted=True) + "\n\n" + band(
     "Method", "Four", "Method", "Three steps. The first one can end the project, cheaply.",
@@ -218,7 +218,7 @@ HOME = HOME_HERO + "\n\n" + band(
       <div class="steps">
         <div class="step"><span class="n">Step one</span><h3>Find out if it's worth building.</h3><p>You bring the idea. Together you find the one thing that has to be true for it to work, and you get a straight call. If there's a fatal flaw, you find it here, cheaply, before anything gets built.</p></div>
         <div class="step"><span class="n">Step two</span><h3>Get a real version of the part that matters.</h3><p>One working flow that real people can actually use. Not a mockup. Something you can put in front of users.</p></div>
-        <div class="step"><span class="n">Step three</span><h3>Test it and decide, with a clear rule.</h3><p>Before testing, you agree what result means go, what means adjust, what means stop. Then you decide with evidence instead of a gut feeling.</p></div>
+        <div class="step"><span class="n">Step three</span><h3>Test it and decide, with a clear rule.</h3><p>The bar gets set inside the two weeks, before anyone sees the build. The sessions themselves run when your people are actually free, and the playbook tells you exactly how. Or they can be run for you.</p></div>
       </div>
       <p class="rev" style="margin-top:34px"><a class="quiet" href="how-it-works.html">See how it works in detail ''' + ARROW + '''</a></p>''') + "\n\n" + band(
     "Deliverables", "Five", "Deliverables", "Named things. Yours to keep, extend, or hand to any team.",
@@ -237,10 +237,10 @@ HOME = HOME_HERO + "\n\n" + band(
           <button type="button" aria-expanded="false" aria-controls="a2">
             <svg class="glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 3.5h9l4 4v13h-13z"/><path d="M14.5 3.5v4h4"/><path d="M8.5 14l2.5 2.5 4.5-5"/></svg>
             <span class="nm">The decision brief</span>
-            <span class="sm">The riskiest assumption, what the testing showed, and a straight call.</span>
+            <span class="sm">The riskiest assumption, the bar it has to clear, and how to read what comes back.</span>
             <span class="sign" aria-hidden="true"></span>
           </button>
-          <div class="more" id="a2"><div><p>Short enough to read in one sitting and written so a co-founder or an investor can read it too. It states the call first, then the evidence behind it. If the two ever disagree, trust the evidence.</p></div></div>
+          <div class="more" id="a2"><div><p>Short enough to read in one sitting and written so a co-founder or an investor can read it too. It states the question and the bar first, then how to tell a go from an adjust from a stop. Once the sessions are done the call goes at the top, with the evidence behind it. If the two ever disagree, trust the evidence.</p></div></div>
         </div>
         <div class="asset" data-open="false">
           <button type="button" aria-expanded="false" aria-controls="a3">
@@ -314,7 +314,7 @@ HOME = HOME_HERO + "\n\n" + band(
       <div class="stairs">
         <div class="stair rev"><p class="k">Step one</p><h3>Is this worth building?</h3><p>A small fixed price, set so it's worth it even when the answer is "don't build."</p></div>
         <div class="stair rev"><p class="k">Step two</p><h3>The build</h3><p>Scoped after step one, once you both know what's actually needed. No surprise numbers, no big commitment before you have proof.</p></div>
-        <div class="stair rev"><p class="k">Optional</p><h3>Testing, done for you</h3><p>Prefer not to run the testing yourself? That can be added on.</p></div>
+        <div class="stair rev"><p class="k">Optional</p><h3>The testing, run for you</h3><p>Finding the right people and getting them in front of it takes real calendar time, which is why it sits outside the two weeks. Run it yourself with the playbook, or have it added on.</p></div>
       </div>''',
     tinted=True) + "\n\n" + band(
     "Questions", "Eleven", "Questions", "The ones that actually get asked.",
@@ -324,6 +324,7 @@ HOME = HOME_HERO + "\n\n" + band(
         <details><summary>Do I need to understand the tech?<i aria-hidden="true"></i></summary><div><p>No. You need to understand your customer. The rest is handled.</p></div></details>
         <details><summary>Who owns what gets built?<i aria-hidden="true"></i></summary><div><p>You do. It's yours to take anywhere.</p></div></details>
         <details><summary>Is this a full product?<i aria-hidden="true"></i></summary><div><p>No, and that's the point. It's the smallest real thing that answers the biggest question. Building the full product before that answer is exactly the expensive mistake this avoids.</p></div></details>
+        <details><summary>How long until I actually have an answer?<i aria-hidden="true"></i></summary><div><p>The build and the bar take two weeks. The answer takes as long as it takes to get the right people in front of it, usually a week or two more, and that part nobody can promise. Which is exactly why the sessions sit outside the fixed scope: putting them inside would mean either padding the timeline or rushing the recruiting, and rushed recruiting is how you end up testing on whoever was available instead of whoever has the problem.</p></div></details>
         <details><summary>What if I already know it's a good idea?<i aria-hidden="true"></i></summary><div><p>Then step one is quick and you'll have saved nothing but a little time. Most people who are certain turn out to be certain about the wrong part.</p></div></details>
       </div>''')
 
@@ -333,7 +334,7 @@ HOWITWORKS = '''<div class="doc">
       <div class="margin"><b>How it works</b>The full process<em>Written from your side, not mine.</em></div>
       <div>
         <h1><span class="rise"><span>Here's exactly what</span></span><span class="rise"><span><strong>happens.</strong></span></span></h1>
-        <p class="deck rev">Two weeks, two steps, one decision at the end. No surprises for you.</p>
+        <p class="deck rev">Two weeks, two steps, and a bar set before anyone sees the build. No surprises for you.</p>
       </div>
     </div>
   </section>
@@ -366,8 +367,8 @@ HOWITWORKS = '''<div class="doc">
     '''      <h2 class="rev">What the <strong>brief contains</strong></h2>
       <ul class="probe">
         <li><strong>The riskiest assumption.</strong> Stated in one sentence, the way you'd say it out loud.</li>
-        <li><strong>What the testing showed.</strong> What people did, not what they said they'd do, with the moments that mattered called out.</li>
-        <li><strong>The call.</strong> Go, adjust, or stop, measured against the rule you set in advance.</li>
+        <li><strong>How to read what comes back.</strong> What to count as a signal, which flattering moments to ignore, and what people doing rather than saying looks like on paper.</li>
+        <li><strong>The call.</strong> Go, adjust, or stop, measured against the rule you set in advance and written once the sessions are done.</li>
         <li><strong>What you'd do next.</strong> Either the shortest path forward or the honest reason there isn't one.</li>
       </ul>
       <p class="lede" style="margin-top:24px">If the call and the evidence ever disagree, trust the evidence and come argue about it.</p>''') + "\n\n" + band(
@@ -379,7 +380,7 @@ HOWITWORKS = '''<div class="doc">
         <li><strong>How to run a session.</strong> What to ask, what never to ask, and how to keep politeness from quietly ruining your results.</li>
         <li><strong>What to measure.</strong> The handful of signals that mean something, and the flattering ones that don't.</li>
       </ul>
-      <p class="lede" style="margin-top:24px">It's included as guidance you can run yourself. If you'd rather not, the testing can be done for you as an add-on.</p>''',
+      <p class="lede" style="margin-top:24px">Finding the right people is the part that takes real calendar time, and it depends on strangers being free. That's why the sessions sit outside the two weeks rather than inside a timeline nobody can honestly promise. Run them yourself with this, or have them run for you as an add-on.</p>''',
     tinted=True) + "\n\n" + band(
     "After", "Six", "What happens after", "All three outcomes beat not knowing.",
     '''      <h2 class="rev">What <strong>happens after</strong></h2>
@@ -585,7 +586,8 @@ CASE = '''<div class="doc">
     '''      <h2 class="rev">The idea, <strong>in one line</strong></h2>
       <p class="lede">A booking tool for independent physios who currently run everything through WhatsApp.</p>
       <p class="lede">The physio who described it had around sixty regulars, a phone that never stopped, and a Sunday evening spent copying appointments into a paper diary. She wanted what the big clinics have: a booking page, a calendar, confirmations that send themselves.</p>
-      <p class="lede">That is a clear brief. It is also a guess about which part hurts.</p>''',
+      <p class="lede">That is a clear brief. It is also a guess about which part hurts.</p>
+      <p class="lede">One thing worth saying up front: Slate is one of my own nine apps, not a client engagement. The regulars were already reachable, so the sessions ran the same week the build finished. On someone else's idea that is the part you cannot count on, which is why testing sits outside the two weeks and can be added on.</p>''',
     tinted=True) + "\n\n" + band(
     "The bet", "Two", "The risky part", "The exciting part and the risky part are rarely the same part.",
     '''      <p class="statement" id="statement" data-key="book themselves">People would rather book themselves than ask.</p>
@@ -657,13 +659,13 @@ CASE = '''<div class="doc">
       <div class="stairs">
         <div class="stair rev"><p class="k">Days one and two</p><h3>Find the risky part</h3><p>The brief said calendar. The questions said reassurance. The decision rule got written before there was anything to look at.</p></div>
         <div class="stair rev"><p class="k">Days three to eight</p><h3>Build one flow</h3><p>Three screens, real times, no accounts. Four of those days went into a week view that later got cut, which is the tuition.</p></div>
-        <div class="stair rev"><p class="k">Days nine to twelve</p><h3>Ten sessions, then the brief</h3><p>Ten regulars, one flow, no coaching. The call written against the rule, with the evidence underneath it.</p></div>
+        <div class="stair rev"><p class="k">Days nine to twelve</p><h3>Ten sessions, then the call</h3><p>Ten regulars, one flow, no coaching. Fast only because the list was already mine. The call written against the rule, with the evidence underneath it.</p></div>
       </div>
       <p class="rev" style="margin-top:36px"><a class="quiet" href="what-ive-built.html">See the other apps ''' + ARROW + '''</a></p>''')
 
 PAGES = [
     ("index.html", "Know whether your idea is worth building | One flow first",
-     "In two weeks you own a working version of the one part that matters most, evidence from real users, and a straight answer: keep going, or stop.",
+     "In two weeks you own a working version of the one part that matters most, a bar agreed before anyone sees it, and the method to get a straight answer out of real people.",
      HOME, "Let's find out if your idea is <strong>real</strong>",
      "One call. You talk through your idea, you hear honestly whether this fits. No pitch, no pressure."),
     ("how-it-works.html", "How it works | One flow first",
