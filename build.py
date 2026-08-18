@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Builds the five pages from one shell so the chrome can never drift apart."""
 import hashlib
+import re
 import pathlib
 
 
@@ -130,9 +131,16 @@ def margin(label, title, note):
             f'<em>{note}</em></div>')
 
 
+def slug(node):
+    """A section's id, from its own node name. Needed for two things: a reader can
+    be sent to a section by link, and the rail's beads can become the navigation
+    they already look like."""
+    return 'n-' + re.sub(r'[^a-z0-9]+', '-', node.lower()).strip('-')
+
+
 def band(node, label, title, note, body, tinted=False, extra_class=""):
     """Every band carries its own wrappers, so blocks never depend on order."""
-    inner = (f'    <section class="band {extra_class}" data-node="{node}">\n'
+    inner = (f'    <section class="band {extra_class}" id="{slug(node)}" data-node="{node}">\n'
              f'      {margin(label, title, note)}\n'
              f'      <div>\n{body}\n      </div>\n'
              f'    </section>')
@@ -271,7 +279,8 @@ HOME_HERO = '''<div class="heroband" id="heroband">
 
         <p class="hero-cta rev"><a class="act" href="start.html"><span>Tell me about your idea</span>
           <span class="chip" aria-hidden="true">''' + ARROW + '''</span></a></p>
-        <p class="act-note rev">Twenty minutes. You'll get a straight read on whether this fits, either way.</p>
+        <p class="act-note rev">Twenty minutes. You'll get a straight read on whether this fits, either way.
+          <a class="quiet quiet--inline" href="#n-fit">Not sure yet? See who this works for ''' + ARROW + '''</a></p>
 
         <div class="stats rev">
           <div class="stat"><b>20 years</b><span>Deciding what to build, and what to cut.</span></div>
@@ -629,7 +638,8 @@ START = '''<div class="doc">
             <p class="field__error" id="idea-error">A sentence is enough, but it needs to be a sentence.</p>
           </div>
           <button class="act act--block" type="submit"><span>Send it over</span></button>
-          <p class="fineprint">Your details are used to reply to you about this call and nothing else. No list, no sequence.</p>
+          <p class="fineprint">I read every one of these myself. No scoring, no auto-reply, no chatbot in between.
+            Your details are used to reply to you about this call and nothing else. No list, no sequence.</p>
         </form>
       </div>
     </div>

@@ -1596,3 +1596,19 @@ h3{font-weight:500;letter-spacing:-.015em;line-height:1.25}
 .act:hover{filter:none;background:var(--clay-500);
   box-shadow:0 2px 6px rgba(93,41,18,.22)}
 .ride{box-shadow:0 6px 18px -6px rgba(93,41,18,.5)}
+
+/* ── A second way out of the hero ──
+   Borrowed from slowclarity.com, which pairs its one call to action with "Not sure
+   yet? Start here" pointing at its own qualification section. The gap it fills is
+   real here: this page had exactly one path, straight to the form, and a reader who
+   is not ready had nothing to do but leave. The Fit section already answers them, and
+   nothing routed to it.
+   Set quieter and smaller than .quiet is elsewhere, and on its own line under the
+   note, because it must not compete with the button it sits beneath: it is the exit
+   for someone the button did not convince, not a second offer. */
+.quiet--inline{display:inline-flex;margin-top:10px;font-size:.92rem;font-weight:500;
+  color:var(--ink-3);gap:6px}
+.quiet--inline:hover{color:var(--clay-500)}
+@media(min-width:560px){
+  .act-note .quiet--inline{margin-left:2px}
+}
