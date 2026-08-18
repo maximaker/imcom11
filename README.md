@@ -209,7 +209,10 @@ kept only because it is built.
   mark belongs. The rail is structure, and its only furniture is the foot disc,
   because a circle can sit on a rule without cutting a rectangle out of the page.
 - A margin label, its dot on the rail, and the first line of the heading beside
-  it share one invisible row. Both offsets come from `--lead-centre` (half a
+  it share one invisible row, and the dot is centred on the rail rather than near
+  it: half the gap, plus half the rail's own 1px, plus half the dot. It sat 1.5px
+  to the left for a long time, which read as the line grazing the dot instead of
+  being capped by it. Both vertical offsets come from `--lead-centre` (half a
   heading's first line, so `.55` of the h2's own clamped size) and `--label-half`,
   which is why the alignment holds as the type scales. A statement-led band leads
   with a slightly larger face and lands ~3px off, under a rounding error at these
@@ -225,10 +228,15 @@ kept only because it is built.
   differing font metrics would leave a sliver or a gap, and it is resolved
   against scroll position rather than measured once: the masthead scrolls away,
   so the head rides down with the mark and holds at the top of the viewport once
-  the mark has gone. The spine sits under the bar (z-20), which costs nothing
-  while the bar is transparent and lets the docked bar clip the head of the rule.
-  Below 1180px the rail is hidden and the inline button in the closing section
-  takes over.
+  the mark has gone, and returns to it when the bar docks and drops back in. That
+  last part is set after the dock state in the same frame, because it depends on
+  it: while the bar is translucent, the rule would otherwise run up through the
+  logo. The spine sits under the bar (z-20), which costs nothing while the bar is
+  transparent. Below 1180px the rail is hidden and the inline button in the closing
+  section takes over.
+- The docked bar is the page colour at 78% with a 14px blur, so type crossing under
+  it never competes with type on it. Blur only, no `saturate()`, which would
+  quietly re-tint a palette whose ratios were measured.
 - The hero carries its own button ("Tell me about your idea") at every width,
   so the promise is never separated from the action. The rail disc and the
   closing button both read "Book a free intro call".

@@ -173,7 +173,12 @@ a{color:var(--clay-500)}
   .margin{position:sticky;z-index:21}
   .margin::after{content:'';position:absolute;
     top:calc(var(--lead-centre) - 6.5px);   /* half the 9px dot plus its 2px ring */
-    right:calc((var(--margin-gap) / 2) * -1 - 5px);  /* +0.5px for the rail's own width */
+    /* Centred on the rail, not near it. The rail's centre is half the gap plus
+       half its own 1px from the margin's right edge, and the dot has to put its
+       own centre there: half the gap, plus 0.5 for the rail, plus 6.5 for half
+       the dot. It was 5px, which left the dot 1.5px to the left and the line
+       grazing it off-centre instead of being capped by it. */
+    right:calc((var(--margin-gap) / 2 + 0.5px + 6.5px) * -1);
     width:9px;height:9px;border-radius:50%;
     background:var(--sand-100);border:2px solid var(--sand-400);
     transition:border-color var(--t-mid) var(--ease-out),
@@ -250,9 +255,15 @@ html[data-intro="running"] .spine{opacity:0}
    so main takes that height back as padding: the fixed bar contributes nothing
    to layout, main's padding contributes exactly what it used to, and the
    document height and every scroll offset stay where they were.
-   Docked it does need a ground. It is over the text now, not beside it. */
+   Docked it does need a ground. It is over the text now, not beside it: the page
+   colour rather than a new one, thin enough to read as the same paper and blurred
+   so the type crossing under it never competes with the type on it. Blur only,
+   no saturate: saturating would quietly re-tint a palette whose ratios were
+   measured. */
 .top[data-dock="true"]{position:fixed;top:0;left:0;right:0;
-  background:var(--sand-100);border-bottom:1px solid var(--sand-300);
+  background:color-mix(in srgb,var(--sand-100) 78%,transparent);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--sand-300);
   transform:translateY(-100%);
   transition:transform 380ms var(--ease-out)}
 .top[data-dock="true"][data-reveal="true"]{transform:none}

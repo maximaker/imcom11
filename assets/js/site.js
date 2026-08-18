@@ -241,10 +241,6 @@
       var h=document.documentElement.scrollHeight-window.innerHeight;
       var p=h>0?Math.min(Math.max(window.scrollY/h,0),1):0;
       if(fill) fill.style.transform='scaleY('+p.toFixed(4)+')';
-      /* The head of the rule rides down with the mark, then holds at the top. */
-      document.documentElement.style.setProperty('--spine-top',
-        Math.max(0, Math.round(railHead - window.scrollY)) + 'px');
-
       if(topBarEl){
         var y = window.scrollY, dy = y - lastY;
         if(dy < 0){ upBy -= dy; downBy = 0; }
@@ -263,6 +259,18 @@
         topBarEl.setAttribute('data-dock', docked ? 'true' : 'false');
         topBarEl.setAttribute('data-reveal', shown ? 'true' : 'false');
       }
+
+      /* The head of the rule rides down with the mark, then holds at the top. But
+         once the bar has docked and dropped back in, the mark is at the top of the
+         viewport again, so the rule has to start under it there too. Set after the
+         dock state above, because it depends on it: while the bar is translucent
+         the line would otherwise run straight up through the logo. */
+      var head = Math.max(0, railHead - window.scrollY);
+      if(docked && shown){
+        var onBar = topBarEl.querySelector('.name .mark');
+        if(onBar) head = onBar.getBoundingClientRect().bottom;
+      }
+      document.documentElement.style.setProperty('--spine-top', Math.round(head) + 'px');
 
       var mid=window.scrollY+window.innerHeight/2;
       marks.forEach(function(m){

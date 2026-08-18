@@ -79,9 +79,24 @@
    of which clear AA on this surface. */
 .fit__col.no{background:#E7D9BE;border-color:#D6C39E}
 
-/* The masthead docks over the text rather than beside it, so it takes white a
-   little more opaque on the darker paper. */
-.top[data-dock="true"]{background:rgba(255,255,255,.82)}
+/* ── The rail ──────────────────────────────────────────────────────────────
+   White track, orange fill. Against wood, white reads as light rather than as a
+   colour, which is the one thing the reference reserves it for, and it puts the
+   orange at 4.31:1 against the line it is filling rather than 1.6:1 against a
+   wood one.
+   It advances on a curve now instead of a straight line. The reference's single
+   easing is described as fast out, long settle, which is exactly what a fill
+   chasing the scroll should do; 90ms was too short for any curve to read, so the
+   duration goes to the reference's 180. Each scroll frame retargets the
+   transition, so the effect is a fill that catches up smoothly rather than one
+   that steps. */
+@media(min-width:1180px){
+  .spine .track{background:var(--sand-50);opacity:1}
+  .spine .fill{transition:transform 180ms cubic-bezier(.2,.7,.3,1)}
+}
+
+/* The docked masthead needs nothing here: style.css now mixes it from
+   --sand-100, so it follows the paper wherever the paper goes. */
 @media(max-width:760px){
   .top nav{background:var(--sand-100)}
 }
