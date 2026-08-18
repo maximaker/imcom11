@@ -181,6 +181,17 @@
   function absTop(el){ return el.getBoundingClientRect().top + window.scrollY; }
 
   var railEl = document.querySelector('.spine');
+
+  /* One bead per section, living on the rail. See the .spine .bead note in the
+     stylesheet for why they are not pseudo-elements of the margins. */
+  var beads = marks.map(function(){
+    if(!railEl) return null;
+    var b = document.createElement('i');
+    b.className = 'bead';
+    b.setAttribute('aria-hidden', 'true');
+    railEl.appendChild(b);
+    return b;
+  });
   /* Document coordinate of the rule's head: the masthead does not travel now, so
      the mark scrolls away and the rule has to pin to the top of the viewport
      once it does. Set here, resolved against scroll position in onScroll. */
@@ -223,11 +234,7 @@
     var edge = col.getBoundingClientRect().right;
     var x = Math.round(edge + gap / 2);
     railEl.style.left = x + 'px';
-    /* The dot is placed from its own margin box, which sits wherever the centred
-       container leaves it. Handing it the difference puts its centre on the rail's
-       centre exactly: its right edge goes 7px past the rail's left edge, which is
-       half the rail plus half the dot. */
-    document.documentElement.style.setProperty('--dot-right', (edge - x - 7) + 'px');
+
     /* The foot disc is absolutely positioned inside .railfoot, so its `left`
        resolves against that box, not the viewport. Convert the coordinate. */
     var foot = document.querySelector('.railfoot');
@@ -282,8 +289,21 @@
       document.documentElement.style.setProperty('--spine-top', Math.round(head) + 'px');
 
       var mid=window.scrollY+window.innerHeight/2;
-      marks.forEach(function(m){
-        m.note.setAttribute('data-on', (mid>=m.a && mid<m.b) ? 'true':'false');
+      var railTop=railEl ? parseFloat(getComputedStyle(railEl).top) || 0 : 0;
+      marks.forEach(function(m,i){
+        var on = (mid>=m.a && mid<m.b);
+        m.note.setAttribute('data-on', on ? 'true':'false');
+        var bead=beads[i];
+        if(bead){
+          /* Taken from the label, so the bead sits on the row the label, the dot
+             and the heading already share, whatever the type scale does. */
+          var lbl=m.note.querySelector('b');
+          if(lbl){
+            var r=lbl.getBoundingClientRect();
+            bead.style.top=(r.top + r.height/2 - railTop)+'px';
+          }
+          bead.setAttribute('data-on', on ? 'true':'false');
+        }
       });
 
       /* Light the statement word by word as it crosses the middle of the screen. */

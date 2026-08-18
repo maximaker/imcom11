@@ -155,12 +155,20 @@ against the white track is 1.11:1, so the eye joined the line straight through i
 The dot is filled in the sample now, the rule colour when idle and clay when
 active, so it interrupts the line it sits on.
 
-The dot and the rail are also snapped to the same whole pixel. Both agreed
-exactly in CSS and both landed on a half pixel, where a 1px rule is drawn across
-two device pixels and a 13px circle rounds separately, so they read as a pixel
-apart however well the arithmetic agrees. `placeRail` rounds the rail's x and
-hands the dot the difference as `--dot-right`; the calc in the stylesheet is the
-fallback for before that runs.
+The beads that mark each section's place on the rail are children of the rail, not
+pseudo-elements of the margins. As pseudo-elements they put a 13px circle in one
+layer and a 1px rule in a fixed one: the two agreed exactly in CSS and rounded
+independently on screen, so the bead read as sitting beside the line rather than
+on it, and whether it drew above or below came down to a z-index race between two
+unrelated subtrees. Three attempts at aligning them that way all measured as
+correct and all still looked wrong.
+
+As a child of the rail there is nothing left to align and nothing to race:
+`left:50%` of a 1px parent is the rule's centre by construction, and a later
+sibling of the track paints over it. JS gives each bead its y, measured from the
+label whose row it belongs to, so it follows the type scale for free. If you touch
+this, the thing to check is not the arithmetic: it is whether the bead is a child
+of `.spine`.
 
 Two of those fixes went into `style.css` instead, because they are wrong on the
 live site too: the hero's label, its dot and the first line of its headline now

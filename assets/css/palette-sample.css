@@ -114,10 +114,16 @@
      carries an opaque halo of the paper behind it, which clears the rule for 4px
      all round. The line is now unmistakably interrupted whichever way either of
      them rounds. */
-  .margin::after{background:var(--sand-300);
+  /* Filled rather than a ring: the hole was the page cream and the track is
+     white, 1.11:1 apart, so the interruption existed and was invisible. The halo
+     is the paper it sits on, which clears the rule for 4px all round.
+     The bead is a child of the rail now, so it cannot fall behind the line or
+     round off its centre, and one halo colour serves every band: it is the page
+     paper, and the rail crosses the tinted panels rather than sitting inside
+     them. */
+  .spine .bead{background:var(--sand-300);
     box-shadow:0 0 0 4px var(--sand-100)}
-  .tinted .margin::after{box-shadow:0 0 0 4px var(--sand-200)}
-  .margin[data-on="true"]::after{background:var(--clay-mark)}
+  .spine .bead[data-on="true"]{background:var(--clay-mark)}
 }
 
 /* The docked masthead needs nothing here: style.css now mixes it from
