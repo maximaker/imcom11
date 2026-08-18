@@ -305,10 +305,17 @@
   /* The ride supersedes the disc that sat at the foot of the rail: same object,
      except that this one has been with the reader the whole way down. */
   .railfoot{display:none}
-  /* And the closing section gets its button back, waiting at opacity 0 for the
-     ride to arrive on top of it. The stylesheet hides it at this width because the
-     foot disc used to be the only call to action here. */
+  /* Both real buttons wait at opacity 0 for the ride to arrive on top of them. The
+     hero's is the object's first form: once the reader leaves the hero it has become
+     the dot on the rail, so it must not still be sitting there. It comes back when
+     they scroll back up to it. The closing one is hidden by the stylesheet at this
+     width, because the foot disc used to be the only call to action down there. */
+  .hero-cta .act,
   .close .act{display:inline-flex;opacity:0;
     transition:opacity 240ms var(--ease-out)}
+  .hero-cta[data-handed="true"] .act,
   .close[data-handed="true"] .act{opacity:1}
+  /* Nothing to click while it is standing in for the ride. */
+  .hero-cta:not([data-handed="true"]) .act,
+  .close:not([data-handed="true"]) .act{pointer-events:none}
 }

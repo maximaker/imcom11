@@ -17,9 +17,16 @@
   var hero = document.querySelector('.open');
   var closing = document.querySelector('.close');
   var target = closing && closing.querySelector('.act');
-  if (!rail || !hero || !closing || !target) return;
+  var top = document.querySelector('.hero-cta');
+  var start = top && top.querySelector('.act');
+  if (!rail || !hero || !closing || !target || !top || !start) return;
 
-  if (still.matches || !wide.matches) { closing.setAttribute('data-handed', 'true'); return; }
+  /* Nothing to ride: both real buttons simply show themselves. */
+  if (still.matches || !wide.matches) {
+    top.setAttribute('data-handed', 'true');
+    closing.setAttribute('data-handed', 'true');
+    return;
+  }
 
   var DOT = 16, DISC = 58;
   var GROW_FROM = 0.50, GROW_TO = 0.88;   /* where the dot becomes the disc */
@@ -77,19 +84,23 @@
   var sw = new Spring(DOT, 130, 23);
   var sh = new Spring(DOT, 130, 23);
 
-  var started = false, handed = false, running = false, shown = false, last = 0;
-  var goal = { x: 0, y: 0, w: DOT, h: DOT, land: 0 };
+  var atTop = true, atEnd = false, running = false, last = 0;
+  var goal = { x: 0, y: 0, w: DOT, h: DOT, lift: 0, land: 0 };
 
   function aim() {
     var h = document.documentElement.scrollHeight - window.innerHeight;
     var p = h > 0 ? clamp(window.scrollY / h) : 0;
 
-    /* The hero keeps its own button, so the ride only exists once the hero has
-       gone, with 120px of overlap or it appears while that button is still up. */
-    started = hero.getBoundingClientRect().bottom < -120;
-
+    var seat = start.getBoundingClientRect();
     var slot = target.getBoundingClientRect();
     var railBox = rail.getBoundingClientRect();
+
+    /* How far the hero's own button has climbed out of the way. This is the other
+       half of the object: the dot on the rail is that button, compacted, so the ride
+       begins life sitting exactly on it and takes its place as it leaves. 0 while
+       the button is still comfortably in view, 1 once it has gone off the top. */
+    goal.lift = smooth((window.innerHeight * 0.5 - (seat.top + seat.height / 2)) /
+                       (window.innerHeight * 0.5));
 
     /* How near the end of the page the reader is, as a fraction over the last three
        quarters of a screen. The aim is blended across this rather than switched at a
@@ -108,13 +119,23 @@
        value is what makes growth feel mushy. */
     var size = lerp(DOT, DISC, clamp((p - GROW_FROM) / (GROW_TO - GROW_FROM)));
 
-    goal.x = lerp(railBox.left + railBox.width / 2, slot.left + slot.width / 2, goal.land);
-    /* Both ends of this are document positions: the point in the page level with
-       the middle of the screen, and the closing button's own place in the page. */
-    goal.y = lerp(scroll + window.innerHeight * 0.5,
-                  scroll + slot.top + slot.height / 2, goal.land);
-    goal.w = lerp(size, slot.width, goal.land);
-    goal.h = lerp(size, slot.height, goal.land);
+    /* Three places it can be, blended in order: the hero's button, the rail, the
+       closing button. lift crosses the first pair and land the second, and the two
+       never overlap, so the whole run is one continuous aim from a pill at the top,
+       through a dot on the rule, to a pill at the bottom. Every y is a document
+       position, so the trailing survives the blends. */
+    var railX = railBox.left + railBox.width / 2;
+    var railY = scroll + window.innerHeight * 0.5;
+
+    var x = lerp(seat.left + seat.width / 2, railX, goal.lift);
+    var y = lerp(scroll + seat.top + seat.height / 2, railY, goal.lift);
+    var w = lerp(seat.width, size, goal.lift);
+    var hh = lerp(seat.height, size, goal.lift);
+
+    goal.x = lerp(x, slot.left + slot.width / 2, goal.land);
+    goal.y = lerp(y, scroll + slot.top + slot.height / 2, goal.land);
+    goal.w = lerp(w, slot.width, goal.land);
+    goal.h = lerp(hh, slot.height, goal.land);
   }
 
   function paint() {
@@ -143,6 +164,17 @@
     ride.setAttribute('data-form', lab > 0.5 ? 'pill' : w > 34 ? 'disc' : 'dot');
   }
 
+  /* The two swaps. Handing over shows the real button and puts the ride away;
+     releasing does the reverse. */
+  function hand(host) {
+    host.setAttribute('data-handed', 'true');
+    ride.setAttribute('data-in', 'false');
+  }
+  function release(host) {
+    host.setAttribute('data-handed', 'false');
+    ride.setAttribute('data-in', 'true');
+  }
+
   function frame(now) {
     /* Real elapsed time, clamped: a backgrounded tab or one long frame would
        otherwise hand the spring a step it cannot integrate and throw it. */
@@ -151,17 +183,16 @@
 
     aim();
 
-    if (!started) {
-      if (shown) { shown = false; ride.setAttribute('data-in', 'false'); }
-      sx.set(goal.x); sy.set(goal.y); sw.set(DOT); sh.set(DOT);
+    /* Parked on whichever real button is currently showing. The springs are held
+       exactly on it rather than integrated, so the moment the reader moves, the ride
+       takes over from a position identical to the button it replaces and the swap is
+       never visible in either direction. */
+    if (atTop || atEnd) {
+      sx.set(goal.x); sy.set(goal.y); sw.set(goal.w); sh.set(goal.h);
       paint();
-      running = false;
-      return;
-    }
-    if (!shown) {
-      shown = true;
-      sx.set(goal.x); sy.set(goal.y);      /* arrive in place, then trail */
-      ride.setAttribute('data-in', 'true');
+      if (atTop && goal.lift > 0.02) { atTop = false; release(top); }
+      else if (atEnd && goal.land < 0.9) { atEnd = false; release(closing); }
+      else { running = false; return; }
     }
 
     /* Integrated in fixed sub-steps rather than one step per frame. The spring is
@@ -188,30 +219,24 @@
     }
     paint();
 
-    /* Handed over once it is sitting on the real button: same place, same size, so
-       the swap is not visible. */
-    var arrived = goal.land > 0.99 &&
-      sx.rests(goal.x) && sy.rests(goal.y) && sw.rests(goal.w);
-    if (arrived && !handed) {
-      handed = true;
-      closing.setAttribute('data-handed', 'true');
-      ride.setAttribute('data-in', 'false');
-    } else if (handed && goal.land < 0.9) {
-      handed = false;
-      closing.setAttribute('data-handed', 'false');
-      ride.setAttribute('data-in', 'true');
-    }
+    /* Handed over once it is sitting on a real button: same place, same size, so
+       the swap is not visible at either end. */
+    var settled = sx.rests(goal.x) && sy.rests(goal.y) && sw.rests(goal.w);
+    if (!atEnd && goal.land > 0.99 && settled) { atEnd = true; hand(closing); }
+    else if (!atTop && goal.lift < 0.01 && settled) { atTop = true; hand(top); }
 
     /* Still catching up? Keep going. Settled, and the reader is still? Stop: the
        page has no idle motion in it anywhere else either. */
-    running = !handed && !(sx.rests(goal.x) && sy.rests(goal.y) &&
-                           sw.rests(goal.w) && sh.rests(goal.h));
+    running = !atTop && !atEnd && !(sx.rests(goal.x) && sy.rests(goal.y) &&
+                                    sw.rests(goal.w) && sh.rests(goal.h));
     if (running) requestAnimationFrame(frame);
   }
 
   function wake() {
     if (!running) { running = true; last = 0; requestAnimationFrame(frame); }
   }
+  /* Starts parked on the hero's button, which is where the object begins. */
+  top.setAttribute('data-handed', 'true');
   addEventListener('scroll', wake, { passive: true });
   addEventListener('resize', wake, { passive: true });
   wake();
