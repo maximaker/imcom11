@@ -26,6 +26,11 @@ HTML directly for one-off copy changes.
   `--clay-mark` for graphic marks, `--clay-500` for text, because the brand
   orange only reaches 4.04:1 on this paper and fails AA at label sizes.
 - Single system sans; hierarchy comes from weight (300 / 640), not from families.
+- Hero leading is set by `.rise`'s bottom margin, not its line-height. Each line
+  is a masked block, so its box must contain its own descenders: the stack's
+  deepest face needs 1.33em for that, and anything tighter gets cut by the
+  mask's `overflow:hidden`. The box keeps a 1.4em line and `-0.45em` of margin
+  brings the step back to 0.95em.
 - Paper texture is two layers of inline SVG turbulence. No image requests.
 - The wordmark is `one flow.first`, the clay dot carrying the accent. Styling is
   deliberately quiet: one weight, one colored mark.
@@ -48,6 +53,11 @@ HTML directly for one-off copy changes.
   label rule so it cannot drift from the rest of the meta layer. The current
   page lights clay and keeps its underline, the same way an active margin label
   lights its dot.
+- Above 1180px the masthead adopts the same three columns as every band, so
+  nothing in it is positioned by eye: the logotype right-aligns where every
+  margin label ends, the logomark centres in the gutter the rail runs down and
+  caps the rule, and the nav ends where the text column ends. The mark needs no
+  plate behind it because the bar is the page ground, not a hole cut in a band.
 - One lockup, in the masthead, at every width. It briefly moved onto the rail
   above 1180px, which needed a 124px opaque plate centred on the rule to break
   it: that plate punched a hole through whatever band was behind it and

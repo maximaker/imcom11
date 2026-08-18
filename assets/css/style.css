@@ -95,15 +95,16 @@ a{color:var(--clay-500)}
   :root{--margin-gap:128px}
   /* left is set in JS from the real column edge: 50vw includes the scrollbar
      but the centred container does not, so vw math drifts by half a scrollbar. */
-  /* Under the masthead (z-30) and over main (z-2): the opaque bar clips the
-     head of the rule, so it reads as running out from beneath the chrome
-     instead of colliding with it. */
+  /* Over the masthead (z-30), because the rule now starts at the mark's lower
+     edge and has to cross the rest of the bar to get out. A 1px line crossing
+     an opaque bar is a rule with a head on it; the plate that used to live here
+     is what cut a hole in the page, not the line. */
   /* --spine-top is the measured masthead height, set in JS: hardcoding it would
      leave a sliver or a gap the moment font metrics differ. Starting the rule at
      the bar's lower edge also means the progress fill maps to the length the
      reader can actually see. */
   .spine{display:block;position:fixed;top:var(--spine-top,0px);bottom:0;width:1px;
-    z-index:20;pointer-events:none;left:-100px}
+    z-index:35;pointer-events:none;left:-100px}
   .spine .track{position:absolute;inset:0;background:var(--sand-400);opacity:.85}
   /* scaleY rather than height: compositor-only, no layout on every scroll frame. */
   .spine .fill{position:absolute;left:0;top:0;width:1px;height:100%;
@@ -216,11 +217,27 @@ a:hover .mark__lead{stroke:var(--clay-400);transform:translateX(1.5px)}
 .top .name{display:flex;align-items:center;gap:10px;
   font-family:var(--display);font-size:19px;font-weight:600;letter-spacing:-0.015em}
 .top .name .mark{width:24px;height:24px}
-/* The lockup stays in the masthead at every width. It used to move onto the
-   rail above 1180px, which meant a 124px opaque plate centred on the rule,
-   punching a hole through whatever band was behind it and overlapping both the
-   margin label and the heading. A brand mark belongs in the bar: one place,
-   aligned to the column, predictable at every width. The rail is structure. */
+/* Above the rail breakpoint the bar adopts the same three columns as every
+   band, so nothing here is positioned by eye: the logotype right-aligns where
+   every margin label ends, the mark centres in the gutter the rail runs down,
+   and the nav ends where the text column ends. The mark caps the rule from
+   inside an opaque bar, which is why it needs no plate behind it: this is the
+   page ground, not a hole cut in a band. */
+@media(min-width:1180px){
+  /* Generous above, so the mark is not crowded against the top of the screen. */
+  .top{padding-top:38px;padding-bottom:24px}
+  .top__row{display:grid;gap:0;align-items:center;
+    grid-template-columns:var(--margin-col) var(--margin-gap) minmax(0,1fr)}
+  /* One link across two cells: same tab stop, same accessible name, both halves
+     on the grid. The inner columns repeat the outer two, so they cannot drift. */
+  .top .name{grid-column:1 / span 2;display:grid;gap:0;align-items:center;
+    grid-template-columns:var(--margin-col) var(--margin-gap)}
+  /* grid-row is not optional: the mark is placed in column 2, so sparse
+     auto-placement would push a column-1 sibling onto a second row. */
+  .top .name span{grid-row:1;grid-column:1;justify-self:end;text-align:right}
+  .top .name .mark{grid-row:1;grid-column:2;justify-self:center;width:30px;height:30px}
+  .top nav{grid-column:3;justify-self:end}
+}
 
 /* The nav is reference, not action: the rail disc is the only thing on a wide
    screen asking to be clicked. So the nav joins the tracked-label register the
@@ -336,14 +353,23 @@ a:hover .mark__lead{stroke:var(--clay-400);transform:translateX(1.5px)}
 .asset[data-in="true"] .glyph circle,.asset[data-in="true"] .glyph line{stroke-dashoffset:0}
 
 /* ── 4. Variable-weight entrance. The headline sets itself. ── */
-.open h1{font-size:clamp(2.7rem,6.6vw,4.7rem);line-height:1.0;letter-spacing:-0.032em;
+.open h1{font-size:clamp(2.7rem,6.6vw,4.7rem);line-height:.95;letter-spacing:-0.032em;
   max-width:none;margin-bottom:34px}
-.rise{display:block;overflow:hidden;padding-bottom:.04em}
+/* Each line is its own masked block, so its box has to contain its own glyphs.
+   The stack's deepest face needs 1.33em for that (81 up, 19 down per 100), and
+   any tighter line-height drops the descenders outside the box where
+   overflow:hidden cuts them: the old .04em of padding was covering 3px of a
+   14px overhang, and could not be widened because that padding is the mask the
+   entrance slides behind. So the box keeps a full natural line and the leading
+   comes off the bottom margin instead. 1.33 - 0.38 = the 0.95em step above,
+   and the mask stays tight against the text it hides. */
+.rise{display:block;overflow:hidden;line-height:1.4;margin-bottom:-.45em}
 .rise strong{font-weight:640}
 /* Hand-set lines only earn their keep where they actually fit. Below that the
    headline reflows as ordinary text and skips the mask entirely. */
 @media(max-width:760px){
-  .rise{display:inline;overflow:visible;padding:0}
+  /* Reflowed as ordinary text: no mask, so the h1's own leading governs again. */
+  .rise{display:inline;overflow:visible;padding:0;margin:0;line-height:inherit}
   .rise>span{display:inline;transform:none}
 }
 .rise>span{display:inline-block;transform:translateY(105%);
@@ -798,7 +824,7 @@ main,.colo{position:relative;z-index:2}
 
 /* Hero type is a touch tighter on a phone so the deck still lands above the fold. */
 @media(max-width:520px){
-  .open h1{font-size:clamp(2.15rem,10vw,2.9rem)}
+  .open h1{font-size:clamp(2.15rem,10vw,2.9rem);line-height:1.04}
   .stats{margin-top:38px}
   .stat b{font-size:1.5rem}
 }

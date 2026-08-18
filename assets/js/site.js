@@ -176,11 +176,16 @@
   var railEl = document.querySelector('.spine');
 
   function placeRail(){
-    /* The rule runs out from under the masthead, so it has to know how tall the
-       bar is. Measured rather than hardcoded. */
+    /* The rule starts at the logomark's lower edge, so the mark caps it. The bar
+       is sticky at the top of the viewport, so this rect does not move on
+       scroll. Falls back to the bar's height where there is no mark. */
     var bar = document.getElementById('top');
-    if(bar) document.documentElement.style
-              .setProperty('--spine-top', bar.offsetHeight + 'px');
+    if(bar){
+      var glyph = bar.querySelector('.name .mark');
+      var head = glyph ? glyph.getBoundingClientRect().bottom : bar.offsetHeight;
+      document.documentElement.style
+        .setProperty('--spine-top', Math.round(head) + 'px');
+    }
     if(!railEl || getComputedStyle(railEl).display === 'none') return;
     var col = document.querySelector('.band .margin');
     if(!col) return;
