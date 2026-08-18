@@ -45,8 +45,10 @@ HTML directly for one-off copy changes.
   reader is a bar the page scrolls straight through, so there is no sticky and
   no hairline either, since the hairline only existed to separate the two. It
   stays `position:relative` rather than static, because the mobile menu is
-  absolutely positioned against it, and that menu keeps its own opaque ground
-  because it does overlay content. There is no blur anywhere on this site, and
+  absolutely positioned against it, and it keeps `z-index:30`: `main` carries
+  `z-2`, so without one the page paints over the header and the open menu panel
+  renders behind the hero. That menu keeps its own opaque ground because it does
+  overlay content. There is no blur anywhere on this site, and
   `saturate()` on a bar would quietly re-tint a palette whose ratios were
   measured. The row is a `.doc`, so the header's inner edges align with every
   band by construction and it inherits the same responsive gutter instead of

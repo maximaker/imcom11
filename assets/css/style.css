@@ -203,10 +203,12 @@ a:hover .mark__lead{stroke:var(--clay-400);transform:translateX(1.5px)}
    scrolls straight through, so dropping the background means dropping the
    sticky with it, along with the hairline that only existed to separate the two.
    Still position:relative rather than static, because the mobile menu is
-   absolutely positioned against it. The row uses .doc, so the header's inner
-   edges align with every band by construction and it inherits the same
-   responsive gutter instead of repeating 26px and 1140px. */
-.top{position:relative;padding-top:20px;padding-bottom:20px}
+   absolutely positioned against it, and it still needs a z-index: main carries
+   z-2, so without one the page paints over the header and the open menu panel
+   renders behind the hero. The row uses .doc, so the header's inner edges align
+   with every band by construction and it inherits the same responsive gutter
+   instead of repeating 26px and 1140px. */
+.top{position:relative;z-index:30;padding-top:20px;padding-bottom:20px}
 /* The bar owns its height, the row owns its alignment. Vertical padding cannot
    live on .top__row: .doc sets `padding:0 20px` further down the sheet, and the
    shorthand would zero it. */
