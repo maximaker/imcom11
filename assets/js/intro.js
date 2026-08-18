@@ -50,14 +50,18 @@
     return x - Math.floor(x);
   }
 
+  /* Each dot is held in polar coordinates and its position written out by hand.
+     Rotating the group would be the obvious way to swing them in, but a <g> whose
+     bounding box is the union of its moving children is exactly the case GSAP
+     cannot get right: the origin compensation is computed against a box that no
+     longer exists, and a translate is left in the matrix even at rotation 0. Both
+     transformOrigin and svgOrigin did it, off by 19 units. Polar has no origin. */
   var dots = [], els = [];
   for (var i = 0; i < N; i++) {
     /* Seated across the solid arc end to end, not inset half a step at each end:
        the circle they form has to reach exactly as far as the stroke that
        replaces it, or the ring visibly grows past where the dots were. */
-    var seat = (GAP + (SOLID * i) / (N - 1)) * Math.PI / 180;
-    var away = (rnd(i, 1) * 360) * Math.PI / 180;
-    var far = 21 + rnd(i, 2) * 15;
+    var seat = GAP + (SOLID * i) / (N - 1);
     var el = document.createElementNS(NS, 'circle');
     el.setAttribute('r', DOT_R);
     el.setAttribute('cx', CX);
@@ -65,9 +69,17 @@
     swarm.appendChild(el);
     els.push(el);
     dots.push({
-      from: { x: Math.cos(away) * far, y: Math.sin(away) * far },
-      to: { x: Math.cos(seat) * R, y: Math.sin(seat) * R }
+      seat: seat,
+      ang: seat + 26 + rnd(i, 1) * 26,     /* swings in, each by its own amount */
+      rad: 21 + rnd(i, 2) * 15
     });
+  }
+
+  function place() {
+    for (var n = 0; n < dots.length; n++) {
+      var a = dots[n].ang * Math.PI / 180;
+      gsap.set(els[n], { x: Math.cos(a) * dots[n].rad, y: Math.sin(a) * dots[n].rad });
+    }
   }
 
   /* Both strokes are drawn by hand: DrawSVG is a Club plugin, and a dash offset
@@ -94,9 +106,13 @@
      The seed is the size of one of the others, because that is what it is: at
      this point it is an idea among ideas, and only later the one that was kept. */
   var SEED = DOT_R / 3.7;
-  gsap.set(core, { attr: { r: 3.7 }, fill: INK, scale: 0, transformOrigin: '16px 16px' });
+  /* svgOrigin, not transformOrigin. On an SVG element transformOrigin is measured
+     from the element's own bounding box, so '16px 16px' on a circle whose box
+     starts at 12.3 puts the origin at 28.3 and scaling throws the dot down and to
+     the right, 7 units off centre. svgOrigin is the user-space point it reads as. */
+  gsap.set(core, { attr: { r: 3.7 }, fill: INK, scale: 0, svgOrigin: '16 16' });
   gsap.set(els, { fill: SAND, opacity: 0, scale: 0.6, transformOrigin: 'center' });
-  els.forEach(function (el, n) { gsap.set(el, { x: dots[n].from.x, y: dots[n].from.y }); });
+  place();
 
   /* Where the mark has to end up. The masthead copy is hidden but still laid out,
      so its box is the real one. Measured through a function rather than frozen
@@ -154,7 +170,13 @@
     });
   }
 
-  var tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
+  /* The painter hangs off the timeline rather than off a tween of its own, so it
+     runs after the children have written their values. A tween's onUpdate can fire
+     before the tweens that move the data, which paints the previous frame's
+     positions: harmless at 60fps, but it means the dots reach their seats a frame
+     after the stroke starts drawing through them. Fourteen gsap.set calls a frame
+     is not worth optimising away. */
+  var tl = gsap.timeline({ defaults: { ease: 'power2.out' }, onUpdate: place });
 
   /* Unhurried on purpose: every phase overlaps the next, so nothing starts from a
      standstill, and the eases are gentle rather than snappy. Absolute start times
@@ -167,17 +189,14 @@
     .to(els, { opacity: 1, scale: 1, duration: 0.55,
       stagger: { each: 0.04, from: 'random' } }, 0.40)
 
-    /* They come around it. The group turns as they close in, so it reads as
-       gathering rather than snapping onto marks. */
-    .fromTo(swarm, { rotation: -30 },
-      { rotation: 0, duration: 1.15, ease: 'power2.inOut',
-        transformOrigin: '16px 16px' }, 0.95)
-    .to(els, {
-      x: function (n) { return dots[n].to.x; },
-      y: function (n) { return dots[n].to.y; },
+    /* They come around it: each dot closes on its seat and swings the last of the
+       way round, because the angle arrives at the same time as the radius. */
+    .to(dots, {
+      ang: function (n) { return dots[n].seat; }, rad: R,
       duration: 1.15, ease: 'power2.inOut',
       stagger: { each: 0.03, from: 'random' }
     }, 0.95)
+
 
     /* The circle hardens, and only once it is a circle. The converge above runs
        0.95 to 2.49 once its stagger is counted, so starting the stroke any earlier

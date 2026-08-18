@@ -3,7 +3,8 @@
 Static marketing site for a productized two-week discovery engagement.
 The offer keeps the two-week timeframe; the brand does not use the word "sprint".
 Five pages plus a case study, no build step, no webfont requests, and nothing
-fetched from anywhere else. GSAP is the one dependency and it is vendored, not
+fetched from anywhere else. Assets carry a content hash in their URL
+(`style.css?v=…`), so an edit is never hidden behind a cached copy. GSAP is the one dependency and it is vendored, not
 linked, so the site still makes no external request.
 
 ## Structure
@@ -66,6 +67,20 @@ leaving alone:
 - **Nothing solidifies before the circle exists.** The converge runs to 2.49s once
   its stagger is counted, so the stroke starts at 2.50s. Earlier and it draws ring
   where dots have not arrived.
+- **Nothing is transformed that has a moving bounding box, and no origin is
+  expressed in box-relative units.** On an SVG element `transformOrigin: '16px
+  16px'` means 16px from the element's own bounding box, not the user-space point
+  (16,16): it scaled the core 7 units off centre. And rotating the swarm `<g>` is
+  worse, because its box is the union of its moving children, so GSAP's origin
+  compensation is computed against a box that no longer exists and leaves a
+  translate in the matrix even at rotation 0. `svgOrigin` fixes the first and not
+  the second. The dots are held in polar coordinates and painted out by hand
+  instead, which has no origin to get wrong. `svgOrigin` on the core, plain
+  `transformOrigin: 'center'` on each dot, whose box never changes.
+- **The painter hangs off the timeline, not off a tween.** A tween's `onUpdate` can
+  fire before the tweens that move the data, which paints the previous frame's
+  positions. Invisible at 60fps, but it made the dots reach their seats a frame
+  after the stroke began drawing through them.
 - **Dash offsets are written to `style` by hand, not tweened as properties.** GSAP
   renders a dash offset as a whole number of px regardless of `autoRound`, and
   these lengths are fractional: the lead is 11.2 units long, and hidden at 11 it

@@ -9,7 +9,7 @@
 <meta property="og:title" content="About | One flow first">
 <meta property="og:description" content="Twenty years of deciding what to build and what to cut, and why the work is scoped, small, and honest about where the value stops.">
 <meta property="og:type" content="website">
-<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/style.css?v=efbe35f2">
 <script>
 /* Decides, before anything paints, whether the first-load animation runs. It has
    to be inline and here: hiding the page from a deferred script means showing it
@@ -46,7 +46,7 @@
   /* Fetched here rather than linked in the markup: this runs once, and the other
      99% of loads should not pay 72KB for it. async=false on an injected script
      keeps execution order without blocking the parser. */
-  ['assets/js/vendor/gsap.min.js','assets/js/intro.js'].forEach(function(src){
+  ['assets/js/vendor/gsap.min.js?v=fa1aeabc','assets/js/intro.js?v=35135974'].forEach(function(src){
     var el=document.createElement('script');
     el.src=src; el.async=false; d.appendChild(el);
   });
@@ -192,6 +192,6 @@
   <span><a href="mailto:hello@oneflowfirst.com">hello@oneflowfirst.com</a></span>
 </footer>
 
-<script src="assets/js/site.js" defer></script>
+<script src="assets/js/site.js?v=e9e3bf56" defer></script>
 </body>
 </html>

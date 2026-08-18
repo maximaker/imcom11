@@ -1,6 +1,22 @@
 #!/usr/bin/env python3
 """Builds the five pages from one shell so the chrome can never drift apart."""
+import hashlib
 import pathlib
+
+
+def ver(path):
+    """Content hash for an asset URL. The pages are regenerated on every build, so
+    a changed stylesheet or script always arrives under a new URL and a browser
+    cannot serve a stale copy against new markup. Without this, an edit to
+    style.css or site.js is invisible until a hard reload."""
+    p = pathlib.Path(path)
+    return hashlib.sha1(p.read_bytes()).hexdigest()[:8] if p.exists() else '0'
+
+
+V_CSS = ver('assets/css/style.css')
+V_SITE = ver('assets/js/site.js')
+V_INTRO = ver('assets/js/intro.js')
+V_GSAP = ver('assets/js/vendor/gsap.min.js')
 
 NAV = [("how-it-works.html", "How it works"),
        ("what-ive-built.html", "What I've built"),
@@ -54,7 +70,7 @@ GATE = '''<script>
   /* Fetched here rather than linked in the markup: this runs once, and the other
      99% of loads should not pay 72KB for it. async=false on an injected script
      keeps execution order without blocking the parser. */
-  ['assets/js/vendor/gsap.min.js','assets/js/intro.js'].forEach(function(src){
+  ['assets/js/vendor/gsap.min.js?v=@GSAP@','assets/js/intro.js?v=@INTRO@'].forEach(function(src){
     var el=document.createElement('script');
     el.src=src; el.async=false; d.appendChild(el);
   });
@@ -69,6 +85,10 @@ GATE = '''<script>
   },3000);
 })();
 </script>'''
+
+# Versions are substituted rather than interpolated: GATE is a plain string,
+# and the script inside it is full of braces an f-string would try to read.
+GATE = GATE.replace('@GSAP@', V_GSAP).replace('@INTRO@', V_INTRO)
 
 
 def screen(label, body):
@@ -128,7 +148,7 @@ def shell(slug, title, desc, body, close_heading, close_body,
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{desc}">
 <meta property="og:type" content="website">
-<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/style.css?v={V_CSS}">
 {GATE}
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23160B02'/><path d='M24.3 21.6A10 10 0 1 1 24.3 10.4' fill='none' stroke='%23FEF6F0' stroke-width='3' stroke-linecap='round'/><circle cx='16' cy='16' r='3.5' fill='%23CC5500'/></svg>">
 </head>
@@ -193,7 +213,7 @@ def shell(slug, title, desc, body, close_heading, close_body,
   <span><a href="mailto:hello@oneflowfirst.com">hello@oneflowfirst.com</a></span>
 </footer>
 
-<script src="assets/js/site.js" defer></script>
+<script src="assets/js/site.js?v={V_SITE}" defer></script>
 </body>
 </html>
 '''
