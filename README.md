@@ -13,6 +13,7 @@ Five pages, no build step, no dependencies, no webfont requests.
     about.html            the person
     start.html            intro-call form
     assets/css/style.css  the whole design system
+    assets/img/mark.svg   the logomark, standalone
     assets/js/site.js     all behavior
     build.py              regenerates the five pages from one shell
 
@@ -28,6 +29,15 @@ HTML directly for one-off copy changes.
 - Paper texture is two layers of inline SVG turbulence. No image requests.
 - The wordmark is `one flow.first`, the clay dot carrying the accent. Styling is
   deliberately quiet: one weight, one colored mark.
+- The logomark is an open ring with one point of focus at its centre and one
+  line running out through the gap. The gap is the idea, so nothing may close
+  it: no background plate, no containing circle, no second dot. Three
+  declarations in CSS (`.mark__ring`, `.mark__lead`, `.mark__core`), so it
+  inherits the palette instead of hardcoding it. `assets/img/mark.svg` is the
+  standalone copy for anywhere CSS cannot reach.
+- Two lockups. Below 1180px the mark sits beside the wordmark in the masthead.
+  At 1180px and up the masthead drops its copy and the lockup moves to the rail
+  cap, stacked, so it stays inside the rail's own column of air.
 - The left rail carries the wordmark at its top and the call to action at its
   foot. Below 1180px the rail is hidden and the inline button in the closing
   section takes over.

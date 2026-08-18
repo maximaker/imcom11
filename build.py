@@ -11,6 +11,13 @@ ARROW = ('<svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidde
          '<path d="M5 12h13m0 0l-5.5-5.5M18 12l-5.5 5.5" stroke="currentColor" '
          'stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>')
 
+MARK = ('<svg class="mark" viewBox="0 0 32 32" aria-hidden="true">'
+        '<path class="mark__ring" d="M25.1 22.2A11 11 0 1 1 25.1 9.8"/>'
+        '<path class="mark__lead" d="M18.6 16h11.2"/>'
+        '<circle class="mark__core" cx="16" cy="16" r="3.7"/></svg>')
+
+WORDMARK = 'one flow<em>.</em>first'
+
 NOTCH = ('<div class="notch" aria-hidden="true"><i><svg viewBox="0 0 24 24" fill="none">'
          '<path d="M12 5v13m0 0l-5-5m5 5l5-5" stroke="currentColor" stroke-width="1.8" '
          'stroke-linecap="round" stroke-linejoin="round"/></svg></i></div>')
@@ -74,7 +81,7 @@ def shell(slug, title, desc, body, close_heading, close_body,
 <meta property="og:description" content="{desc}">
 <meta property="og:type" content="website">
 <link rel="stylesheet" href="assets/css/style.css">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23CC5500'/><path d='M8 17.5l5 5L24 10' stroke='%23FEF6F0' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23160B02'/><path d='M24.3 21.6A10 10 0 1 1 24.3 10.4' fill='none' stroke='%23FEF6F0' stroke-width='3' stroke-linecap='round'/><circle cx='16' cy='16' r='3.5' fill='%23CC5500'/></svg>">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to main content</a>
@@ -84,12 +91,12 @@ def shell(slug, title, desc, body, close_heading, close_body,
 <div class="spine">
   <div class="track" aria-hidden="true"></div><div class="fill" id="spinefill" aria-hidden="true"></div>
   <div class="cap cap--top">
-    <a class="railmark" href="index.html">one flow<em>.</em>first</a>
+    <a class="railmark" href="index.html">{MARK}<span>{WORDMARK}</span></a>
   </div>
 </div>
 
 <header class="top" id="top">
-  <a class="name" href="index.html">one flow<em>.</em>first</a>
+  <a class="name" href="index.html">{MARK}<span>{WORDMARK}</span></a>
   <button class="navtoggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="Open menu">
     <span aria-hidden="true"></span><span aria-hidden="true"></span>
   </button>
