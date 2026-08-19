@@ -273,7 +273,7 @@ HOME_HERO = '''<div class="heroband" id="heroband">
 
         <p class="principle rev">One flow first. <span>Nothing else yet.</span></p>
 
-        <p class="hero-cta rev"><a class="act" href="start.html"><span>Tell me about your idea</span>
+        <p class="hero-cta rev"><a class="act" href="#intake"><span>Tell me about your idea</span>
           <span class="chip" aria-hidden="true">''' + ARROW + '''</span></a></p>
         <p class="act-note rev">Twenty minutes. You'll get a straight read on whether this fits, either way.
           <a class="quiet quiet--inline" href="#n-fit">Not sure yet? See who this works for ''' + ARROW + '''</a></p>
