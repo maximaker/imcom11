@@ -857,6 +857,12 @@ h2{font-size:clamp(1.72rem,3.5vw,2.5rem);line-height:1.1;max-width:19ch;margin-b
 .stair .k{font-size:11px;text-transform:uppercase;letter-spacing:2.4px;font-weight:500;
   color:var(--clay-500);margin:0 0 10px}
 .stair h3{font-size:1.14rem;font-weight:640;margin-bottom:8px}
+/* The number is the reason this section exists, so it gets the display weight the
+   headings use, with its condition beside it in the meta voice. */
+.stair .price{font-size:1.66rem;font-weight:300;letter-spacing:-.015em;
+  color:var(--ink);margin:2px 0 12px}
+.stair .price span{font-size:11px;text-transform:uppercase;letter-spacing:2.4px;
+  font-weight:500;color:var(--ink-2);margin-left:8px;font-family:var(--mono)}
 .stair p{font-size:.95rem;color:var(--ink-2);margin:0}
 
 /* Probe lists */
