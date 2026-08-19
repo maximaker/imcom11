@@ -724,9 +724,9 @@ START = '''<div class="doc">
     "Pricing", "Four", "Pricing", "You'll see the whole staircase before you take the first step.",
     '''      <h2 class="rev">How <strong>pricing works</strong></h2>
       <div class="stairs">
-        <div class="stair rev"><p class="k">Step one</p><h3>Is this worth building?</h3><p class="price">&euro;4,500 <span>fixed</span></p><p>The two weeks: the build, the brief, the playbook. Set so it's worth it even when the answer is "don't build" &mdash; half to book, half when the brief is in your hands.</p></div>
-        <div class="stair rev"><p class="k">Step two</p><h3>The build</h3><p class="price">from &euro;15,000 <span>scoped after step one</span></p><p>Priced once you both know what's actually needed, against a written scope. No surprise numbers, no big commitment before you have proof.</p></div>
-        <div class="stair rev"><p class="k">Optional</p><h3>The testing, run for you</h3><p class="price">&euro;1,200 <span>flat</span></p><p>Finding the right people and getting them in front of it takes real calendar time, which is why it sits outside the two weeks. Run it yourself with the playbook, or have it added on.</p></div>
+        <div class="stair rev"><p class="k">Step one</p><h3>Is this worth building?</h3><p class="price">&euro;450 <span>fixed</span></p><p>The first days of the two weeks: we go through what you wrote, find the riskiest assumption, and shape what &mdash; if anything &mdash; deserves to be built. Priced so that "don't build" is a cheap answer to get.</p></div>
+        <div class="stair rev"><p class="k">Step two</p><h3>The build</h3><p class="price">&euro;2,500&ndash;4,000 <span>scoped in step one</span></p><p>The rest of the two weeks: the flow built, the bar set, the brief and the playbook in your hands. Agreed in writing before anything is built, so the number is yours to say no to.</p></div>
+        <div class="stair rev"><p class="k">Optional</p><h3>The testing, run for you</h3><p class="price">&euro;900 <span>flat</span></p><p>Finding the right people and getting them in front of it takes real calendar time, which is why it sits outside the two weeks. Run it yourself with the playbook, or have it added on.</p></div>
       </div>
       <p class="lede rev" style="margin-top:28px">No retainer, no hourly meter, no invoice you didn't
         see coming. Every number is agreed in writing before the work it pays for begins.</p>''',
