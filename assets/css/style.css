@@ -1803,3 +1803,86 @@ html[data-over="true"] .top{display:none}
   font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.14em;
   color:var(--clay-500);line-height:1.8}
 .checklist--ord li b{font-weight:600;color:var(--ink)}
+
+/* ── The intake, loosened ──
+   Measured against slowclarity's intake, which is where this pattern came from and
+   which reads as more relaxed than the first pass here did. The differences were
+   all quantifiable: its question is 48px against our 33; its field is invisible --
+   transparent, no border, 24px text sitting on the page -- against our white box
+   with a 1px border and 17px text; its gaps run 32/16/63/100 down the screen where
+   ours ran 12/14/22/30; and its controls are a plain text Back and a modest pill,
+   against our full-strength 74px block. Tightness was the sum of those numbers.
+   The identity stays ours: paper, terracotta, Plex, the mono eyebrows. Only the
+   rhythm changes. Everything here is scoped to .intakepage, so the page-embedded
+   fallback form and the brief panel keep their boxed fields. */
+.intakepage > *{max-width:720px}
+.intakepage .qstep__frame{margin-bottom:26px}
+.intakepage .qstep > .field__label,
+.intakepage .qstep .qfield legend{font-size:clamp(1.9rem,3.6vw,3rem);
+  font-weight:300;line-height:1.22;letter-spacing:-.025em;margin-bottom:16px}
+.intakepage .qstep__q{font-size:clamp(1.9rem,3.6vw,3rem);line-height:1.22;
+  letter-spacing:-.025em;margin-bottom:16px}
+.intakepage .qstep > .field__hint,
+.intakepage .qstep__hint{font-size:1.06rem;font-weight:300;line-height:1.6;
+  margin-bottom:52px;max-width:52ch}
+/* A step whose question has no hint still needs the air the hint would have kept. */
+.intakepage .qstep > .field__label{margin-bottom:16px}
+.intakepage .qstep > .field__label:has(+ textarea){margin-bottom:52px}
+
+/* The field disappears. No box, no fill: 22px of light Plex sitting on the paper
+   with one hairline underneath, which darkens to the accent when the field is
+   awake. The box was the single biggest source of tightness -- it framed every
+   answer as a form control, where the point of the page is that it reads as a
+   conversation. */
+.intakepage .qstep .textarea,
+.intakepage .qstep .input{background:none;border:0;border-radius:0;
+  border-bottom:1px solid var(--sand-400);
+  padding:10px 0 14px;min-height:0;
+  font-size:22px;font-weight:300;line-height:1.55;color:var(--ink);
+  transition:border-color var(--t-mid) var(--ease-out)}
+.intakepage .qstep .textarea:focus,
+.intakepage .qstep .input:focus{outline:none;box-shadow:none;
+  border-bottom-color:var(--clay-500)}
+.intakepage .qstep .textarea::placeholder,
+.intakepage .qstep .input::placeholder{color:var(--ink-3);opacity:.6;font-weight:300}
+.intakepage .qstep .field{margin-bottom:34px}
+.intakepage .qstep .field .field__label{font-family:var(--mono);font-size:11px;
+  font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);
+  margin-bottom:2px}
+
+/* The choices lose their boxes for the same reason the field did. */
+.intakepage .pick{background:none;border:0;border-bottom:1px solid var(--sand-300);
+  border-radius:0;padding:18px 2px;min-height:56px}
+.intakepage .pick + .pick{margin-top:0}
+.intakepage .pick:hover{border-bottom-color:var(--sand-500)}
+.intakepage .pick:has(input:checked){border-bottom-color:var(--clay-400)}
+.intakepage .pick span{font-size:1.12rem;font-weight:300}
+
+/* Controls on one quiet row, a long way below the field: Back on the left with the
+   count beside it, the action on the right. The submit keeps the accent -- it is
+   still the one thing on the screen that moves the reader forward -- but at pill
+   proportions rather than the closing section's full block. */
+.intakepage .intake{display:grid;grid-template-columns:1fr auto;align-items:center;
+  column-gap:24px}
+.intakepage .intake__steps{grid-column:1 / -1;order:0}
+.intakepage .intake__kbd{grid-column:1 / -1;order:1;margin:14px 0 0;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--ink-3);opacity:.7}
+.intakepage .intake__kbd[hidden]{display:none}
+.intakepage .intake__bar{grid-column:1;order:2;margin:64px 0 0;
+  display:flex;justify-content:flex-start;gap:26px}
+.intakepage .intake > button[type="submit"]{grid-column:2;order:3;margin:64px 0 0;
+  justify-self:end;align-self:center;width:auto;
+  min-height:52px;padding:14px 26px;border-radius:999px;font-size:16px}
+.intakepage .fineprint{grid-column:1 / -1;order:4;margin-top:26px}
+@media(max-width:559px){
+  .intakepage .intake{grid-template-columns:1fr}
+  .intakepage .intake__bar,
+  .intakepage .intake > button[type="submit"]{grid-column:1;justify-self:stretch;
+    margin-top:34px}
+  .intakepage .intake__bar{margin-top:44px}
+}
+/* The chord does not exist on a touch screen. */
+@media (hover:none){
+  .intakepage .intake__kbd{display:none}
+}

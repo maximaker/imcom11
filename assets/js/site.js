@@ -689,6 +689,11 @@
         var done = here<0 ? 0 : (here+1)/counted.length;
         prog.style.transform = 'scaleX(' + done.toFixed(4) + ')';
       }
+      /* The hint is only true where there is a textarea for it to be true of: on the
+         choice and contact steps plain interaction advances, and a hint about a
+         chord that does nothing there is worse than none. */
+      var kbd=form.querySelector('.intake__kbd');
+      if(kbd) kbd.hidden = !steps[at].querySelector('textarea');
     }
     function go(to){
       at = Math.max(0, Math.min(steps.length-1, to));

@@ -689,6 +689,7 @@ TAKEOVER = f'''<!-- Ships as an ordinary section at the foot of the page, and si
           </div>
         </li>
       </ol>
+      <p class="intake__kbd" hidden aria-hidden="true">Ctrl + Enter to continue</p>
       <div class="intake__bar" hidden>
         <button class="quiet intake__back" type="button">Back</button>
         <p class="intake__count" aria-live="polite"></p>
