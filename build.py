@@ -733,12 +733,12 @@ START = '''<div class="doc">
     tinted=True) + "\n\n" + band(
     "Trust", "Five", "Why trust it", "Competence, stated as what you get.",
     '''      <h2 class="rev">Why you can <strong>trust the answer</strong></h2>
-      <div class="grid3">
+      <div class="rows">
         <div class="rev"><h3>You get judgment, not just a build.</h3><p>Anyone can generate an app now. The hard part is knowing what to make and what to cut, and that's the part you're paying for.</p></div>
         <div class="rev"><h3>You get advice from someone who isn't paid to say yes.</h3><p>When the honest answer is "don't build this," you'll hear it. That's only possible because the value here is the clarity, not the code.</p></div>
         <div class="rev"><h3>You get speed without losing the thinking.</h3><p>The idea gets real in days, with a designer's read on how people actually behave built in.</p></div>
       </div>
-      <p class="lede rev" style="margin-top:30px">The judgment comes from 20 years of deciding what to build and what to cut. The speed comes from nine working apps built in the last few months. If you want that story, it's on the <a href="about.html">about page</a>.</p>''') + "\n\n" + band(
+      <p class="lede rev" style="margin-top:44px">The judgment comes from 20 years of deciding what to build and what to cut. The speed comes from nine working apps built in the last few months. If you want that story, it's on the <a href="about.html">about page</a>.</p>''') + "\n\n" + band(
     "Questions", "Six", "Questions", "The ones that actually get asked.",
     '''      <h2 class="rev">Questions <strong>people ask</strong></h2>
       <div class="faq rev">

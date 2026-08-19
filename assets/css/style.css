@@ -827,10 +827,20 @@ h2{font-size:clamp(1.72rem,3.5vw,2.5rem);line-height:1.1;max-width:19ch;margin-b
 @media(min-width:800px){.doubt .a{margin:0}}
 
 /* Three-up */
-.grid3{display:grid;gap:26px}
-@media(min-width:820px){.grid3{grid-template-columns:repeat(3,1fr);gap:34px}}
-.grid3 h3{font-size:1.1rem;font-weight:640;margin-bottom:8px;line-height:1.25}
-.grid3 p{color:var(--ink-2);font-size:.97rem}
+/* Three or more claims stack as hairline rows, the same anatomy as the pricing
+   stairs: the title is the row's left-hand accent, the body sits beside it.
+   Columns are kept for the places that hold exactly two things. */
+.rows{display:grid;margin-top:14px}
+.rows > div{padding:34px 0;border-top:1px solid var(--sand-300)}
+.rows > div:last-child{border-bottom:1px solid var(--sand-300)}
+@media(min-width:820px){
+  .rows > div{display:grid;grid-template-columns:280px minmax(0,1fr);column-gap:64px;
+    padding:44px 0}
+}
+.rows h3{font-size:1.18rem;font-weight:640;line-height:1.4;letter-spacing:-.01em;
+  margin:0 0 10px}
+@media(min-width:820px){.rows h3{margin-bottom:0}}
+.rows p{color:var(--ink-2);font-size:.98rem;line-height:1.65;max-width:56ch;margin:0}
 
 /* Fit lists */
 .fit{display:grid;gap:18px}
@@ -1180,22 +1190,6 @@ main{position:relative}
 @media(max-width:520px){
   .doubt .q,.quote p{font-size:1.48rem}
 }
-
-/* ── Air ───────────────────────────────────────────────────────────────────
-   The three-up read as one crowded block: three measures of body copy with 26px
-   between them and nothing to separate them. Hairlines and the reference's
-   28-32px of inner padding do the separating now, and the measure is capped so
-   the columns breathe rather than fill. */
-.grid3{gap:34px}
-@media(min-width:820px){
-  .grid3{gap:0;grid-template-columns:repeat(3,minmax(0,1fr));
-    border-top:1px solid var(--sand-300);border-bottom:1px solid var(--sand-300)}
-  .grid3 > *{padding:30px 32px;border-left:1px solid var(--sand-300)}
-  .grid3 > *:first-child{border-left:0;padding-left:0}
-  .grid3 > *:last-child{padding-right:0}
-}
-.grid3 h3{margin-bottom:12px;line-height:1.3}
-.grid3 p{font-size:1rem;line-height:1.72;max-width:36ch}
 
 /* Doubts and steps get the same treatment: room, not boxes.
    The doubts were still boxes, and the box was the problem. Each one is a two
