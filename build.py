@@ -728,7 +728,7 @@ START = '''<div class="doc">
         <div class="stair rev"><p class="k">Step two</p><h3>The build</h3><p class="price">&euro;2,500&ndash;4,000 <span>scoped in step one</span></p><p>The rest of the two weeks: the flow built, the bar set, the brief and the playbook in your hands. Agreed in writing before anything is built, so the number is yours to say no to.</p></div>
         <div class="stair rev"><p class="k">Optional</p><h3>The testing, run for you</h3><p class="price">&euro;900 <span>flat</span></p><p>Finding the right people and getting them in front of it takes real calendar time, which is why it sits outside the two weeks. Run it yourself with the playbook, or have it added on.</p></div>
       </div>
-      <p class="lede rev" style="margin-top:28px">No retainer, no hourly meter, no invoice you didn't
+      <p class="lede rev" style="margin-top:52px">No retainer, no hourly meter, no invoice you didn't
         see coming. Every number is agreed in writing before the work it pays for begins.</p>''',
     tinted=True) + "\n\n" + band(
     "Trust", "Five", "Why trust it", "Competence, stated as what you get.",
