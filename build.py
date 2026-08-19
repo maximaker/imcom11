@@ -166,6 +166,11 @@ def shell(slug, title, desc, body, close_heading, close_body,
     up with is the hero's button, carried down, so the two have to read the same or
     the words change in the instant the handover is meant to be invisible. Pages
     without a hero button keep the plainer wording, since nothing travels there."""
+    # On the start page the closing button cannot usefully point at start.html --
+    # that is the page it is on, and clicking it reloaded the page and dropped the
+    # reader at the top. It opens the intake, which is what every other page's
+    # closing button leads to eventually anyway.
+    cta_href = '#intake' if slug == 'start.html' else 'start.html'
     here = nav_slug or slug
     robots = f'<meta name="robots" content="{robots}">\n' if robots else ''
     # The ride is the hero's button, compacted and carried down the rail, so it is
@@ -230,7 +235,7 @@ def shell(slug, title, desc, body, close_heading, close_body,
     <div>
       <h2>{close_heading}</h2>
       <p class="lede" style="margin-bottom:32px">{close_body}</p>
-      <a class="act" href="start.html" id="cta"><span>{close_cta}</span>
+      <a class="act" href="{cta_href}" id="cta"><span>{close_cta}</span>
         <span class="chip" aria-hidden="true">{ARROW}</span></a>
     </div>
   </section>
@@ -239,7 +244,7 @@ def shell(slug, title, desc, body, close_heading, close_body,
 
   <div class="doc">
   <div class="railfoot">
-    <a class="railcta" href="start.html">
+    <a class="railcta" href="{cta_href}">
       <span class="lbl">{close_cta}</span>
       {ARROW}
     </a>
@@ -323,20 +328,12 @@ HOME = HOME_HERO + "\n\n" + band(
       <p class="lede">Your idea has probably been sitting in a doc for a while. Not because you're lazy, but because committing real money to it feels like a leap and you can't quite see where you'd land.</p>
       <p class="lede">That instinct is right. Most ideas don't fail because nobody could build them. They fail because someone spent months and a pile of money before finding out that <strong>nobody wanted the thing that got built</strong>.</p>''',
     tinted=True) + "\n\n" + band(
-    "Doubts", "Two", "Said out loud", "The three things people think and rarely say.",
-    '''      <h2 class="rev">You might be <strong>thinking</strong></h2>
-      <div class="doubts">
-        <div class="doubt rev" tabindex="0"><p class="q">"What if it's a bad idea and I find out too late."</p><p class="a">You find out first, before anything gets built.</p></div>
-        <div class="doubt rev" tabindex="0"><p class="q">"I'm not technical. I won't understand what's happening."</p><p class="a">You don't need to be. You'll get it explained clearly enough to decide with confidence.</p></div>
-        <div class="doubt rev" tabindex="0"><p class="q">"I don't want to be talked into a build I don't need."</p><p class="a">You won't be. You'll get an honest answer even when the honest answer is no.</p></div>
-      </div>''') + "\n\n" + band(
-    "After", "Three", "After", "The difference between hoping and being able to find out.",
+    "After", "Two", "After", "The difference between hoping and being able to find out.",
     '''      <h2 class="rev">In two weeks, guessing turns into <strong>something you can test</strong></h2>
       <p class="lede">Instead of a doc full of hope and a knot in your stomach, you have something real in your hands and <strong>a bar you agreed to before you saw a single result</strong>.</p>
       <p class="lede">You can walk into a room and show it, not describe it. And when you put it in front of real people, you already know what a good result looks like, so the answer can't quietly become whatever you were hoping for.</p>
-      <p class="lede">If it's a go, you know exactly what to build next. If it's a stop, you kept your money and a year of your life.</p>''',
-    tinted=True) + "\n\n" + band(
-    "Method", "Four", "Method", "Three steps. The first one can end the project, cheaply.",
+      <p class="lede">If it's a go, you know exactly what to build next. If it's a stop, you kept your money and a year of your life.</p>''') + "\n\n" + band(
+    "Method", "Three", "Method", "Three steps. The first one can end the project, cheaply.",
     '''      <h2 class="rev">Three steps, <strong>start to answer</strong></h2>
       <div class="steps">
         <div class="step"><span class="n">Step one</span><h3>Find out if it's worth building.</h3><p>You bring the idea. Together you find the one thing that has to be true for it to work, and you get a straight call. If there's a fatal flaw, you find it here, cheaply, before anything gets built.</p></div>
@@ -344,7 +341,7 @@ HOME = HOME_HERO + "\n\n" + band(
         <div class="step"><span class="n">Step three</span><h3>Test it and decide, with a clear rule.</h3><p>The bar gets set inside the two weeks, before anyone sees the build. The sessions themselves run when your people are actually free, and the playbook tells you exactly how. Or they can be run for you.</p></div>
       </div>
       <p class="rev" style="margin-top:34px"><a class="quiet" href="how-it-works.html">See how it works in detail ''' + ARROW + '''</a></p>''') + "\n\n" + band(
-    "Deliverables", "Five", "Deliverables", "Named things. Yours to keep, extend, or hand to any team.",
+    "Deliverables", "Four", "Deliverables", "Named things. Yours to keep, extend, or hand to any team.",
     '''      <h2 class="rev">What you <strong>own</strong> at the end</h2>
       <div class="assets">
         <div class="asset" data-open="false">
@@ -377,10 +374,18 @@ HOME = HOME_HERO + "\n\n" + band(
       </div>
       <p class="lede rev" style="margin-top:26px">That last one matters more than it looks. It's <strong>the part that keeps working long after the two weeks end</strong>.</p>''',
     tinted=True) + "\n\n" + band(
-    "Terms", "Six", "Terms", "The unusual promise.",
+    "Terms", "Five", "Terms", "The unusual promise.",
     '''      <h2 class="statement" id="statement" data-key="never stuck with me.">You should never be stuck with me.</h2>
       <p class="lede rev">Plenty of people in this business are quietly hoping you'll stay. This works the other way round. When the two weeks end, you can read your own evidence, make your own call, and move forward or walk away without another opinion. You keep the build, the brief, and the method.</p>
       <p class="lede rev">People do come back. Usually with the next idea, or the same one pointed somewhere new. That's <strong>a choice, not a dependency</strong>, and it's the only kind worth having.</p>''') + "\n\n" + band(
+    "Pricing", "Six", "Pricing", "You'll see the whole staircase before you take the first step.",
+    '''      <h2 class="rev">How <strong>pricing works</strong></h2>
+      <div class="stairs">
+        <div class="stair rev"><p class="k">Step one</p><h3>Is this worth building?</h3><p>A small fixed price, set so it's worth it even when the answer is "don't build."</p></div>
+        <div class="stair rev"><p class="k">Step two</p><h3>The build</h3><p>Scoped after step one, once you both know what's actually needed. No surprise numbers, no big commitment before you have proof.</p></div>
+        <div class="stair rev"><p class="k">Optional</p><h3>The testing, run for you</h3><p>Finding the right people and getting them in front of it takes real calendar time, which is why it sits outside the two weeks. Run it yourself with the playbook, or have it added on.</p></div>
+      </div>''',
+    tinted=True) + "\n\n" + band(
     "Trust", "Seven", "Why trust it", "Competence, stated as what you get.",
     '''      <h2 class="rev">Why you can <strong>trust the answer</strong></h2>
       <div class="grid3">
@@ -388,8 +393,7 @@ HOME = HOME_HERO + "\n\n" + band(
         <div class="rev"><h3>You get advice from someone who isn't paid to say yes.</h3><p>When the honest answer is "don't build this," you'll hear it. That's only possible because the value here is the clarity, not the code.</p></div>
         <div class="rev"><h3>You get speed without losing the thinking.</h3><p>The idea gets real in days, with a designer's read on how people actually behave built in.</p></div>
       </div>
-      <p class="lede rev" style="margin-top:30px">The judgment comes from 20 years of deciding what to build and what to cut. The speed comes from nine working apps built in the last few months. If you want that story, it's on the <a href="about.html">about page</a>.</p>''',
-    tinted=True) + "\n\n" + band(
+      <p class="lede rev" style="margin-top:30px">The judgment comes from 20 years of deciding what to build and what to cut. The speed comes from nine working apps built in the last few months. If you want that story, it's on the <a href="about.html">about page</a>.</p>''') + "\n\n" + band(
     "Proof", "Eight", "Proof", "Not theory. Things that run.",
     '''      <h2 class="rev">Nine apps, and <strong>what each one taught me</strong></h2>
       <p class="lede">These were built for real ideas, with the same tools and the same speed you'd get. What matters isn't that they work. It's what got cut to make them work.</p>
@@ -410,8 +414,9 @@ HOME = HOME_HERO + "\n\n" + band(
           <p class="kill"><b>What I'd kill</b>[WHAT I'D KILL]</p>
         </div>
       </div>
-      <p class="rev" style="margin-top:34px"><a class="quiet" href="what-ive-built.html">See the full thinking behind them ''' + ARROW + '''</a></p>''') + "\n\n" + band(
-    "Fit", "Nine", "Fit", "A quick call sorts it out in twenty minutes.",
+      <p class="rev" style="margin-top:34px"><a class="quiet" href="what-ive-built.html">See the full thinking behind them ''' + ARROW + '''</a></p>''',
+    tinted=True) + "\n\n" + band(
+    "Fit", "Nine", "Fit", "Two lists. Ten minutes of questions settle which one is yours.",
     '''      <h2 class="rev">Who this <strong>works for</strong></h2>
       <div class="fit">
         <div class="fit__col rev">
@@ -432,12 +437,12 @@ HOME = HOME_HERO + "\n\n" + band(
         </div>
       </div>
       <p class="lede rev" style="margin-top:26px">No hard feelings either way.</p>''') + "\n\n" + band(
-    "Pricing", "Ten", "Pricing", "You'll see the whole staircase before you take the first step.",
-    '''      <h2 class="rev">How <strong>pricing works</strong></h2>
-      <div class="stairs">
-        <div class="stair rev"><p class="k">Step one</p><h3>Is this worth building?</h3><p>A small fixed price, set so it's worth it even when the answer is "don't build."</p></div>
-        <div class="stair rev"><p class="k">Step two</p><h3>The build</h3><p>Scoped after step one, once you both know what's actually needed. No surprise numbers, no big commitment before you have proof.</p></div>
-        <div class="stair rev"><p class="k">Optional</p><h3>The testing, run for you</h3><p>Finding the right people and getting them in front of it takes real calendar time, which is why it sits outside the two weeks. Run it yourself with the playbook, or have it added on.</p></div>
+    "Doubts", "Ten", "Said out loud", "The three things people think and rarely say.",
+    '''      <h2 class="rev">You might be <strong>thinking</strong></h2>
+      <div class="doubts">
+        <div class="doubt rev" tabindex="0"><p class="q">"What if it's a bad idea and I find out too late."</p><p class="a">You find out first, before anything gets built.</p></div>
+        <div class="doubt rev" tabindex="0"><p class="q">"I'm not technical. I won't understand what's happening."</p><p class="a">You don't need to be. You'll get it explained clearly enough to decide with confidence.</p></div>
+        <div class="doubt rev" tabindex="0"><p class="q">"I don't want to be talked into a build I don't need."</p><p class="a">You won't be. You'll get an honest answer even when the honest answer is no.</p></div>
       </div>''',
     tinted=True) + "\n\n" + band(
     "Questions", "Eleven", "Questions", "The ones that actually get asked.",
