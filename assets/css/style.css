@@ -869,11 +869,13 @@ h2{font-size:clamp(1.72rem,3.5vw,2.5rem);line-height:1.1;max-width:19ch;margin-b
 .stairs{display:grid;margin-top:14px}
 .stair{padding:38px 0;border-top:1px solid var(--sand-300)}
 .stair:last-child{border-bottom:1px solid var(--sand-300)}
+/* The two-column row belongs to the priced staircase only: the case study's
+   timeline uses the same bones with nothing to put in a left column. */
 @media(min-width:900px){
-  .stair{display:grid;grid-template-columns:280px minmax(0,1fr);column-gap:64px;
-    padding:52px 0}
-  .stair .price{grid-column:1;grid-row:1/span 3;align-self:start}
-  .stair .k,.stair h3,.stair p{grid-column:2}
+  .stairs--price .stair{display:grid;grid-template-columns:280px minmax(0,1fr);
+    column-gap:64px;padding:52px 0}
+  .stairs--price .stair .price{grid-column:1;grid-row:1/span 3;align-self:start}
+  .stairs--price .stair .k,.stairs--price .stair h3,.stairs--price .stair p{grid-column:2}
 }
 .stair .k{font-size:11px;text-transform:uppercase;letter-spacing:2.4px;font-weight:500;
   color:var(--clay-500);margin:0 0 14px}
@@ -888,7 +890,7 @@ h2{font-size:clamp(1.72rem,3.5vw,2.5rem);line-height:1.1;max-width:19ch;margin-b
 .stair .price span{display:block;font-size:11px;text-transform:uppercase;
   letter-spacing:2.4px;font-weight:500;color:var(--ink-2);margin:12px 0 0;
   font-family:var(--mono)}
-@media(min-width:900px){.stair .price{margin-bottom:0}}
+@media(min-width:900px){.stairs--price .stair .price{margin-bottom:0}}
 .stair p{font-size:.98rem;color:var(--ink-2);margin:0;line-height:1.65}
 
 /* Probe lists */

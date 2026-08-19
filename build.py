@@ -723,7 +723,7 @@ START = '''<div class="doc">
       <p class="lede rev">People do come back. Usually with the next idea, or the same one pointed somewhere new. That's <strong>a choice, not a dependency</strong>, and it's the only kind worth having.</p>''') + "\n\n" + band(
     "Pricing", "Four", "Pricing", "You'll see the whole staircase before you take the first step.",
     '''      <h2 class="rev">How <strong>pricing works</strong></h2>
-      <div class="stairs">
+      <div class="stairs stairs--price">
         <div class="stair rev"><p class="k">Step one</p><h3>Is this worth building?</h3><p class="price">&euro;450 <span>fixed</span></p><p>The first days of the two weeks: we go through what you wrote, find the riskiest assumption, and shape what &mdash; if anything &mdash; deserves to be built. Priced so that "don't build" is a cheap answer to get.</p></div>
         <div class="stair rev"><p class="k">Step two</p><h3>The build</h3><p class="price">&euro;2,500&ndash;4,000 <span>scoped in step one</span></p><p>The rest of the two weeks: the flow built, the bar set, the brief and the playbook in your hands. Agreed in writing before anything is built, so the number is yours to say no to.</p></div>
         <div class="stair rev"><p class="k">Optional</p><h3>The testing, run for you</h3><p class="price">&euro;900 <span>flat</span></p><p>Finding the right people and getting them in front of it takes real calendar time, which is why it sits outside the two weeks. Run it yourself with the playbook, or have it added on.</p></div>
