@@ -38,7 +38,7 @@ MARK = ('<svg class="mark" viewBox="0 0 32 32" aria-hidden="true">'
 # flow" light and "first" semibold, with the dot as the accent, so the mark
 # says which half of it is the name. Kept inside the one <span> because
 # intro.js reveals '.top .name span'.
-WORDMARK = '<i>one flow</i><em>.</em><b>first</b>'
+WORDMARK = '<i>one flow</i><em aria-hidden="true"></em><b>first</b>'
 
 GATE = '''<script>
 /* Decides, before anything paints, whether the first-load animation runs. It has
@@ -211,7 +211,7 @@ def shell(slug, title, desc, body, close_heading, close_body,
 
 <header class="top" id="top">
   <div class="doc top__row">
-    <a class="name" href="index.html">{MARK}<span>{WORDMARK}</span></a>
+    <a class="name" href="index.html" aria-label="one flow first, home">{MARK}<span>{WORDMARK}</span></a>
     <button class="navtoggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="Open menu">
       <span aria-hidden="true"></span><span aria-hidden="true"></span>
     </button>

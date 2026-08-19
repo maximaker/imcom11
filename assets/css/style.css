@@ -796,7 +796,19 @@ h2{font-size:clamp(1.72rem,3.5vw,2.5rem);line-height:1.1;max-width:19ch;margin-b
 
 .top .name{font-family:var(--display);font-weight:640;font-size:17px;
   letter-spacing:-0.02em;color:var(--ink);text-decoration:none}
-.top .name em{font-style:normal;color:var(--clay-500)}
+/* ── The wordmark's separator ──
+   A drawn dot rather than a full stop. A period is a glyph: it sits on the baseline,
+   at whatever weight and size the face decides, and it read as punctuation between two
+   words rather than as a mark holding them apart. This is a circle at the optical
+   centre of the line, sized and spaced deliberately.
+   The words are laid out with inline-flex and a gap rather than by putting spaces in
+   the markup, so the air either side of the dot is one number that does not change
+   with the font's word-space. That is also why the anchor carries an aria-label: a
+   whitespace-only text node between flex items is dropped, so without it the name
+   reads "one flowfirst". */
+.name > span{display:inline-flex;align-items:center;gap:.42em}
+.name em{flex:none;width:.29em;height:.29em;border-radius:50%;
+  background:var(--clay-500);font-style:normal}
 
 /* Mobile nav: a real menu button rather than a wrapping row of links. */
 .navtoggle{display:none}
@@ -1550,8 +1562,8 @@ h3{font-weight:500;letter-spacing:-.015em;line-height:1.25}
    light, the dot in terracotta, "first" semibold. The dot was already the accent
    here; the weight split is new, and it is what makes the mark say which half of
    it is the name. */
-.top .name i{font-style:normal;font-weight:300}
-.top .name b{font-weight:600}
+.name i{font-style:normal;font-weight:300}
+.name b{font-weight:600}
 
 /* ── Press is felt ──
    .985, which the doc calls barely visible and entirely noticeable. Buttons and
