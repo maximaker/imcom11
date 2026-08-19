@@ -1687,3 +1687,135 @@ h3{font-weight:500;letter-spacing:-.015em;line-height:1.25}
     grid-template-columns:auto auto;justify-content:start;gap:20px}
 }
 .form-status .act--block{width:auto}
+
+/* ── The intake page ──
+   The point of this page is that there is nothing on it. The same eleven questions
+   inside a card in the middle of start.html read as a contact form that would not
+   end, because they were surrounded by a masthead, a nav, a rail, a margin note, a
+   checklist, a closing section and a footer, and every one of those said "there is
+   more of this below". Alone on a page, one question at a time, the same eleven
+   read as a conversation. That is the whole change; the questions did not move. */
+.bare{min-height:100vh;display:flex;flex-direction:column}
+
+/* A rule at the very top, and the only ambient indicator on the site: it reports
+   how far through the reader is and nothing else. Accent here, where there is no
+   rail for it to compete with and progress is worth being able to see. */
+.intakeprog{position:fixed;top:0;left:0;right:0;height:2px;z-index:60;
+  background:var(--clay-400);transform:scaleX(0);transform-origin:left;
+  transition:transform var(--t-slow) var(--ease-out)}
+
+.baretop{display:flex;align-items:center;justify-content:space-between;gap:20px;
+  padding:26px 20px;max-width:760px;width:100%;margin:0 auto;box-sizing:border-box}
+@media(min-width:620px){.baretop{padding:34px 40px}}
+/* Exit, not Back: Back is the button inside the form that moves one question, and
+   two controls a centimetre apart both saying back is how a reader loses their place. */
+.exit{display:inline-flex;align-items:center;gap:8px;min-height:44px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-3);text-decoration:none;
+  transition:color var(--t-fast) var(--ease-out)}
+.exit:hover{color:var(--clay-500)}
+.exit span{font-size:16px;line-height:1}
+
+.intakepage{flex:1;display:flex;align-items:center;justify-content:center;
+  padding:20px 20px 72px;box-sizing:border-box}
+@media(min-width:620px){.intakepage{padding:32px 40px 96px}}
+.intakepage > *{width:100%;max-width:660px}
+.intakepage .intake{max-width:660px}
+
+/* The question, alone on a screen, gets the size a heading gets. This is the only
+   place the interface type scale and the display scale meet. */
+.intakepage .qstep > .field__label,
+.intakepage .qstep .qfield legend{font-size:clamp(1.5rem,3.4vw,2.05rem);
+  font-weight:300;line-height:1.18;letter-spacing:-.022em;margin-bottom:14px}
+.intakepage .qstep > .field__hint,
+.intakepage .qstep__hint{font-size:1rem;margin-bottom:22px;max-width:44ch}
+/* The contact step asks a question like every other step, but its two fields carry
+   their own labels, so the question has to be a heading rather than a label. It was
+   the one step with nothing set at question size, which made the end of the form look
+   like a different form. */
+.intakepage .qstep__q{font-size:clamp(1.5rem,3.4vw,2.05rem);font-weight:300;
+  line-height:1.18;letter-spacing:-.022em;margin:0 0 10px}
+.qstep__hint{display:block;color:var(--ink-3);line-height:1.6}
+.intakepage .qstep .textarea{min-height:132px;font-size:17px;line-height:1.6}
+.intakepage .intake__steps{gap:0}
+
+/* The welcome. It is a step like any other so that with scripting off it is simply
+   the paragraph above the questions, and so Back out of question one returns here
+   rather than to nothing. */
+.qstep--open h1{font-size:clamp(1.9rem,4.6vw,2.9rem);font-weight:200;
+  letter-spacing:-.03em;line-height:1.1;margin-bottom:22px}
+.qstep--open .lede{max-width:48ch}
+.qstep--open .lede + .lede{margin-top:16px}
+
+.intakepage .intake__bar{margin:30px 0 0;order:2}
+.intakepage .intake{display:flex;flex-direction:column}
+.intakepage .intake__steps{order:0}
+.intakepage .intake > button[type="submit"]{order:1;margin-top:30px;width:auto;
+  align-self:start}
+.intakepage .fineprint{order:3;margin-top:22px}
+@media(max-width:519px){
+  .intakepage .intake > button[type="submit"]{width:100%}
+}
+
+/* The brief, when it arrives, is the only thing on the page. */
+.intakepage .form-status{display:none}
+.intakepage .form-status[data-visible="true"]{display:block}
+.intakepage .form-status h3{font-size:clamp(1.6rem,3.6vw,2.2rem);font-weight:300;
+  letter-spacing:-.025em;line-height:1.16;margin-bottom:16px}
+.intakepage .form-status > div > p{color:var(--ink-2);font-size:1rem;line-height:1.7;
+  max-width:56ch;margin-bottom:24px}
+
+/* ── The takeover ──
+   Fixed over everything, opaque, and its own scroll container. The grain is on body
+   and body is behind this, so the overlay repeats it rather than showing through:
+   it has to look like the same paper, not like a sheet laid on top of it. */
+.takeover[data-modal="true"]{position:fixed;inset:0;z-index:100;overflow-y:auto;
+  overscroll-behavior:contain;
+  background-color:var(--sand-100);
+  background-image:
+    repeating-linear-gradient(0deg,  rgba(23,27,52,.016) 0 1px, rgba(23,27,52,0) 1px 3px),
+    repeating-linear-gradient(90deg, rgba(23,27,52,.013) 0 1px, rgba(23,27,52,0) 1px 4px),
+    repeating-linear-gradient(37deg, rgba(120,92,40,.012) 0 1px, rgba(120,92,40,0) 1px 5px);
+  display:flex;flex-direction:column}
+.takeover[hidden]{display:none}
+/* Un-promoted, it is a section: separated from the page above it by a rule, every
+   question visible, and no way for it to cover anything. */
+.takeover:not([data-modal="true"]){border-top:1px solid var(--sand-300);
+  margin-top:var(--s-2xl);padding-top:var(--s-xl)}
+.takeover:not([data-modal="true"]) .takeover__top .exit,
+.takeover:not([data-modal="true"]) .intakeprog,
+.takeover:not([data-modal="true"]) .intake__bar{display:none}
+.takeover:not([data-modal="true"]) .takeover__body{display:block}
+/* No animation on the way in beyond the paper arriving: a modal that slides is a
+   modal you wait for, and the first question should already be readable. */
+.takeover__top{display:flex;align-items:center;justify-content:space-between;gap:20px;
+  padding:22px 20px;max-width:760px;width:100%;margin:0 auto;box-sizing:border-box;
+  flex:none}
+@media(min-width:620px){.takeover__top{padding:30px 40px}}
+.takeover__top .name{font-family:var(--display);font-size:17px;font-weight:600;
+  letter-spacing:-.02em;color:var(--ink);display:flex;align-items:center;gap:10px}
+.takeover__top .name .mark{width:24px;height:24px}
+.takeover__body{flex:1}
+
+/* Close, not Back: Back is the control inside the form that moves one question, and
+   two things a centimetre apart both meaning backwards is how a reader loses
+   their place. */
+.exit{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0;
+  background:none;border:0;cursor:pointer;
+  font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-3);text-decoration:none;
+  transition:color var(--t-fast) var(--ease-out)}
+.exit:hover{color:var(--clay-500)}
+.exit span{font-size:16px;line-height:1}
+
+/* The rule at the top of the overlay, and the only ambient indicator on the site:
+   it reports how far through the reader is and nothing else. */
+.takeover[data-modal="true"] .intakeprog{position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--clay-400);transform:scaleX(0);transform-origin:left;
+  transition:transform var(--t-slow) var(--ease-out)}
+
+/* Nothing behind the overlay is reachable, including by a rail that is position:fixed
+   and would otherwise paint straight through it. */
+html[data-over="true"] .spine,
+html[data-over="true"] .ride,
+html[data-over="true"] .top{display:none}

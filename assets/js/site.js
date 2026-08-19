@@ -505,7 +505,107 @@
      and hand over themselves, and the page says plainly that nothing has moved until
      they do. Which is also the better version of the idea: the answers are worth more
      to them than to me, so they get them either way. */
-  var form=document.getElementById('intake');
+  /* ── The takeover ──
+     The intake fills the viewport rather than sitting in a card. That is the whole
+     difference between it reading as a conversation and reading as a contact form
+     that will not end: the same eleven questions inside a page, under a masthead and
+     over a footer, are surrounded by things saying "there is more of this below".
+     An overlay rather than a page of its own, so nothing is navigated away from and
+     the reader lands back exactly where they were. It is a real dialog: the page
+     behind it cannot be scrolled or tabbed into, Escape closes it, and focus returns
+     to the button that opened it. */
+  /* The overlay carries the id 'intake', not the form inside it, so that the button's
+     href="#intake" is a real anchor: with scripting off it scrolls to the questions
+     instead of pointing at nothing. */
+  var over=document.getElementById('intake');
+  var opener=document.getElementById('intake-open');
+  if(over && opener){
+    /* Promoted here rather than in the markup, so that a reader without scripting gets
+       the questions as an ordinary form at the foot of the page and the button above
+       simply scrolls to them. data-modal is what the stylesheet keys the fixed
+       positioning to, so until this line runs the overlay is a section. */
+    over.setAttribute('data-modal','true');
+    over.setAttribute('role','dialog');
+    over.setAttribute('aria-modal','true');
+    over.hidden=true;
+
+    var lastFocus=null, scrollAt=0;
+    var FOCUSABLE='a[href],button:not([disabled]),textarea,input,select,[tabindex]:not([tabindex="-1"])';
+    /* Prefixing a comma-separated selector list scopes only its first term: the rest
+       stay unscoped and match the whole subtree. It looked right and put focus on the
+       Close button, because that is the first button in the overlay rather than the
+       first thing in the step. Each term has to be prefixed on its own. */
+    function within(scope, sel){
+      return sel.split(',').map(function(part){ return scope+' '+part.trim(); }).join(',');
+    }
+
+    function openOver(){
+      if(!over.hidden) return;
+      lastFocus=document.activeElement;
+      scrollAt=window.scrollY;
+      over.hidden=false;
+      /* position:fixed on the body rather than overflow:hidden. Hiding overflow
+         alone does not stop iOS scrolling the page behind a fixed overlay, and it
+         loses the scroll position on the way back; this holds the page still and
+         puts it back on exactly the pixel it was on. */
+      document.body.style.position='fixed';
+      document.body.style.top=(-scrollAt)+'px';
+      document.body.style.left='0';
+      document.body.style.right='0';
+      document.documentElement.setAttribute('data-over','true');
+      var first=over.querySelector(within('.intake__steps .qstep:not([hidden])', FOCUSABLE))
+             || over.querySelector('button[type="submit"]');
+      if(first) first.focus();
+    }
+    function closeOver(){
+      if(over.hidden) return;
+      over.hidden=true;
+      document.body.style.position='';
+      document.body.style.top='';
+      document.body.style.left='';
+      document.body.style.right='';
+      document.documentElement.removeAttribute('data-over');
+      window.scrollTo(0, scrollAt);
+      if(location.hash==='#intake'){
+        history.replaceState(null,'',location.pathname+location.search);
+      }
+      /* Back to the button that opened it. lastFocus is whatever had focus at the
+         time, which is the opener when a person clicked it, but body when the overlay
+         was opened from the hash -- and focusing body puts the reader at the top of
+         the document with no idea where they are. */
+      var back = (lastFocus && lastFocus.focus && lastFocus!==document.body)
+               ? lastFocus : opener;
+      if(back && back.focus) back.focus();
+    }
+
+    opener.addEventListener('click',function(e){ e.preventDefault(); openOver(); });
+    var exit=document.getElementById('takeover-exit');
+    if(exit) exit.addEventListener('click',closeOver);
+
+    document.addEventListener('keydown',function(e){
+      if(over.hidden) return;
+      if(e.key==='Escape'){ e.preventDefault(); closeOver(); return; }
+      if(e.key!=='Tab') return;
+      /* The trap. Without it Tab walks out of the overlay and into a page the reader
+         cannot see, which is the specific way a modal betrays a keyboard user. */
+      var f=[].slice.call(over.querySelectorAll(FOCUSABLE)).filter(function(el){
+        return el.offsetParent!==null || el===document.activeElement;
+      });
+      if(!f.length) return;
+      var first=f[0], last=f[f.length-1];
+      if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+      else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+    });
+
+    /* Linkable, so the hero's button on any page can point straight at it with
+       start.html#intake and skip the explaining. */
+    if(location.hash==='#intake') openOver();
+    addEventListener('hashchange',function(){
+      if(location.hash==='#intake') openOver();
+    });
+  }
+
+  var form=document.getElementById('intake-form');
   if(form){
     var status=document.getElementById('form-status');
     var submit=form.querySelector('button[type="submit"]');
@@ -564,15 +664,28 @@
       }catch(e){ return 0; }
     }
 
+    /* The welcome is a step so that Back out of question one has somewhere to go and
+       so the un-paginated form reads as a paragraph above the questions. It is not a
+       question though, so it does not count: "1 of 12" on a page that promises eleven
+       is a small lie, and the reader is counting. */
+    var counted = steps.filter(function(s){ return s.getAttribute('data-count')!=='skip'; });
+    var prog = document.getElementById('intakeprog');
+
     function paint(){
       steps.forEach(function(s,i){ s.hidden = (i!==at); });
       var last = at===steps.length-1;
-      submitLabel.textContent = last ? 'Send it over' : 'Next';
+      var here = counted.indexOf(steps[at]);
+      submitLabel.textContent = last ? 'Send it over'
+                             : here<0 ? 'Begin' : 'Next';
       submit.setAttribute('data-role', last ? 'send' : 'next');
       back.hidden = at===0;
-      count.textContent = (at+1) + ' of ' + steps.length;
+      count.textContent = here<0 ? '' : (here+1) + ' of ' + counted.length;
       bar.hidden = false;
       form.setAttribute('data-step', String(at+1));
+      if(prog){
+        var done = here<0 ? 0 : (here+1)/counted.length;
+        prog.style.transform = 'scaleX(' + done.toFixed(4) + ')';
+      }
     }
     function go(to){
       at = Math.max(0, Math.min(steps.length-1, to));

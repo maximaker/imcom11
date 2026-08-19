@@ -588,6 +588,125 @@ ABOUT = '''<div class="doc">
       </ul>
       <p class="statement" id="statement" style="margin-top:44px">Not hundreds of clients. Twenty years and nine things that run.</p>''')
 
+
+TAKEOVER = f'''<!-- Ships as an ordinary section at the foot of the page, and site.js promotes it
+     to a dialog. The other way round -- hidden and role="dialog" in the markup -- meant
+     that with scripting off the intake did not exist at all, and the button pointing at
+     it jumped to nothing. -->
+<div class="takeover" id="intake" aria-labelledby="takeover-title">
+  <i class="intakeprog" id="intakeprog" aria-hidden="true"></i>
+  <div class="takeover__top">
+    <span class="name" aria-hidden="true">{MARK}<span>{WORDMARK}</span></span>
+    <button class="exit" type="button" id="takeover-exit">Close<span aria-hidden="true">&times;</span></button>
+  </div>
+  <div class="takeover__body intakepage">
+    <div class="form-status" id="form-status" tabindex="-1" role="status" aria-live="polite">
+      <h3>Here it is. It&rsquo;s yours either way.</h3>
+      <p>Nothing has been sent yet &mdash; this site has no server to send it to, and a
+        form that says &ldquo;sent&rdquo; when it means &ldquo;discarded&rdquo; is worse than no form. Copy it
+        or open it in your mail app, and it reaches me the moment you hit send. Keep a
+        copy either way: the answers are more use to you than they are to me.</p>
+      <label class="field__label" for="brief">Your brief</label>
+      <textarea class="textarea" id="brief" rows="14" readonly></textarea>
+      <div class="briefacts">
+        <button class="act" type="button" id="brief-mail"><span>Open in your mail app</span></button>
+        <button class="quiet" type="button" id="brief-copy">Copy it instead</button>
+      </div>
+    </div>
+    <form class="intake" id="intake-form" novalidate>
+      <ol class="intake__steps">
+        <li class="qstep qstep--open" data-count="skip">
+          <h2 class="qstep__q qstep__q--big" id="takeover-title">A few questions about your idea.</h2>
+          <p class="lede">About ten minutes if you take your time. There are no right
+            answers and none of this is a test &mdash; a rough answer is more use to me
+            than a polished one.</p>
+          <p class="lede">Only the idea and your email are needed. Skip anything you&rsquo;d
+            rather say out loud. It saves as you go, so you can close this and come back.</p>
+        </li>
+        <li class="qstep" id="q-idea-step" data-q="1">
+          <label class="field__label" for="q-idea">What's the idea? <span class="req" aria-hidden="true">*</span></label>
+          <span class="field__hint">One or two sentences. Rough is fine &mdash; this is not a pitch.</span>
+          <textarea class="textarea" id="q-idea" name="idea" required aria-describedby="q-idea-error" rows="3" placeholder="It&rsquo;s a&hellip;"></textarea>
+          <p class="field__error" id="q-idea-error">A sentence is enough, but it needs to be a sentence.</p>
+        </li>
+        <li class="qstep" id="q-who-step" data-q="2">
+          <label class="field__label" for="q-who">Who is it for, specifically? <span class="qstep__opt">Optional</span></label>
+          <span class="field__hint">Not everyone. The narrower you can make this, the more useful the two weeks are.</span>
+          <textarea class="textarea" id="q-who" name="who" rows="3" placeholder="It&rsquo;s for&hellip;"></textarea>
+        </li>
+        <li class="qstep" id="q-instead-step" data-q="3">
+          <label class="field__label" for="q-instead">What do they do instead today? <span class="qstep__opt">Optional</span></label>
+          <span class="field__hint">Whatever you&rsquo;d be replacing, even if it&rsquo;s a spreadsheet, a WhatsApp thread, or nothing.</span>
+          <textarea class="textarea" id="q-instead" name="instead" rows="3" placeholder="Right now they&hellip;"></textarea>
+        </li>
+        <li class="qstep" id="q-true-step" data-q="4">
+          <p class="qstep__frame">This is the one the two weeks gets built around.</p>
+          <label class="field__label" for="q-true">What has to be true for this to work? <span class="qstep__opt">Optional</span></label>
+          <span class="field__hint">The one thing that, if it turned out false, would make the rest pointless.</span>
+          <textarea class="textarea" id="q-true" name="assumption" rows="3" placeholder="It only works if&hellip;"></textarea>
+        </li>
+        <li class="qstep" id="q-unsure-step" data-q="5">
+          <label class="field__label" for="q-unsure">Which part are you least sure about? <span class="qstep__opt">Optional</span></label>
+          <span class="field__hint">It&rsquo;s usually not the part that&rsquo;s hardest to build.</span>
+          <textarea class="textarea" id="q-unsure" name="unsure" rows="3" placeholder="I&rsquo;m least sure that&hellip;"></textarea>
+        </li>
+        <li class="qstep" id="q-wrong-step" data-q="6">
+          <label class="field__label" for="q-wrong">How would you know you were wrong? <span class="qstep__opt">Optional</span></label>
+          <span class="field__hint">A number, a behaviour, anything you could actually watch happen.</span>
+          <textarea class="textarea" id="q-wrong" name="wrong" rows="3" placeholder="I&rsquo;d know if&hellip;"></textarea>
+        </li>
+        <li class="qstep" id="q-no-step" data-q="7">
+          <p class="qstep__frame">An honest answer here is worth more than a polite one.</p>
+          <label class="field__label" for="q-no">What would you do if the answer came back no? <span class="qstep__opt">Optional</span></label>
+          <textarea class="textarea" id="q-no" name="ifno" rows="3" placeholder="If it&rsquo;s a no, I&rsquo;d&hellip;"></textarea>
+        </li>
+        <li class="qstep" id="q-sitting-step" data-q="8">
+          <label class="field__label" for="q-sitting">How long has this been sitting? <span class="qstep__opt">Optional</span></label>
+          <span class="field__hint">A doc, a note, a conversation you keep having.</span>
+          <textarea class="textarea" id="q-sitting" name="sitting" rows="3" placeholder="About&hellip;"></textarea>
+        </li>
+        <li class="qstep" id="q-pressure-step" data-q="9">
+          <label class="field__label" for="q-pressure">What&rsquo;s the pressure? <span class="qstep__opt">Optional</span></label>
+          <span class="field__hint">A date, a competitor, money running out, a person waiting on you. Or none.</span>
+          <textarea class="textarea" id="q-pressure" name="pressure" rows="3" placeholder="The pressure is&hellip;"></textarea>
+        </li>
+        <li class="qstep" id="q-want-step" data-q="10">
+          <fieldset class="qfield">
+            <legend class="field__label">What do you want out of the two weeks? <span class="qstep__opt">Optional</span></legend>
+            <label class="pick"><input type="radio" name="want" value="yes-no"><span>A straight yes or no</span></label>
+            <label class="pick"><input type="radio" name="want" value="built"><span>Something built I can put in front of people</span></label>
+            <label class="pick"><input type="radio" name="want" value="rule"><span>A rule I can trust for the next decision</span></label>
+            <label class="pick"><input type="radio" name="want" value="unsure"><span>Not sure yet</span></label>
+          </fieldset>
+        </li>
+        <li class="qstep" id="q-contact-step" data-q="11">
+          <p class="qstep__frame">Last one.</p>
+          <h2 class="qstep__q">Where should I send my reply?</h2>
+          <p class="qstep__hint">I read every one of these myself. No scoring, no
+            auto-reply, nothing in between.</p>
+          <div class="field">
+            <label class="field__label" for="name">Your name <span class="req" aria-hidden="true">*</span></label>
+            <input class="input" type="text" id="name" name="name" autocomplete="name" required aria-describedby="name-error">
+            <p class="field__error" id="name-error">Please add your name so I know who I&rsquo;m talking to.</p>
+          </div>
+          <div class="field">
+            <label class="field__label" for="email">Email <span class="req" aria-hidden="true">*</span></label>
+            <input class="input" type="email" id="email" name="email" autocomplete="email" inputmode="email" required aria-describedby="email-error">
+            <p class="field__error" id="email-error">Please enter an email address I can reply to.</p>
+          </div>
+        </li>
+      </ol>
+      <div class="intake__bar" hidden>
+        <button class="quiet intake__back" type="button">Back</button>
+        <p class="intake__count" aria-live="polite"></p>
+      </div>
+      <button class="act" type="submit"><span>Send it over</span></button>
+      <p class="fineprint">Your answers stay in this browser until you send them, and
+        are used to reply to you about this call and nothing else. No list, no sequence.</p>
+    </form>
+  </div>
+</div>'''
+
 START = '''<div class="doc">
   <section class="open">
     <div class="inner">
@@ -614,105 +733,17 @@ START = '''<div class="doc">
       </div>
 
       <div class="form-card rev">
-        <div class="form-status" id="form-status" tabindex="-1" role="status" aria-live="polite">
-          <div>
-            <h3>Here it is. It's yours either way.</h3>
-            <p>Nothing has been sent yet — this site has no server to send it to, and
-              a form that says "sent" when it means "discarded" is worse than no form.
-              Copy it or open it in your mail app, and it reaches me the moment you hit
-              send. Keep a copy regardless: the answers are more use to you than to me.</p>
-            <label class="field__label" for="brief">Your brief</label>
-            <textarea class="textarea" id="brief" rows="14" readonly></textarea>
-            <div class="briefacts">
-              <button class="act act--block" type="button" id="brief-mail"><span>Open in your mail app</span></button>
-              <button class="quiet" type="button" id="brief-copy">Copy it instead</button>
-            </div>
-          </div>
-        </div>
-        <form class="intake" id="intake" novalidate>
-          <p class="intake__lead">Ten questions, then your details. They are the same
-            ones I would ask on the call, so answering them here means the call starts
-            at the interesting part. Only the idea and your email are needed — skip
-            anything you would rather talk through.</p>
-          <ol class="intake__steps">
-        <li class="qstep" id="q-idea-step" data-q="1">
-          <label class="field__label" for="q-idea">What's the idea? <span class="req" aria-hidden="true">*</span></label>
-          <span class="field__hint">One or two sentences. Rough is fine — this is not a pitch.</span>
-          <textarea class="textarea" id="q-idea" name="idea" required aria-describedby="q-idea-error" rows="3" placeholder="It's a…"></textarea>
-          <p class="field__error" id="q-idea-error">A sentence is enough, but it needs to be a sentence.</p>
-        </li>
-        <li class="qstep" id="q-who-step" data-q="2">
-          <label class="field__label" for="q-who">Who is it for, specifically? <span class="qstep__opt">Optional</span></label>
-          <span class="field__hint">Not everyone. The narrower you can make this, the more useful the two weeks are.</span>
-          <textarea class="textarea" id="q-who" name="who" rows="3" placeholder="It's for…"></textarea>
-        </li>
-        <li class="qstep" id="q-instead-step" data-q="3">
-          <label class="field__label" for="q-instead">What do they do instead today? <span class="qstep__opt">Optional</span></label>
-          <span class="field__hint">Whatever you'd be replacing, even if it's a spreadsheet, a WhatsApp thread, or nothing.</span>
-          <textarea class="textarea" id="q-instead" name="instead" rows="3" placeholder="Right now they…"></textarea>
-        </li>
-        <li class="qstep" id="q-true-step" data-q="4">
-          <p class="qstep__frame">This is the one the two weeks gets built around.</p>
-          <label class="field__label" for="q-true">What has to be true for this to work? <span class="qstep__opt">Optional</span></label>
-          <span class="field__hint">The one thing that, if it turned out false, would make the rest pointless.</span>
-          <textarea class="textarea" id="q-true" name="assumption" rows="3" placeholder="It only works if…"></textarea>
-        </li>
-        <li class="qstep" id="q-unsure-step" data-q="5">
-          <label class="field__label" for="q-unsure">Which part are you least sure about? <span class="qstep__opt">Optional</span></label>
-          <span class="field__hint">It's usually not the part that's hardest to build.</span>
-          <textarea class="textarea" id="q-unsure" name="unsure" rows="3" placeholder="I'm least sure that…"></textarea>
-        </li>
-        <li class="qstep" id="q-wrong-step" data-q="6">
-          <label class="field__label" for="q-wrong">How would you know you were wrong? <span class="qstep__opt">Optional</span></label>
-          <span class="field__hint">A number, a behaviour, anything you could actually watch happen.</span>
-          <textarea class="textarea" id="q-wrong" name="wrong" rows="3" placeholder="I'd know if…"></textarea>
-        </li>
-        <li class="qstep" id="q-no-step" data-q="7">
-          <p class="qstep__frame">An honest answer here is worth more than a polite one.</p>
-          <label class="field__label" for="q-no">What would you do if the answer came back no? <span class="qstep__opt">Optional</span></label>
-          <textarea class="textarea" id="q-no" name="ifno" rows="3" placeholder="If it's a no, I'd…"></textarea>
-        </li>
-        <li class="qstep" id="q-sitting-step" data-q="8">
-          <label class="field__label" for="q-sitting">How long has this been sitting? <span class="qstep__opt">Optional</span></label>
-          <span class="field__hint">A doc, a note, a conversation you keep having.</span>
-          <textarea class="textarea" id="q-sitting" name="sitting" rows="3" placeholder="About…"></textarea>
-        </li>
-        <li class="qstep" id="q-pressure-step" data-q="9">
-          <label class="field__label" for="q-pressure">What's the pressure? <span class="qstep__opt">Optional</span></label>
-          <span class="field__hint">A date, a competitor, money running out, a person waiting on you. Or none.</span>
-          <textarea class="textarea" id="q-pressure" name="pressure" rows="3" placeholder="The pressure is…"></textarea>
-        </li>
-        <li class="qstep" id="q-want-step" data-q="10">
-          <fieldset class="qfield">
-            <legend class="field__label">What do you want out of the two weeks? <span class="qstep__opt">Optional</span></legend>
-            <label class="pick"><input type="radio" name="want" value="yes-no"><span>A straight yes or no</span></label>
-            <label class="pick"><input type="radio" name="want" value="built"><span>Something built I can put in front of people</span></label>
-            <label class="pick"><input type="radio" name="want" value="rule"><span>A rule I can trust for the next decision</span></label>
-            <label class="pick"><input type="radio" name="want" value="unsure"><span>Not sure yet</span></label>
-          </fieldset>
-        </li>
-        <li class="qstep" id="q-contact-step" data-q="11">
-          <p class="qstep__frame">I read every one of these myself.</p>
-          <div class="field">
-            <label class="field__label" for="name">Your name <span class="req" aria-hidden="true">*</span></label>
-            <input class="input" type="text" id="name" name="name" autocomplete="name" required aria-describedby="name-error">
-            <p class="field__error" id="name-error">Please add your name so I know who I'm talking to.</p>
-          </div>
-          <div class="field">
-            <label class="field__label" for="email">Email <span class="req" aria-hidden="true">*</span></label>
-            <input class="input" type="email" id="email" name="email" autocomplete="email" inputmode="email" required aria-describedby="email-error">
-            <p class="field__error" id="email-error">Please enter an email address I can reply to.</p>
-          </div>
-        </li>
-          </ol>
-          <div class="intake__bar" hidden>
-            <button class="quiet intake__back" type="button">Back</button>
-            <p class="intake__count" aria-live="polite"></p>
-          </div>
-          <button class="act act--block" type="submit"><span>Send it over</span></button>
-          <p class="fineprint">I read every one of these myself. No scoring, no auto-reply, no chatbot in between.
-            Your answers stay in this browser until you send them, and are used to reply to you about this call and nothing else. No list, no sequence.</p>
-        </form>
+        <p class="lede" style="margin-bottom:22px">Before the call there is a short
+          intake. Eleven questions, one at a time with nothing else on the screen, and
+          they are the same ones I would ask you out loud &mdash; so answering them first
+          means the call starts at the interesting part instead of at the beginning.</p>
+        <p class="lede" style="margin-bottom:28px">Only the idea and your email are
+          needed. Everything else can be skipped or left for the call, it saves as you
+          go, and the answers are yours to keep whether or not we ever speak.</p>
+        <a class="act act--block" href="#intake" id="intake-open"><span>Start the intake</span>
+          <span class="chip" aria-hidden="true">''' + ARROW + '''</span></a>
+        <p class="fineprint">About ten minutes if you take your time, two if you don&rsquo;t.
+          I read every one myself. No scoring, no auto-reply, no chatbot in between.</p>
       </div>
     </div>
   </section>
@@ -858,6 +889,12 @@ CASE = '''<div class="doc">
         <div class="stair rev"><p class="k">Days nine to twelve</p><h3>Ten sessions, then the call</h3><p>Ten regulars, one flow, no coaching. Fast only because the list was already mine. The call written against the rule, with the evidence underneath it.</p></div>
       </div>
       <p class="rev" style="margin-top:36px"><a class="quiet" href="what-ive-built.html">See the other apps ''' + ARROW + '''</a></p>''')
+
+# The overlay is appended rather than interpolated. START is assembled from three
+# concatenated literals because ARROW sits in the middle of it, and only the first of
+# those was an f-string, so a {TAKEOVER} written inline landed in whichever segment
+# happened to be scanned -- which is how it ended up inside HOME_HERO instead.
+START = START + '\n\n' + TAKEOVER
 
 PAGES = [
     ("index.html", "Is your idea worth building? | One flow first",
