@@ -655,6 +655,9 @@ START = '''<div class="doc">
           that far &mdash; starts at the interesting part instead of at the beginning.
           And everything worth checking before you do is on this page: <b>what you
           own, the terms, the price</b>, and the questions people ask.</p>
+        <p class="hero-cta rev"><a class="act" href="#intake"><span>Tell me about your idea</span>
+          <span class="chip" aria-hidden="true">''' + ARROW + '''</span></a></p>
+        <p class="act-note rev">No scoring, no auto-reply, no chatbot in between.</p>
       </div>
     </div>
   </section>
@@ -678,9 +681,6 @@ START = '''<div class="doc">
       <p class="lede rev" style="margin-top:24px">The answers are yours to keep either
         way, and they are worth more to you than to me: they are the same questions
         the two weeks would start with.</p>
-      <p class="hero-cta rev"><a class="act" href="#intake"><span>Tell me about your idea</span>
-        <span class="chip" aria-hidden="true">''' + ARROW + '''</span></a></p>
-      <p class="act-note rev">No scoring, no auto-reply, no chatbot in between.</p>
     </div>
   </section>
 </div>''' + "\n\n" + band(
