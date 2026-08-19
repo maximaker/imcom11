@@ -341,60 +341,7 @@ HOME = HOME_HERO + "\n\n" + band(
         <div class="step"><span class="n">Step three</span><h3>Test it and decide, with a clear rule.</h3><p>The bar gets set inside the two weeks, before anyone sees the build. The sessions themselves run when your people are actually free, and the playbook tells you exactly how. Or they can be run for you.</p></div>
       </div>
       <p class="rev" style="margin-top:34px"><a class="quiet" href="how-it-works.html">See how it works in detail ''' + ARROW + '''</a></p>''') + "\n\n" + band(
-    "Deliverables", "Four", "Deliverables", "Named things. Yours to keep, extend, or hand to any team.",
-    '''      <h2 class="rev">What you <strong>own</strong> at the end</h2>
-      <div class="assets">
-        <div class="asset" data-open="false">
-          <button type="button" aria-expanded="false" aria-controls="a1">
-            <svg class="glyph" viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M9.5 8.5h5M9.5 12h5M9.5 15.5h2.5"/></svg>
-            <span class="nm">The working build</span>
-            <span class="sm">One real flow through the core of your idea, usable on a phone.</span>
-            <span class="sign" aria-hidden="true"></span>
-          </button>
-          <div class="more" id="a1"><div><p>Yours to keep, extend, or hand to any team. No license, no lock-in, no dependency on me continuing to exist. If you take it to another developer tomorrow, everything they need is in the repository.</p></div></div>
-        </div>
-        <div class="asset" data-open="false">
-          <button type="button" aria-expanded="false" aria-controls="a2">
-            <svg class="glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 3.5h9l4 4v13h-13z"/><path d="M14.5 3.5v4h4"/><path d="M8.5 14l2.5 2.5 4.5-5"/></svg>
-            <span class="nm">The decision brief</span>
-            <span class="sm">The riskiest assumption, the bar it has to clear, and how to read what comes back.</span>
-            <span class="sign" aria-hidden="true"></span>
-          </button>
-          <div class="more" id="a2"><div><p>Short enough to read in one sitting and written so a co-founder or an investor can read it too. It states the question and the bar first, then how to tell a go from an adjust from a stop. Once the sessions are done the call goes at the top, with the evidence behind it. If the two ever disagree, trust the evidence.</p></div></div>
-        </div>
-        <div class="asset" data-open="false">
-          <button type="button" aria-expanded="false" aria-controls="a3">
-            <svg class="glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 17.5l5-5 3.5 3 4-6.5"/><circle cx="8.5" cy="12.5" r="1.6"/><circle cx="12" cy="15.5" r="1.6"/><circle cx="16" cy="9" r="1.6"/></svg>
-            <span class="nm">The testing playbook</span>
-            <span class="sm">How to find the right people and run sessions that stay honest.</span>
-            <span class="sign" aria-hidden="true"></span>
-          </button>
-          <div class="more" id="a3"><div><p>Where to find people with the problem rather than people who like you, how many you actually need (fewer than you would expect), and how to keep politeness from quietly ruining your results. Reusable on every idea you have after this one.</p></div></div>
-        </div>
-      </div>
-      <p class="lede rev" style="margin-top:26px">That last one matters more than it looks. It's <strong>the part that keeps working long after the two weeks end</strong>.</p>''',
-    tinted=True) + "\n\n" + band(
-    "Terms", "Five", "Terms", "The unusual promise.",
-    '''      <h2 class="statement" id="statement" data-key="never stuck with me.">You should never be stuck with me.</h2>
-      <p class="lede rev">Plenty of people in this business are quietly hoping you'll stay. This works the other way round. When the two weeks end, you can read your own evidence, make your own call, and move forward or walk away without another opinion. You keep the build, the brief, and the method.</p>
-      <p class="lede rev">People do come back. Usually with the next idea, or the same one pointed somewhere new. That's <strong>a choice, not a dependency</strong>, and it's the only kind worth having.</p>''') + "\n\n" + band(
-    "Pricing", "Six", "Pricing", "You'll see the whole staircase before you take the first step.",
-    '''      <h2 class="rev">How <strong>pricing works</strong></h2>
-      <div class="stairs">
-        <div class="stair rev"><p class="k">Step one</p><h3>Is this worth building?</h3><p>A small fixed price, set so it's worth it even when the answer is "don't build."</p></div>
-        <div class="stair rev"><p class="k">Step two</p><h3>The build</h3><p>Scoped after step one, once you both know what's actually needed. No surprise numbers, no big commitment before you have proof.</p></div>
-        <div class="stair rev"><p class="k">Optional</p><h3>The testing, run for you</h3><p>Finding the right people and getting them in front of it takes real calendar time, which is why it sits outside the two weeks. Run it yourself with the playbook, or have it added on.</p></div>
-      </div>''',
-    tinted=True) + "\n\n" + band(
-    "Trust", "Seven", "Why trust it", "Competence, stated as what you get.",
-    '''      <h2 class="rev">Why you can <strong>trust the answer</strong></h2>
-      <div class="grid3">
-        <div class="rev"><h3>You get judgment, not just a build.</h3><p>Anyone can generate an app now. The hard part is knowing what to make and what to cut, and that's the part you're paying for.</p></div>
-        <div class="rev"><h3>You get advice from someone who isn't paid to say yes.</h3><p>When the honest answer is "don't build this," you'll hear it. That's only possible because the value here is the clarity, not the code.</p></div>
-        <div class="rev"><h3>You get speed without losing the thinking.</h3><p>The idea gets real in days, with a designer's read on how people actually behave built in.</p></div>
-      </div>
-      <p class="lede rev" style="margin-top:30px">The judgment comes from 20 years of deciding what to build and what to cut. The speed comes from nine working apps built in the last few months. If you want that story, it's on the <a href="about.html">about page</a>.</p>''') + "\n\n" + band(
-    "Proof", "Eight", "Proof", "Not theory. Things that run.",
+    "Proof", "Four", "Proof", "Not theory. Things that run.",
     '''      <h2 class="rev">Nine apps, and <strong>what each one taught me</strong></h2>
       <p class="lede">These were built for real ideas, with the same tools and the same speed you'd get. What matters isn't that they work. It's what got cut to make them work.</p>
       <div class="proofs">
@@ -416,7 +363,7 @@ HOME = HOME_HERO + "\n\n" + band(
       </div>
       <p class="rev" style="margin-top:34px"><a class="quiet" href="what-ive-built.html">See the full thinking behind them ''' + ARROW + '''</a></p>''',
     tinted=True) + "\n\n" + band(
-    "Fit", "Nine", "Fit", "Two lists. Ten minutes of questions settle which one is yours.",
+    "Fit", "Five", "Fit", "Two lists. Ten minutes of questions settle which one is yours.",
     '''      <h2 class="rev">Who this <strong>works for</strong></h2>
       <div class="fit">
         <div class="fit__col rev">
@@ -437,24 +384,14 @@ HOME = HOME_HERO + "\n\n" + band(
         </div>
       </div>
       <p class="lede rev" style="margin-top:26px">No hard feelings either way.</p>''') + "\n\n" + band(
-    "Doubts", "Ten", "Said out loud", "The three things people think and rarely say.",
+    "Doubts", "Six", "Said out loud", "The three things people think and rarely say.",
     '''      <h2 class="rev">You might be <strong>thinking</strong></h2>
       <div class="doubts">
         <div class="doubt rev" tabindex="0"><p class="q">"What if it's a bad idea and I find out too late."</p><p class="a">You find out first, before anything gets built.</p></div>
         <div class="doubt rev" tabindex="0"><p class="q">"I'm not technical. I won't understand what's happening."</p><p class="a">You don't need to be. You'll get it explained clearly enough to decide with confidence.</p></div>
         <div class="doubt rev" tabindex="0"><p class="q">"I don't want to be talked into a build I don't need."</p><p class="a">You won't be. You'll get an honest answer even when the honest answer is no.</p></div>
       </div>''',
-    tinted=True) + "\n\n" + band(
-    "Questions", "Eleven", "Questions", "The ones that actually get asked.",
-    '''      <h2 class="rev">Questions <strong>people ask</strong></h2>
-      <div class="faq rev">
-        <details><summary>What if you tell me my idea is bad?<i aria-hidden="true"></i></summary><div><p>Then you've saved months and a fortune, and you'll get a clear reason why, not a vague no.</p></div></details>
-        <details><summary>Do I need to understand the tech?<i aria-hidden="true"></i></summary><div><p>No. You need to understand your customer. The rest is handled.</p></div></details>
-        <details><summary>Who owns what gets built?<i aria-hidden="true"></i></summary><div><p>You do. It's yours to take anywhere.</p></div></details>
-        <details><summary>Is this a full product?<i aria-hidden="true"></i></summary><div><p>No, and that's the point. It's the smallest real thing that answers the biggest question. Building the full product before that answer is exactly the expensive mistake this avoids.</p></div></details>
-        <details><summary>How long until I actually have an answer?<i aria-hidden="true"></i></summary><div><p>The build and the bar take two weeks. The answer takes as long as it takes to get the right people in front of it, usually a week or two more, and that part nobody can promise. Which is exactly why the sessions sit outside the fixed scope: putting them inside would mean either padding the timeline or rushing the recruiting, and rushed recruiting is how you end up testing on whoever was available instead of whoever has the problem.</p></div></details>
-        <details><summary>What if I already know it's a good idea?<i aria-hidden="true"></i></summary><div><p>Then step one is quick and you'll have saved nothing but a little time. Most people who are certain turn out to be certain about the wrong part.</p></div></details>
-      </div>''')
+    tinted=True)
 
 HOWITWORKS = '''<div class="doc">
   <section class="open">
@@ -730,7 +667,7 @@ START = '''<div class="doc">
   </section>
 
   <section class="band" id="n-what-happens" data-node="What happens">
-    <div class="margin"><b>What happens</b>Three steps<em>You write, I read, we talk. Nothing automatic anywhere in it.</em></div>
+    <div class="margin"><b>One</b>What happens<em>You write, I read, we talk. Nothing automatic anywhere in it.</em></div>
     <div>
       <h2 class="rev">What happens <strong>after you send it</strong></h2>
       <ol class="checklist checklist--ord rev">
@@ -753,7 +690,71 @@ START = '''<div class="doc">
       <p class="act-note rev">No scoring, no auto-reply, no chatbot in between.</p>
     </div>
   </section>
-</div>'''
+</div>''' + "\n\n" + band(
+    "Deliverables", "Two", "Deliverables", "Named things. Yours to keep, extend, or hand to any team.",
+    '''      <h2 class="rev">What you <strong>own</strong> at the end</h2>
+      <div class="assets">
+        <div class="asset" data-open="false">
+          <button type="button" aria-expanded="false" aria-controls="a1">
+            <svg class="glyph" viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M9.5 8.5h5M9.5 12h5M9.5 15.5h2.5"/></svg>
+            <span class="nm">The working build</span>
+            <span class="sm">One real flow through the core of your idea, usable on a phone.</span>
+            <span class="sign" aria-hidden="true"></span>
+          </button>
+          <div class="more" id="a1"><div><p>Yours to keep, extend, or hand to any team. No license, no lock-in, no dependency on me continuing to exist. If you take it to another developer tomorrow, everything they need is in the repository.</p></div></div>
+        </div>
+        <div class="asset" data-open="false">
+          <button type="button" aria-expanded="false" aria-controls="a2">
+            <svg class="glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 3.5h9l4 4v13h-13z"/><path d="M14.5 3.5v4h4"/><path d="M8.5 14l2.5 2.5 4.5-5"/></svg>
+            <span class="nm">The decision brief</span>
+            <span class="sm">The riskiest assumption, the bar it has to clear, and how to read what comes back.</span>
+            <span class="sign" aria-hidden="true"></span>
+          </button>
+          <div class="more" id="a2"><div><p>Short enough to read in one sitting and written so a co-founder or an investor can read it too. It states the question and the bar first, then how to tell a go from an adjust from a stop. Once the sessions are done the call goes at the top, with the evidence behind it. If the two ever disagree, trust the evidence.</p></div></div>
+        </div>
+        <div class="asset" data-open="false">
+          <button type="button" aria-expanded="false" aria-controls="a3">
+            <svg class="glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 17.5l5-5 3.5 3 4-6.5"/><circle cx="8.5" cy="12.5" r="1.6"/><circle cx="12" cy="15.5" r="1.6"/><circle cx="16" cy="9" r="1.6"/></svg>
+            <span class="nm">The testing playbook</span>
+            <span class="sm">How to find the right people and run sessions that stay honest.</span>
+            <span class="sign" aria-hidden="true"></span>
+          </button>
+          <div class="more" id="a3"><div><p>Where to find people with the problem rather than people who like you, how many you actually need (fewer than you would expect), and how to keep politeness from quietly ruining your results. Reusable on every idea you have after this one.</p></div></div>
+        </div>
+      </div>
+      <p class="lede rev" style="margin-top:26px">That last one matters more than it looks. It's <strong>the part that keeps working long after the two weeks end</strong>.</p>''',
+    tinted=True) + "\n\n" + band(
+    "Terms", "Three", "Terms", "The unusual promise.",
+    '''      <h2 class="statement" id="statement" data-key="never stuck with me.">You should never be stuck with me.</h2>
+      <p class="lede rev">Plenty of people in this business are quietly hoping you'll stay. This works the other way round. When the two weeks end, you can read your own evidence, make your own call, and move forward or walk away without another opinion. You keep the build, the brief, and the method.</p>
+      <p class="lede rev">People do come back. Usually with the next idea, or the same one pointed somewhere new. That's <strong>a choice, not a dependency</strong>, and it's the only kind worth having.</p>''') + "\n\n" + band(
+    "Pricing", "Four", "Pricing", "You'll see the whole staircase before you take the first step.",
+    '''      <h2 class="rev">How <strong>pricing works</strong></h2>
+      <div class="stairs">
+        <div class="stair rev"><p class="k">Step one</p><h3>Is this worth building?</h3><p>A small fixed price, set so it's worth it even when the answer is "don't build."</p></div>
+        <div class="stair rev"><p class="k">Step two</p><h3>The build</h3><p>Scoped after step one, once you both know what's actually needed. No surprise numbers, no big commitment before you have proof.</p></div>
+        <div class="stair rev"><p class="k">Optional</p><h3>The testing, run for you</h3><p>Finding the right people and getting them in front of it takes real calendar time, which is why it sits outside the two weeks. Run it yourself with the playbook, or have it added on.</p></div>
+      </div>''',
+    tinted=True) + "\n\n" + band(
+    "Trust", "Five", "Why trust it", "Competence, stated as what you get.",
+    '''      <h2 class="rev">Why you can <strong>trust the answer</strong></h2>
+      <div class="grid3">
+        <div class="rev"><h3>You get judgment, not just a build.</h3><p>Anyone can generate an app now. The hard part is knowing what to make and what to cut, and that's the part you're paying for.</p></div>
+        <div class="rev"><h3>You get advice from someone who isn't paid to say yes.</h3><p>When the honest answer is "don't build this," you'll hear it. That's only possible because the value here is the clarity, not the code.</p></div>
+        <div class="rev"><h3>You get speed without losing the thinking.</h3><p>The idea gets real in days, with a designer's read on how people actually behave built in.</p></div>
+      </div>
+      <p class="lede rev" style="margin-top:30px">The judgment comes from 20 years of deciding what to build and what to cut. The speed comes from nine working apps built in the last few months. If you want that story, it's on the <a href="about.html">about page</a>.</p>''') + "\n\n" + band(
+    "Questions", "Six", "Questions", "The ones that actually get asked.",
+    '''      <h2 class="rev">Questions <strong>people ask</strong></h2>
+      <div class="faq rev">
+        <details><summary>What if you tell me my idea is bad?<i aria-hidden="true"></i></summary><div><p>Then you've saved months and a fortune, and you'll get a clear reason why, not a vague no.</p></div></details>
+        <details><summary>Do I need to understand the tech?<i aria-hidden="true"></i></summary><div><p>No. You need to understand your customer. The rest is handled.</p></div></details>
+        <details><summary>Who owns what gets built?<i aria-hidden="true"></i></summary><div><p>You do. It's yours to take anywhere.</p></div></details>
+        <details><summary>Is this a full product?<i aria-hidden="true"></i></summary><div><p>No, and that's the point. It's the smallest real thing that answers the biggest question. Building the full product before that answer is exactly the expensive mistake this avoids.</p></div></details>
+        <details><summary>How long until I actually have an answer?<i aria-hidden="true"></i></summary><div><p>The build and the bar take two weeks. The answer takes as long as it takes to get the right people in front of it, usually a week or two more, and that part nobody can promise. Which is exactly why the sessions sit outside the fixed scope: putting them inside would mean either padding the timeline or rushing the recruiting, and rushed recruiting is how you end up testing on whoever was available instead of whoever has the problem.</p></div></details>
+        <details><summary>What if I already know it's a good idea?<i aria-hidden="true"></i></summary><div><p>Then step one is quick and you'll have saved nothing but a little time. Most people who are certain turn out to be certain about the wrong part.</p></div></details>
+      </div>''',
+    tinted=True)
 
 # ────────────────────── worked case study (template) ──────────────────────
 # Structure, order, and prose are the reusable part. The session counts and the
