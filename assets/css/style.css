@@ -848,24 +848,34 @@ h2{font-size:clamp(1.72rem,3.5vw,2.5rem);line-height:1.1;max-width:19ch;margin-b
 .checklist.cross li::before{background:none;border:1.5px solid var(--sand-500);
   width:8px;height:8px;top:.6em}
 
-/* Pricing stairs. Open columns under a hairline, not cards: a box around each
-   price made three dense parcels out of what is one staircase, and the rest of
-   the site already traded its boxes for rules and room. */
-.stairs{display:grid;gap:38px;margin-top:14px}
-@media(min-width:900px){.stairs{grid-template-columns:repeat(3,1fr);gap:48px}}
-.stair{padding-top:26px;border-top:1px solid var(--sand-300)}
+/* Pricing stairs. One step per row with the number as the row's left-hand
+   object, the way slowclarity set its steps: the price does the work its ghost
+   numerals did, except here the big figure is the information itself. Hairlines
+   and vertical room instead of cards, like everything else on the site. */
+.stairs{display:grid;margin-top:14px}
+.stair{padding:38px 0;border-top:1px solid var(--sand-300)}
+.stair:last-child{border-bottom:1px solid var(--sand-300)}
+@media(min-width:900px){
+  .stair{display:grid;grid-template-columns:280px minmax(0,1fr);column-gap:64px;
+    padding:52px 0}
+  .stair .price{grid-column:1;grid-row:1/span 3;align-self:start}
+  .stair .k,.stair h3,.stair p{grid-column:2}
+}
 .stair .k{font-size:11px;text-transform:uppercase;letter-spacing:2.4px;font-weight:500;
-  color:var(--clay-500);margin:0 0 16px}
-.stair h3{font-size:1.14rem;font-weight:640;margin-bottom:14px}
-/* The number is the reason this section exists, so it gets the display weight the
-   headings use, with its condition under it in the meta voice. */
-.stair .price{font-size:2.1rem;font-weight:300;letter-spacing:-.02em;
-  color:var(--ink);margin:0 0 6px;line-height:1.1}
+  color:var(--clay-500);margin:0 0 14px}
+.stair h3{font-size:clamp(1.4rem,2vw,1.7rem);font-weight:640;margin-bottom:14px;
+  letter-spacing:-.015em}
+/* The step is the accent and the number is its ghost: still the row's left-hand
+   object at display scale, the way slowclarity set its numerals, but in the quiet
+   ink so the eye lands on what the step is before what it costs. */
+.stair .price{font-size:clamp(1.9rem,2.6vw,2.35rem);font-weight:300;
+  letter-spacing:-.02em;color:var(--ink-3);margin:0 0 18px;line-height:1.05;
+  white-space:nowrap}
 .stair .price span{display:block;font-size:11px;text-transform:uppercase;
-  letter-spacing:2.4px;font-weight:500;color:var(--ink-2);margin:10px 0 0;
+  letter-spacing:2.4px;font-weight:500;color:var(--ink-2);margin:12px 0 0;
   font-family:var(--mono)}
-.stair p{font-size:.95rem;color:var(--ink-2);margin:0;line-height:1.6}
-.stair .price+p{margin-top:18px}
+@media(min-width:900px){.stair .price{margin-bottom:0}}
+.stair p{font-size:.98rem;color:var(--ink-2);margin:0;line-height:1.65;max-width:56ch}
 
 /* Probe lists */
 .probe{list-style:none;margin:22px 0 0;padding:0 0 0 22px;display:grid;gap:16px;
