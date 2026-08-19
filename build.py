@@ -157,7 +157,7 @@ def hero(margin_html, h1, deck, extra=""):
 
 
 def shell(slug, title, desc, body, close_heading, close_body,
-          nav_slug=None, robots=None, close_cta="Book a free intro call"):
+          nav_slug=None, robots=None, close_cta="Tell me about your idea"):
     """nav_slug lets a child page mark its parent as current. robots is for
     pages that should stay out of search, such as the case study template.
 
@@ -226,7 +226,7 @@ def shell(slug, title, desc, body, close_heading, close_body,
 
   <div class="doc">
   <section class="close rev" data-node="Start">
-    <div class="margin"><b>Next</b>One call<em>Twenty minutes. It sorts out fit either way.</em></div>
+    <div class="margin"><b>Next</b>Step one<em>Ten minutes of questions, then a reply from a person.</em></div>
     <div>
       <h2>{close_heading}</h2>
       <p class="lede" style="margin-bottom:32px">{close_body}</p>
@@ -710,40 +710,46 @@ TAKEOVER = f'''<!-- Ships as an ordinary section at the foot of the page, and si
 START = '''<div class="doc">
   <section class="open">
     <div class="inner">
-      <div class="margin"><b>Start</b>One call<em>Free, 20 to 30 minutes, on a video call.</em></div>
+      <div class="margin"><b>Start</b>Step one<em>Write it down. The call comes after, if there is one to have.</em></div>
       <div>
-        <h1><span class="rise"><span>Let's talk about</span></span><span class="rise"><span><strong>your idea.</strong></span></span></h1>
-        <p class="deck rev">You share the idea. You hear honestly whether this fits, and what step one would look like for you specifically.</p>
+        <h1><span class="rise"><span>Tell me about</span></span><span class="rise"><span><strong>your idea.</strong></span></span></h1>
+        <p class="deck rev">Eleven questions, one at a time. They are the ones I would
+          ask you out loud, so writing them down first means the call &mdash; if we get
+          that far &mdash; starts at the interesting part instead of at the beginning.</p>
       </div>
     </div>
   </section>
 
-  <section class="band" data-node="The call">
-    <div class="margin"><b>The call</b>What it is<em>No pitch, no pressure, no follow-up sequence.</em></div>
+  <section class="band" id="n-what-happens" data-node="What happens">
+    <div class="margin"><b>What happens</b>Three steps<em>You write, I read, we talk. Nothing automatic anywhere in it.</em></div>
     <div class="startgrid">
       <div class="rev">
-        <h2>What the <strong>call is</strong></h2>
-        <ul class="checklist">
-          <li>Free, 20 to 30 minutes, on a video call.</li>
-          <li>You talk through the idea. No deck needed, a rough version is fine.</li>
-          <li>You leave knowing whether this fits and what step one would cost.</li>
-          <li>No pitch, no pressure, no follow-up sequence.</li>
-        </ul>
-        <p class="lede" style="margin-top:24px">If it's not a fit, you'll hear that too, and get pointed somewhere better.</p>
+        <h2>What happens <strong>after you send it</strong></h2>
+        <ol class="checklist checklist--ord">
+          <li><b>You answer the questions.</b> Ten minutes if you take your time, two if
+            you don&rsquo;t. Only the idea and your email are needed &mdash; skip anything
+            you would rather say out loud.</li>
+          <li><b>I read them and reply within one working day.</b> Either with a couple of
+            times for a call, or, if what you wrote already tells me this is not a fit,
+            with that and a better direction. I read every one myself.</li>
+          <li><b>The call, if there is a fit.</b> Free, 20 to 30 minutes, on video. We
+            talk through what you wrote rather than starting from nothing. No pitch, no
+            pressure, no follow-up sequence.</li>
+        </ol>
+        <p class="lede" style="margin-top:24px">The answers are yours to keep either way,
+          and they are worth more to you than to me: they are the same questions the two
+          weeks would start with.</p>
       </div>
 
       <div class="form-card rev">
-        <p class="lede" style="margin-bottom:22px">Before the call there is a short
-          intake. Eleven questions, one at a time with nothing else on the screen, and
-          they are the same ones I would ask you out loud &mdash; so answering them first
-          means the call starts at the interesting part instead of at the beginning.</p>
-        <p class="lede" style="margin-bottom:28px">Only the idea and your email are
-          needed. Everything else can be skipped or left for the call, it saves as you
-          go, and the answers are yours to keep whether or not we ever speak.</p>
-        <a class="act act--block" href="#intake" id="intake-open"><span>Start the intake</span>
+        <p class="lede" style="margin-bottom:28px">One question at a time, nothing else on
+          the screen, and it saves as you go &mdash; so you can close it and come back.</p>
+        <a class="act act--block" href="#intake" id="intake-open"><span>Tell me about your idea</span>
           <span class="chip" aria-hidden="true">''' + ARROW + '''</span></a>
-        <p class="fineprint">About ten minutes if you take your time, two if you don&rsquo;t.
-          I read every one myself. No scoring, no auto-reply, no chatbot in between.</p>
+        <p class="fineprint">Or write to
+          <a href="mailto:hello@oneflowfirst.com">hello@oneflowfirst.com</a> if you would
+          rather just say hello. The questions are the faster route to a useful reply,
+          not a gate in front of one.</p>
       </div>
     </div>
   </section>
@@ -900,25 +906,30 @@ PAGES = [
     ("index.html", "Is your idea worth building? | One flow first",
      "In two weeks you own the one part that matters most, built for real, and a bar agreed before anyone sees it. Then real people tell you whether it holds.",
      HOME, "Let's find out if your idea is <strong>real</strong>",
-     "One call. You talk through your idea, you hear honestly whether this fits. No pitch, no pressure.",
-     {"close_cta": "Tell me about your idea"}),
+     "Ten minutes of questions, in your own words. Then a straight read on whether this "
+     "fits, from a person who read them. No pitch, no pressure, and the answers are "
+     "yours to keep either way."),
     ("how-it-works.html", "How it works | One flow first",
      "Exactly what happens across the two weeks: the qualifying questions, the decision rule, the build, the brief, the playbook, and what comes after.",
      HOWITWORKS, "Ready to <strong>find out?</strong>",
-     "One call. You talk through your idea, you hear honestly whether this fits."),
+     "Ten minutes of questions, in your own words, then a straight read on whether this "
+     "fits. The answers are yours to keep either way."),
     ("what-ive-built.html", "What I've built | One flow first",
      "Real apps, built for real ideas. The thinking behind them, including what I'd change and what I'd kill.",
      BUILT, "Let's find out if your idea is <strong>real</strong>",
-     "One call. You talk through your idea, you hear honestly whether this fits."),
+     "Ten minutes of questions, in your own words, then a straight read on whether this "
+     "fits. The answers are yours to keep either way."),
     ("case-slate.html", "Slate: booking was never the problem | One flow first",
      "A worked two-week case study. The bet, the decision rule agreed in advance, one flow built for real, ten test sessions, and the call: adjust, not go.",
      CASE, "Got an idea with a <strong>risky part?</strong>",
-     "One call. You talk through the idea, you hear honestly whether this fits.",
+     "Ten minutes of questions about the risky part, then a straight read on whether this "
+     "fits. The answers are yours to keep either way.",
      {"nav_slug": "what-ive-built.html", "robots": "noindex"}),
     ("about.html", "About | One flow first",
      "Twenty years of deciding what to build and what to cut, and why the work is scoped, small, and honest about where the value stops.",
      ABOUT, "Let's find out if your idea is <strong>real</strong>",
-     "One call. You talk through your idea, you hear honestly whether this fits."),
+     "Ten minutes of questions, in your own words, then a straight read on whether this "
+     "fits. The answers are yours to keep either way."),
     ("start.html", "Let's talk about your idea | One flow first",
      "A free 20 to 30 minute call. You share the idea, you hear honestly whether this fits and what step one would look like for you.",
      START, "Prefer <strong>email?</strong>",

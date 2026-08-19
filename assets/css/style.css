@@ -1819,3 +1819,15 @@ h3{font-weight:500;letter-spacing:-.015em;line-height:1.25}
 html[data-over="true"] .spine,
 html[data-over="true"] .ride,
 html[data-over="true"] .top{display:none}
+
+/* A numbered variant of the checklist, for the one place on the site that describes a
+   sequence in prose rather than in columns. The dot says "and also"; a numeral says
+   "and then", which is the whole difference on a page whose problem was that it
+   described a call and handed over a form. */
+.checklist--ord{counter-reset:ck}
+.checklist--ord li{counter-increment:ck;padding-left:34px}
+.checklist--ord li::before{content:counter(ck);left:0;top:0;
+  width:auto;height:auto;border-radius:0;background:none;
+  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.14em;
+  color:var(--clay-500);line-height:1.8}
+.checklist--ord li b{font-weight:600;color:var(--ink)}
