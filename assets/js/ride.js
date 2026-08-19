@@ -1,13 +1,14 @@
-/* Sample only: the call to action rides the rail.
-   Past the hero it compacts to a dot on the rule and travels with the reader,
+/* The call to action rides the rail.
+   Past the page's first button — the hero's on home, the What-happens one on the
+   first-step page — it compacts to a dot on the rule and travels with the reader,
    trailing a little so it reads as keeping up rather than being pinned. Through the
    last third it grows into the disc the foot of the rail used to carry, and as the
    closing section arrives it crosses to that section's own button, becomes it, and
    hands over. The button it hands to is the real one in the markup, so what the
    reader ends up with is a link in a section rather than something floating.
 
-   Wanted here and nowhere else: the live site keeps its hero button and its foot
-   disc untouched. Loaded only by sample-home.html.
+   Shipped by shell() to any page whose body has a .hero-cta seat to start from, so
+   a page with two calls to action reads as having one, carried down.
    Skipped entirely below the rail's breakpoint and under reduced motion, where the
    closing button simply shows itself. */
 (function () {

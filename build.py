@@ -678,7 +678,7 @@ START = '''<div class="doc">
       <p class="lede rev" style="margin-top:24px">The answers are yours to keep either
         way, and they are worth more to you than to me: they are the same questions
         the two weeks would start with.</p>
-      <p class="rev" style="margin-top:34px"><a class="act" href="#intake"><span>Tell me about your idea</span>
+      <p class="hero-cta rev"><a class="act" href="#intake"><span>Tell me about your idea</span>
         <span class="chip" aria-hidden="true">''' + ARROW + '''</span></a></p>
       <p class="act-note rev">No scoring, no auto-reply, no chatbot in between.</p>
     </div>
