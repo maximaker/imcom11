@@ -53,7 +53,11 @@
 
   var ride = document.createElement('a');
   ride.className = 'ride';
-  ride.href = 'start.html';
+  /* The ride ends as the closing button, and the closing button opens the intake
+     in place now, so the ride does too: clicking it mid-journey must do the same
+     thing as clicking it after the handoff. The overlay is hidden, so the browser
+     skips the anchor scroll and the hashchange listener does the opening. */
+  ride.href = '#intake';
   ride.setAttribute('aria-label', 'Tell me about your idea');
   ride.innerHTML =
     '<span class="ride__label">Tell me about your idea</span>' +

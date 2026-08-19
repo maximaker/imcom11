@@ -166,11 +166,6 @@ def shell(slug, title, desc, body, close_heading, close_body,
     up with is the hero's button, carried down, so the two have to read the same or
     the words change in the instant the handover is meant to be invisible. Pages
     without a hero button keep the plainer wording, since nothing travels there."""
-    # On the start page the closing button cannot usefully point at start.html --
-    # that is the page it is on, and clicking it reloaded the page and dropped the
-    # reader at the top. It opens the intake, which is what every other page's
-    # closing button leads to eventually anyway.
-    cta_href = '#intake' if slug == 'start.html' else 'start.html'
     here = nav_slug or slug
     robots = f'<meta name="robots" content="{robots}">\n' if robots else ''
     # The ride is the hero's button, compacted and carried down the rail, so it is
@@ -235,21 +230,14 @@ def shell(slug, title, desc, body, close_heading, close_body,
     <div>
       <h2>{close_heading}</h2>
       <p class="lede" style="margin-bottom:32px">{close_body}</p>
-      <a class="act" href="{cta_href}" id="cta"><span>{close_cta}</span>
+      <a class="act" href="#intake" id="cta"><span>{close_cta}</span>
         <span class="chip" aria-hidden="true">{ARROW}</span></a>
     </div>
   </section>
 
   </div>
 
-  <div class="doc">
-  <div class="railfoot">
-    <a class="railcta" href="{cta_href}">
-      <span class="lbl">{close_cta}</span>
-      {ARROW}
-    </a>
-  </div>
-  </div>
+{TAKEOVER}
 </main>
 
 <footer class="colo">
@@ -905,7 +893,8 @@ CASE = '''<div class="doc">
 # concatenated literals because ARROW sits in the middle of it, and only the first of
 # those was an f-string, so a {TAKEOVER} written inline landed in whichever segment
 # happened to be scanned -- which is how it ended up inside HOME_HERO instead.
-START = START + '\n\n' + TAKEOVER
+# The overlay is emitted by shell() on every page now: the closing button opens
+# it in place, so no page has to route through start.html to ask the questions.
 
 PAGES = [
     ("index.html", "Is your idea worth building? | One flow first",

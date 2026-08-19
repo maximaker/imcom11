@@ -196,43 +196,6 @@ a{color:var(--clay-500)}
     transition:transform 90ms linear}
 
 
-  /* Not fixed: the disc sits at the foot of the page on the rail's line and
-     scrolls away with everything else. Container is transparent. */
-  .railfoot{position:relative;height:0;background:none}
-  /* Above the rail too: the disc caps the rule's foot, it is not crossed by it. */
-  .railfoot a{position:absolute;bottom:8px;left:var(--rail-x,50%);
-    transform:translateX(-50%);z-index:21}
-
-
-  /* The disc is the rail's only furniture, and the only call to action on wide
-     screens. A circle can sit on a rule without cutting a rectangle out of the
-     page. It blooms into the full button on hover: width and corner radius are
-     the only things that move, so the centre stays pinned to the rule. */
-  .railcta{position:relative;display:flex;align-items:center;justify-content:center;
-    gap:0;width:58px;height:58px;border-radius:999px;overflow:hidden;
-    color:#fff;text-decoration:none;font-family:var(--body);
-    font-size:16px;font-weight:600;white-space:nowrap;
-    background:linear-gradient(180deg,#C25000 0%,#B04800 52%,#A34400 100%);
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.24),
-               0 6px 18px -6px rgba(120,50,0,.5);
-    transition:width 420ms var(--ease-out),
-               border-radius 420ms var(--ease-out),
-               box-shadow 420ms var(--ease-out)}
-  .railcta .lbl{max-width:0;opacity:0;overflow:hidden;
-    transition:max-width 420ms var(--ease-out),
-               opacity 220ms var(--ease-out),
-               margin 420ms var(--ease-out)}
-  .railcta svg{flex:none;transition:transform 420ms var(--ease-out)}
-
-  .railcta:hover,.railcta:focus-visible{color:#fff;width:272px;border-radius:16px;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.3),
-               0 16px 34px -10px rgba(120,50,0,.6)}
-  .railcta:hover .lbl,.railcta:focus-visible .lbl{max-width:190px;opacity:1;
-    margin:0 12px 0 4px}
-  .railcta:hover svg,.railcta:focus-visible svg{transform:translateX(2px)}
-  .railcta:active{box-shadow:inset 0 1px 0 rgba(255,255,255,.2),
-               0 6px 14px -6px rgba(120,50,0,.5)}
-
 }
 
 /* Marginalia: right-aligned against the rail, with a marker that is part of the
@@ -255,12 +218,11 @@ a{color:var(--clay-500)}
 .margin em{display:block;font-style:normal;margin-top:14px;padding-top:13px;
   border-top:1px solid var(--sand-400);color:var(--ink-3)}
 
-.railfoot{display:none}
-@media(min-width:1180px){
-  .railfoot{display:block}
-  /* The rail disc is the call to action here, so the inline one retires. */
-  .close .act,.close .act-note{display:none}
-}
+/* The closing section's own button is the ending on every page and at every
+   width. The disc that used to cap the rail is gone: it was the rail's ending
+   before the travelling button existed, and once the ride superseded it on the
+   home page it survived on the others as a dot stuck to the line with nowhere to
+   have come from. */
 
 /* ── The mark. An open ring, one point of focus at its centre, one line out
    through the gap. The gap is the whole idea, so nothing may close it: no
@@ -1442,9 +1404,7 @@ main{position:relative}
    closing button hidden by style.css and be left with no call to action at all.
    Gated, a page without a ride keeps the foot disc exactly as it always had it. */
 @media(min-width:1180px){
-  /* The ride supersedes the disc that sat at the foot of the rail: same object,
-     except that this one has been with the reader the whole way down. */
-  html[data-ride] .railfoot{display:none}
+
   /* Both real buttons wait at opacity 0 for the ride to arrive on top of them. The
      hero's is the object's first form: once the reader leaves the hero it has become
      the dot on the rail, so it must not still be sitting there. It comes back when

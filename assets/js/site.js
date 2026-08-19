@@ -337,11 +337,6 @@
     var x = Math.round(edge + gap / 2);
     railEl.style.left = x + 'px';
 
-    /* The foot disc is absolutely positioned inside .railfoot, so its `left`
-       resolves against that box, not the viewport. Convert the coordinate. */
-    var foot = document.querySelector('.railfoot');
-    var link = foot && foot.querySelector('a');
-    if(link) link.style.left = (x - foot.getBoundingClientRect().left) + 'px';
   }
 
   function measure(){
@@ -518,8 +513,13 @@
      href="#intake" is a real anchor: with scripting off it scrolls to the questions
      instead of pointing at nothing. */
   var over=document.getElementById('intake');
-  var opener=document.getElementById('intake-open');
-  if(over && opener){
+  /* Everything that points at the intake opens it: the card button on start.html,
+     the closing button on every page, and the travelling button once it has become
+     that closing button. Collected by href rather than by id, so a new link to
+     #intake anywhere is an opener without anyone remembering this list exists. */
+  var openers=[].slice.call(document.querySelectorAll('a[href="#intake"]'));
+  var opener=openers[0]||null;
+  if(over){
     /* Promoted here rather than in the markup, so that a reader without scripting gets
        the questions as an ordinary form at the foot of the page and the button above
        simply scrolls to them. data-modal is what the stylesheet keys the fixed
@@ -576,9 +576,12 @@
       var back = (lastFocus && lastFocus.focus && lastFocus!==document.body)
                ? lastFocus : opener;
       if(back && back.focus) back.focus();
+      lastFocus=null;
     }
 
-    opener.addEventListener('click',function(e){ e.preventDefault(); openOver(); });
+    openers.forEach(function(a){
+      a.addEventListener('click',function(e){ e.preventDefault(); openOver(); });
+    });
     var exit=document.getElementById('takeover-exit');
     if(exit) exit.addEventListener('click',closeOver);
 
