@@ -237,6 +237,9 @@ def shell(slug, title, desc, body, close_heading, close_body,
 
   </div>
 
+  <a class="stickycta" href="#intake" data-on="false" tabindex="-1"
+     aria-hidden="true">Tell me about your idea</a>
+
 {TAKEOVER}
 </main>
 
@@ -639,11 +642,13 @@ TAKEOVER = f'''<!-- Ships as an ordinary section at the foot of the page, and si
           <textarea class="textarea" id="q-true" name="assumption" rows="3" placeholder="It only works if&hellip;"></textarea>
         </li>
         <li class="qstep" id="q-unsure-step" data-q="5">
+          <p class="qstep__frame">Halfway. Now the useful part.</p>
           <label class="field__label" for="q-unsure">Which part are you least sure about? <span class="qstep__opt">Optional</span></label>
           <span class="field__hint">It&rsquo;s usually not the part that&rsquo;s hardest to build.</span>
           <textarea class="textarea" id="q-unsure" name="unsure" rows="3" placeholder="I&rsquo;m least sure that&hellip;"></textarea>
         </li>
         <li class="qstep" id="q-wrong-step" data-q="6">
+          <p class="qstep__frame">This one does the most work.</p>
           <label class="field__label" for="q-wrong">How would you know you were wrong? <span class="qstep__opt">Optional</span></label>
           <span class="field__hint">A number, a behaviour, anything you could actually watch happen.</span>
           <textarea class="textarea" id="q-wrong" name="wrong" rows="3" placeholder="I&rsquo;d know if&hellip;"></textarea>
@@ -664,6 +669,7 @@ TAKEOVER = f'''<!-- Ships as an ordinary section at the foot of the page, and si
           <textarea class="textarea" id="q-pressure" name="pressure" rows="3" placeholder="The pressure is&hellip;"></textarea>
         </li>
         <li class="qstep" id="q-want-step" data-q="10">
+          <p class="qstep__frame">Nearly there. Pick what is true today.</p>
           <fieldset class="qfield">
             <legend class="field__label">What do you want out of the two weeks? <span class="qstep__opt">Optional</span></legend>
             <label class="pick"><input type="radio" name="want" value="yes-no"><span>A straight yes or no</span></label>

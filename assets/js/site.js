@@ -303,6 +303,7 @@
      while off-screen, and undocks only at the very top, where the docked and
      in-flow positions coincide, so neither switch is ever visible. */
   var topBarEl = document.getElementById('top');
+  var stickyEl = document.querySelector('.stickycta');
   var heroEnd = 0, lastY = window.scrollY, upBy = 0, downBy = 0,
       docked = false, shown = false;
   var TRIGGER = 24;   /* travel in one direction before the bar responds */
@@ -372,6 +373,23 @@
         }
         topBarEl.setAttribute('data-dock', docked ? 'true' : 'false');
         topBarEl.setAttribute('data-reveal', shown ? 'true' : 'false');
+      }
+
+      /* The sticky call to action, phone widths only (the stylesheet gates it).
+         On a wide screen the travelling button or the rail keeps the way forward
+         in reach; on a phone neither exists, so between the hero and the closing
+         section there was no path forward at all except the menu. Appears once the
+         hero is behind you -- the same threshold the docking bar uses -- and stands
+         down when the closing section arrives carrying the real button, so the two
+         are never on screen together saying the same thing. */
+      if(stickyEl){
+        var closeEl = document.querySelector('.close');
+        var closeUp = closeEl &&
+          closeEl.getBoundingClientRect().top < window.innerHeight;
+        var stickOn = window.scrollY > heroEnd && !closeUp;
+        stickyEl.setAttribute('data-on', stickOn ? 'true' : 'false');
+        stickyEl.setAttribute('aria-hidden', stickOn ? 'false' : 'true');
+        stickyEl.tabIndex = stickOn ? 0 : -1;
       }
 
       /* The head of the rule rides down with the mark, then holds at the top. But
@@ -539,9 +557,13 @@
       return sel.split(',').map(function(part){ return scope+' '+part.trim(); }).join(',');
     }
 
-    function openOver(){
+    function openOver(from){
       if(!over.hidden) return;
-      lastFocus=document.activeElement;
+      /* The element to hand focus back to. Passed by the click handlers, because a
+         programmatic click does not focus the anchor first, so activeElement was
+         still body and the close fell back to the first opener on the page --
+         which is the closing button at the very bottom. */
+      lastFocus=from||document.activeElement;
       scrollAt=window.scrollY;
       over.hidden=false;
       /* position:fixed on the body rather than overflow:hidden. Hiding overflow
@@ -565,7 +587,6 @@
       document.body.style.left='';
       document.body.style.right='';
       document.documentElement.removeAttribute('data-over');
-      window.scrollTo(0, scrollAt);
       if(location.hash==='#intake'){
         history.replaceState(null,'',location.pathname+location.search);
       }
@@ -575,12 +596,17 @@
          the document with no idea where they are. */
       var back = (lastFocus && lastFocus.focus && lastFocus!==document.body)
                ? lastFocus : opener;
-      if(back && back.focus) back.focus();
+      /* preventScroll, and focus before the scroll restore: a bare focus() scrolls
+         its target into view, and when the target is the closing button at the foot
+         of the page that threw the reader to the bottom the instant they closed --
+         the restore ran first and the focus undid it. */
+      if(back && back.focus){ try{ back.focus({preventScroll:true}); }catch(e){ back.focus(); } }
+      window.scrollTo(0, scrollAt);
       lastFocus=null;
     }
 
     openers.forEach(function(a){
-      a.addEventListener('click',function(e){ e.preventDefault(); openOver(); });
+      a.addEventListener('click',function(e){ e.preventDefault(); openOver(a); });
     });
     var exit=document.getElementById('takeover-exit');
     if(exit) exit.addEventListener('click',closeOver);

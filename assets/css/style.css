@@ -1886,3 +1886,42 @@ html[data-over="true"] .top{display:none}
 @media (hover:none){
   .intakepage .intake__kbd{display:none}
 }
+
+/* ── The step arrives ──
+   Questions used to flip: one display toggle, no motion at all, which read as a
+   form paging rather than a conversation moving on. A 300ms rise on whichever step
+   becomes visible -- restarted by the display change itself, so no script keeps
+   time. Scoped to the promoted overlay: the no-script fallback shows every step at
+   once and has nothing to arrive. */
+@keyframes stepin{from{opacity:0;transform:translateY(12px)}}
+.takeover[data-modal="true"] .qstep{animation:stepin 300ms var(--ease-out)}
+.takeover[data-modal="true"] .form-status[data-visible="true"] > *{
+  animation:stepin 340ms var(--ease-out)}
+@media (prefers-reduced-motion:reduce){
+  .takeover[data-modal="true"] .qstep,
+  .takeover[data-modal="true"] .form-status[data-visible="true"] > *{animation:none}
+}
+
+/* ── The sticky call to action, phones only ──
+   The design system specifies it -- "appears after the first screen, on mobile
+   only" -- and the flow needs it: on a phone there is no rail and no travelling
+   button, so a reader in the middle of the page had no way forward except the
+   menu. One pill, the same words as every other primary action, replying to
+   scroll position rather than idling. */
+.stickycta{display:none}
+@media(max-width:1179px){
+  .stickycta{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));
+    z-index:50;display:inline-flex;align-items:center;justify-content:center;
+    min-height:52px;padding:14px 26px;border-radius:999px;
+    background:var(--clay-400);color:#fff;text-decoration:none;
+    font-family:var(--body);font-size:15.5px;font-weight:600;white-space:nowrap;
+    box-shadow:0 10px 26px -10px rgba(93,41,18,.55);
+    transform:translate(-50%,calc(100% + 20px + env(safe-area-inset-bottom)));
+    transition:transform var(--t-slow) var(--ease-out)}
+  .stickycta[data-on="true"]{transform:translate(-50%,0)}
+  .stickycta:active{transform:translate(-50%,0) scale(.985)}
+}
+html[data-over="true"] .stickycta{display:none}
+@media (prefers-reduced-motion:reduce){
+  .stickycta{transition:none}
+}
