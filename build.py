@@ -23,7 +23,7 @@ V_RIDE = ver('assets/js/ride.js')
 NAV = [("how-it-works.html", "How it works"),
        ("what-ive-built.html", "What I've built"),
        ("about.html", "About"),
-       ("start.html", "Start")]
+       ("start.html", "First step")]
 
 ARROW = ('<svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">'
          '<path d="M5 12h13m0 0l-5.5-5.5M18 12l-5.5 5.5" stroke="currentColor" '
@@ -158,10 +158,6 @@ def hero(margin_html, h1, deck, extra=""):
 
 def shell(slug, title, desc, body, close_heading, close_body,
           nav_slug=None, robots=None, close_cta="Tell me about your idea"):
-    # close_cta=None drops the closing button. Only start.html does: its closing is
-    # the email escape, and the section above it just made the ask properly, so a
-    # button under "Prefer email?" answered a question nobody asked there. The
-    # margin note follows, since "Step one" beside no button described nothing.
     """nav_slug lets a child page mark its parent as current. robots is for
     pages that should stay out of search, such as the case study template.
 
@@ -171,12 +167,6 @@ def shell(slug, title, desc, body, close_heading, close_body,
     the words change in the instant the handover is meant to be invisible. Pages
     without a hero button keep the plainer wording, since nothing travels there."""
     here = nav_slug or slug
-    CLOSE_ACT = ('' if close_cta is None else
-        f'      <a class="act" href="#intake" id="cta"><span>{close_cta}</span>\n'
-        f'        <span class="chip" aria-hidden="true">{ARROW}</span></a>')
-    CLOSE_MARGIN = ('<b>Or</b>Email<em>One line about the idea is enough.</em>'
-                    if close_cta is None else
-                    '<b>Next</b>Step one<em>Ten minutes of questions, then a reply from a person.</em>')
     robots = f'<meta name="robots" content="{robots}">\n' if robots else ''
     # The ride is the hero's button, compacted and carried down the rail, so it is
     # only shipped to a page that has one to start from. Asking the markup rather
@@ -236,11 +226,12 @@ def shell(slug, title, desc, body, close_heading, close_body,
 
   <div class="doc">
   <section class="close rev" data-node="Start">
-    <div class="margin">{CLOSE_MARGIN}</div>
+    <div class="margin"><b>Next</b>Step one<em>Ten minutes of questions, then a reply from a person.</em></div>
     <div>
       <h2>{close_heading}</h2>
       <p class="lede" style="margin-bottom:32px">{close_body}</p>
-{CLOSE_ACT}
+      <a class="act" href="#intake" id="cta"><span>{close_cta}</span>
+        <span class="chip" aria-hidden="true">{ARROW}</span></a>
     </div>
   </section>
 
@@ -656,12 +647,14 @@ TAKEOVER = f'''<!-- Ships as an ordinary section at the foot of the page, and si
 START = '''<div class="doc">
   <section class="open">
     <div class="inner">
-      <div class="margin"><b>Start</b>Step one<em>Write it down. The call comes after, if there is one to have.</em></div>
+      <div class="margin"><b>First step</b>Write it down<em>The call comes after, if there is one to have.</em></div>
       <div>
         <h1><span class="rise"><span>Tell me about</span></span><span class="rise"><span><strong>your idea.</strong></span></span></h1>
         <p class="deck rev">Eleven questions, one at a time. They are the ones I would
           ask you out loud, so writing them down first means the call &mdash; if we get
-          that far &mdash; starts at the interesting part instead of at the beginning.</p>
+          that far &mdash; starts at the interesting part instead of at the beginning.
+          And everything worth checking before you do is on this page: <b>what you
+          own, the terms, the price</b>, and the questions people ask.</p>
       </div>
     </div>
   </section>
@@ -934,11 +927,10 @@ PAGES = [
      "fits. The answers are yours to keep either way."),
     ("start.html", "Let's talk about your idea | One flow first",
      "A free 20 to 30 minute call. You share the idea, you hear honestly whether this fits and what step one would look like for you.",
-     START, "Prefer <strong>email?</strong>",
-     'Write to <a href="mailto:hello@oneflowfirst.com">hello@oneflowfirst.com</a> '
-     'with the same one line about your idea. Same reader, same reply, within the '
-     'same working day.',
-     {"close_cta": None}),
+     START, "Read it all? Then you know <strong>what I'd ask.</strong>",
+     'Ten minutes of questions, in your own words, and a reply within one working '
+     'day. Or write to <a href="mailto:hello@oneflowfirst.com">hello@oneflowfirst.com</a> '
+     'if you would rather just say hello &mdash; same reader, same reply.'),
 ]
 
 for page in PAGES:
