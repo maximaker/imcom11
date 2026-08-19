@@ -1925,3 +1925,13 @@ html[data-over="true"] .stickycta{display:none}
 @media (prefers-reduced-motion:reduce){
   .stickycta{transition:none}
 }
+
+/* ── The reply ──
+   What the asker says between questions, keyed in site.js to what the reader just
+   did: answered, skipped, or chose. Set in the handwriting face because that face
+   is reserved for words a person says out loud -- the reader's own objections use
+   it already -- and this is the other half of that conversation. Quiet ink, not
+   the accent: it is a voice, not a control. */
+.qstep__reply{margin:0 0 26px;font-family:'Quote Hand','Segoe Script',cursive;
+  font-weight:600;font-size:1.5rem;line-height:1.35;letter-spacing:.006em;
+  color:var(--ink-2);max-width:30ch}

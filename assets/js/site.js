@@ -647,6 +647,62 @@
     var KEY='ofo.intake';
     var at=0;
 
+    /* ── The replies ──
+       A person asking these questions out loud reacts between them, and the
+       reaction depends on what just happened: an answer, a skip, a choice. Those
+       three are knowable here without pretending to understand the words, so every
+       line below is honest -- it responds to what the reader did, and the reading
+       of what they wrote happens where the last step says it does.
+       Set in the site's handwriting face, because that face is reserved for words
+       a person says rather than interface copy, and these are exactly that.
+       One reply per moment that deserves one, not one per step: acknowledging
+       everything is how it would turn into theatre. */
+    var reply=document.createElement('p');
+    reply.className='qstep__reply';
+    reply.setAttribute('aria-live','polite');
+    var pendingReply=null, skippedOnce=false;
+
+    function replyFor(step){
+      var field=step.querySelector('textarea');
+      var val=field?field.value.trim():'';
+      if(step.id==='q-idea-step' && val)
+        return 'Good. A sentence is enough to start.';
+      if(field && !field.required && !val && !skippedOnce){
+        skippedOnce=true;
+        return 'Skipped is fine. We can do that one out loud.';
+      }
+      if(step.id==='q-true-step' && val)
+        return 'Noted. That is the one that gets tested first.';
+      if(step.id==='q-no-step' && val)
+        return 'Thank you for being straight about that.';
+      if(step.id==='q-want-step'){
+        var picked=step.querySelector('input[type=radio]:checked');
+        if(!picked) return null;
+        return {
+          'yes-no':'Then a straight yes or no is what you will get.',
+          'built':'Then we make sure something real gets in front of people.',
+          'rule':'Then the rule comes first, before anything is built.',
+          'unsure':'Fair. It tends to get clear once the idea is written down.'
+        }[picked.value]||null;
+      }
+      return null;
+    }
+
+    function placeReply(){
+      var frame=steps[at].querySelector('.qstep__frame');
+      if(pendingReply){
+        reply.textContent=pendingReply;
+        steps[at].insertBefore(reply, steps[at].firstChild);
+        /* The reply is the spoken moment on this step, so the printed frame stands
+           down rather than stacking two voices at the top of one screen. */
+        if(frame) frame.hidden=true;
+      } else {
+        if(reply.parentNode) reply.parentNode.removeChild(reply);
+        if(frame) frame.hidden=false;
+      }
+      pendingReply=null;
+    }
+
     function wrap(el){return el.closest('.field')||el.closest('.qstep');}
     function check(el){
       var w=wrap(el); if(!w) return true;
@@ -720,6 +776,7 @@
          chord that does nothing there is worse than none. */
       var kbd=form.querySelector('.intake__kbd');
       if(kbd) kbd.hidden = !steps[at].querySelector('textarea');
+      placeReply();
     }
     function go(to){
       at = Math.max(0, Math.min(steps.length-1, to));
@@ -761,7 +818,7 @@
     });
 
     function advance(){
-      if(at<steps.length-1){ go(at+1); return; }
+      if(at<steps.length-1){ pendingReply=replyFor(steps[at]); go(at+1); return; }
       finish();
     }
 
@@ -809,6 +866,11 @@
       var brief=compose();
       var box=document.getElementById('brief');
       if(box) box.value=brief;
+      /* By name, because they just told it to a person. First name only: the full
+         name back verbatim is what a mail merge does. */
+      var first=(document.getElementById('name').value.trim().split(/\s+/)[0]||'');
+      var h3=status&&status.querySelector('h3');
+      if(h3 && first) h3.textContent='Here it is, '+first+'. It\u2019s yours either way.';
 
       var mail=document.getElementById('brief-mail');
       if(mail){
@@ -847,6 +909,9 @@
 
     at=restore();
     if(at>steps.length-1) at=0;
+    /* Answers already in this browser mean the reader has been here: greet them as
+       a person would, and say the true thing -- nothing was lost. */
+    if(at>0) pendingReply='Welcome back. Everything is where you left it.';
     paint();
   }
 
