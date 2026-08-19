@@ -446,7 +446,8 @@ HOWITWORKS = '''<div class="doc">
         <div class="verdict adjust rev"><p class="k">Pivot</p><p>Part of it held and part of it didn't. The idea points somewhere new, and the same two weeks can run again on the changed version. New question, same method.</p></div>
         <div class="verdict stop rev"><p class="k">Stop</p><p>It didn't hold. You'll get a clear reason why it's a real stop and not "try harder", and you'll have kept the money you would have spent finding out the long way.</p></div>
       </div>
-      <p class="lede rev" style="margin-top:26px">Some people come back after a pivot, or later with a different idea. None of that is decided up front. The two weeks stand on their own.</p>''')
+      <p class="lede rev" style="margin-top:26px">Some people come back after a pivot, or later with a different idea. None of that is decided up front. The two weeks stand on their own.</p>
+      <p class="rev" style="margin-top:32px"><a class="quiet" href="case-slate.html">See it run on a real idea ''' + ARROW + '''</a></p>''')
 
 BUILT = '''<div class="doc">
   <section class="open">
@@ -468,17 +469,16 @@ BUILT = '''<div class="doc">
         <div class="case__block kill"><h3 class="case__k">What I'd kill</h3><p>The week view. Four days of work, used by two of ten people. It survived because it looks like the thing a booking tool is supposed to have.</p></div>
       </div>
       <p class="rev" style="margin-top:32px"><a class="quiet" href="case-slate.html">Read the full case note ''' + ARROW + '''</a></p>''',
-    tinted=True) + "\n\n" + "\n\n".join(
-    band(f"App {i:02d}", f"App {i:02d}", "[App name]", "[One line you'd say to a friend.]",
-         f'''      <h2 class="rev">[App name]</h2>
-      <p class="lede">[One line: what it is, said the way you'd say it to a friend.]</p>
-      <div class="case rev">
-        <div class="case__block"><h3 class="case__k">The problem it solves</h3><p>[Who had the problem, what it cost them, and what they were doing instead before this existed.]</p></div>
-        <div class="case__block change"><h3 class="case__k">What I'd change if this were a paid product</h3><p>[The one structural change that would make people pay, not the polish list.]</p></div>
-        <div class="case__block kill"><h3 class="case__k">What I'd kill</h3><p>[The feature that was fun to build and earns nothing. Say why it survived as long as it did.]</p></div>
-      </div>''',
-         tinted=(i % 2 == 0))
-    for i in (2, 3)) + "\n\n" + band(
+    tinted=True) + "\n\n" + band(
+    "The rest", "Next", "The other apps", "Written up as they earn it.",
+    '''      <h2 class="rev">Eight more <strong>exist and run</strong></h2>
+      <p class="lede">They get written up here as the notes get pulled together, each in the
+        same shape as Slate: the problem, what testing showed, the change, and the kill.</p>
+      <div class="blank rev"><b>To fill</b><p>App 02 &mdash; name, one line you&rsquo;d say to a friend,
+        the problem it solved, what you&rsquo;d change if it were paid, what you&rsquo;d kill.</p></div>
+      <div class="blank rev"><b>To fill</b><p>App 03 &mdash; same shape. The change and kill notes are
+        the point; the screenshots are optional.</p></div>''') + "\n\n" + band(
+
     "Pattern", "Then", "The pattern", "The building is the easy half now.",
     '''      <h2 class="rev">Nine apps, and the <strong>same lesson each time</strong></h2>
       <p class="lede">Every one of these got built fast, with the same tools and the same speed you'd get. And in every one, the interesting decision was not what to add. It was what to leave out.</p>
@@ -498,7 +498,15 @@ ABOUT = '''<div class="doc">
     "Who", "One", "Who", "Long enough to have been wrong often enough.",
     '''      <h2 class="rev">Two decades in <strong>product and design</strong></h2>
       <p class="lede">Twenty plus years spent working out what a product should be, mostly by watching people fail to use things that looked great on a slide.</p>
-      <p class="lede"><strong>What that means for you:</strong> when you describe your idea, you're talking to someone who has seen a lot of versions of it, including the ones that quietly didn't work and why.</p>''',
+      <p class="lede"><strong>What that means for you:</strong> when you describe your idea, you're talking to someone who has seen a lot of versions of it, including the ones that quietly didn't work and why.</p>
+      <div class="blankrow rev">
+        <div class="blank blank--portrait"><b>To fill</b><p>Your photo. Plain background,
+          the way you&rsquo;d appear on the call itself.</p></div>
+        <div class="blank"><b>To fill</b><p>Your name, with one line under it in your own
+          words. The site says &ldquo;I&rdquo; on every page and the intake asks eleven personal
+          questions &mdash; the person asking should be the one detail that isn&rsquo;t missing.
+          A link that proves you exist (LinkedIn or similar) belongs here too.</p></div>
+      </div>''',
     tinted=True) + "\n\n" + band(
     "Why", "Two", "Why", "The gap between designed and real closed.",
     '''      <h2 class="rev">Why I <strong>work this way</strong></h2>
@@ -554,7 +562,8 @@ TAKEOVER = f'''<!-- Ships as an ordinary section at the foot of the page, and si
             answers and none of this is a test &mdash; a rough answer is more use to me
             than a polished one.</p>
           <p class="lede">Only the idea and your email are needed. Skip anything you&rsquo;d
-            rather say out loud. It saves as you go, so you can close this and come back.</p>
+            rather say out loud. It saves as you go, so you can close this and come back.
+            Nothing leaves your browser until you choose to send it at the end.</p>
         </li>
         <li class="qstep" id="q-idea-step" data-q="1">
           <label class="field__label" for="q-idea">What's the idea? <span class="req" aria-hidden="true">*</span></label>
