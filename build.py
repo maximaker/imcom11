@@ -158,6 +158,10 @@ def hero(margin_html, h1, deck, extra=""):
 
 def shell(slug, title, desc, body, close_heading, close_body,
           nav_slug=None, robots=None, close_cta="Tell me about your idea"):
+    # close_cta=None drops the closing button. Only start.html does: its closing is
+    # the email escape, and the section above it just made the ask properly, so a
+    # button under "Prefer email?" answered a question nobody asked there. The
+    # margin note follows, since "Step one" beside no button described nothing.
     """nav_slug lets a child page mark its parent as current. robots is for
     pages that should stay out of search, such as the case study template.
 
@@ -167,6 +171,12 @@ def shell(slug, title, desc, body, close_heading, close_body,
     the words change in the instant the handover is meant to be invisible. Pages
     without a hero button keep the plainer wording, since nothing travels there."""
     here = nav_slug or slug
+    CLOSE_ACT = ('' if close_cta is None else
+        f'      <a class="act" href="#intake" id="cta"><span>{close_cta}</span>\n'
+        f'        <span class="chip" aria-hidden="true">{ARROW}</span></a>')
+    CLOSE_MARGIN = ('<b>Or</b>Email<em>One line about the idea is enough.</em>'
+                    if close_cta is None else
+                    '<b>Next</b>Step one<em>Ten minutes of questions, then a reply from a person.</em>')
     robots = f'<meta name="robots" content="{robots}">\n' if robots else ''
     # The ride is the hero's button, compacted and carried down the rail, so it is
     # only shipped to a page that has one to start from. Asking the markup rather
@@ -226,12 +236,11 @@ def shell(slug, title, desc, body, close_heading, close_body,
 
   <div class="doc">
   <section class="close rev" data-node="Start">
-    <div class="margin"><b>Next</b>Step one<em>Ten minutes of questions, then a reply from a person.</em></div>
+    <div class="margin">{CLOSE_MARGIN}</div>
     <div>
       <h2>{close_heading}</h2>
       <p class="lede" style="margin-bottom:32px">{close_body}</p>
-      <a class="act" href="#intake" id="cta"><span>{close_cta}</span>
-        <span class="chip" aria-hidden="true">{ARROW}</span></a>
+{CLOSE_ACT}
     </div>
   </section>
 
@@ -722,35 +731,26 @@ START = '''<div class="doc">
 
   <section class="band" id="n-what-happens" data-node="What happens">
     <div class="margin"><b>What happens</b>Three steps<em>You write, I read, we talk. Nothing automatic anywhere in it.</em></div>
-    <div class="startgrid">
-      <div class="rev">
-        <h2>What happens <strong>after you send it</strong></h2>
-        <ol class="checklist checklist--ord">
-          <li><b>You answer the questions.</b> Ten minutes if you take your time, two if
-            you don&rsquo;t. Only the idea and your email are needed &mdash; skip anything
-            you would rather say out loud.</li>
-          <li><b>I read them and reply within one working day.</b> Either with a couple of
-            times for a call, or, if what you wrote already tells me this is not a fit,
-            with that and a better direction. I read every one myself.</li>
-          <li><b>The call, if there is a fit.</b> Free, 20 to 30 minutes, on video. We
-            talk through what you wrote rather than starting from nothing. No pitch, no
-            pressure, no follow-up sequence.</li>
-        </ol>
-        <p class="lede" style="margin-top:24px">The answers are yours to keep either way,
-          and they are worth more to you than to me: they are the same questions the two
-          weeks would start with.</p>
-      </div>
-
-      <div class="form-card rev">
-        <p class="lede" style="margin-bottom:28px">One question at a time, nothing else on
-          the screen, and it saves as you go &mdash; so you can close it and come back.</p>
-        <a class="act act--block" href="#intake" id="intake-open"><span>Tell me about your idea</span>
-          <span class="chip" aria-hidden="true">''' + ARROW + '''</span></a>
-        <p class="fineprint">Or write to
-          <a href="mailto:hello@oneflowfirst.com">hello@oneflowfirst.com</a> if you would
-          rather just say hello. The questions are the faster route to a useful reply,
-          not a gate in front of one.</p>
-      </div>
+    <div>
+      <h2 class="rev">What happens <strong>after you send it</strong></h2>
+      <ol class="checklist checklist--ord rev">
+        <li><b>You answer the questions.</b> One at a time, nothing else on the
+          screen, and it saves as you go &mdash; close it and come back. Ten minutes
+          if you take your time, two if you don&rsquo;t. Only the idea and your email
+          are needed; skip anything you would rather say out loud.</li>
+        <li><b>I read them and reply within one working day.</b> Either with a couple of
+          times for a call, or, if what you wrote already tells me this is not a fit,
+          with that and a better direction. I read every one myself.</li>
+        <li><b>The call, if there is a fit.</b> Free, 20 to 30 minutes, on video. We
+          talk through what you wrote rather than starting from nothing. No pitch, no
+          pressure, no follow-up sequence.</li>
+      </ol>
+      <p class="lede rev" style="margin-top:24px">The answers are yours to keep either
+        way, and they are worth more to you than to me: they are the same questions
+        the two weeks would start with.</p>
+      <p class="rev" style="margin-top:34px"><a class="act" href="#intake"><span>Tell me about your idea</span>
+        <span class="chip" aria-hidden="true">''' + ARROW + '''</span></a></p>
+      <p class="act-note rev">No scoring, no auto-reply, no chatbot in between.</p>
     </div>
   </section>
 </div>'''
@@ -934,7 +934,10 @@ PAGES = [
     ("start.html", "Let's talk about your idea | One flow first",
      "A free 20 to 30 minute call. You share the idea, you hear honestly whether this fits and what step one would look like for you.",
      START, "Prefer <strong>email?</strong>",
-     "Write to hello@oneflowfirst.com with the same one line about your idea."),
+     'Write to <a href="mailto:hello@oneflowfirst.com">hello@oneflowfirst.com</a> '
+     'with the same one line about your idea. Same reader, same reply, within the '
+     'same working day.',
+     {"close_cta": None}),
 ]
 
 for page in PAGES:
