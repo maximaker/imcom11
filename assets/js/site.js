@@ -545,6 +545,7 @@
     over.setAttribute('data-modal','true');
     over.setAttribute('role','dialog');
     over.setAttribute('aria-modal','true');
+    over.setAttribute('tabindex','-1');
     over.hidden=true;
 
     var lastFocus=null, scrollAt=0;
@@ -575,9 +576,16 @@
       document.body.style.left='0';
       document.body.style.right='0';
       document.documentElement.setAttribute('data-over','true');
-      var first=over.querySelector(within('.intake__steps .qstep:not([hidden])', FOCUSABLE))
-             || over.querySelector('button[type="submit"]');
-      if(first) first.focus();
+      /* A text field if the visible step has one, otherwise the dialog itself.
+         Never the submit button: focus() from script counts as :focus-visible, so
+         the reader was met by a keyboard ring around "Begin" they never asked for.
+         Focusing the dialog is what a dialog should do on open anyway -- the label
+         is announced and Tab starts from the top. */
+      var first=over.querySelector(
+        '.intake__steps .qstep:not([hidden]) textarea,'+
+        '.intake__steps .qstep:not([hidden]) input[type=text],'+
+        '.intake__steps .qstep:not([hidden]) input[type=email]');
+      (first||over).focus({preventScroll:true});
     }
     function closeOver(){
       if(over.hidden) return;
@@ -781,8 +789,13 @@
     function go(to){
       at = Math.max(0, Math.min(steps.length-1, to));
       paint(); save();
-      var f = steps[at].querySelector('textarea,input:not([type=radio]),input');
+      var f = steps[at].querySelector(
+        'textarea,input[type=text],input[type=email]');
+      /* No field means the field that had focus was just hidden, which drops focus
+         to body -- and from body the next Tab lands on the page's skip link behind
+         the overlay. The dialog takes it instead: quiet, no ring, Tab stays home. */
       if(f) f.focus({preventScroll:true});
+      else if(!over.hidden) over.focus({preventScroll:true});
       /* The card, not the field: scrolling a focused field to centre on a short
          step jumps the page for no reason. */
       var card=form.closest('.form-card')||form;
