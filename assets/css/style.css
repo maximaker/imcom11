@@ -840,7 +840,7 @@ h2{font-size:clamp(1.72rem,3.5vw,2.5rem);line-height:1.1;max-width:19ch;margin-b
 .rows h3{font-size:1.18rem;font-weight:640;line-height:1.4;letter-spacing:-.01em;
   margin:0 0 10px}
 @media(min-width:820px){.rows h3{margin-bottom:0}}
-.rows p{color:var(--ink-2);font-size:.98rem;line-height:1.65;max-width:56ch;margin:0}
+.rows p{color:var(--ink-2);font-size:.98rem;line-height:1.65;margin:0}
 
 /* Fit lists */
 .fit{display:grid;gap:18px}
@@ -885,7 +885,7 @@ h2{font-size:clamp(1.72rem,3.5vw,2.5rem);line-height:1.1;max-width:19ch;margin-b
   letter-spacing:2.4px;font-weight:500;color:var(--ink-2);margin:12px 0 0;
   font-family:var(--mono)}
 @media(min-width:900px){.stair .price{margin-bottom:0}}
-.stair p{font-size:.98rem;color:var(--ink-2);margin:0;line-height:1.65;max-width:56ch}
+.stair p{font-size:.98rem;color:var(--ink-2);margin:0;line-height:1.65}
 
 /* Probe lists */
 .probe{list-style:none;margin:22px 0 0;padding:0 0 0 22px;display:grid;gap:16px;
@@ -1807,7 +1807,7 @@ html[data-over="true"] .top{display:none}
    "and then", which is the whole difference on a page whose problem was that it
    described a call and handed over a form. */
 .checklist--ord{counter-reset:ck}
-.checklist--ord li{counter-increment:ck;padding-left:34px}
+.checklist--ord li{counter-increment:ck;padding-left:34px;max-width:60ch}
 .checklist--ord li::before{content:counter(ck);left:0;top:0;
   width:auto;height:auto;border-radius:0;background:none;
   font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.14em;
