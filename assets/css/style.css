@@ -481,12 +481,16 @@ html[data-intro="running"] .spine{opacity:0}
 .caption i{font-style:normal;font-size:15px;color:var(--ink-3);max-width:44ch;line-height:1.55}
 .caption span[data-key="true"] b{color:var(--clay-500)}
 
-.ticks{display:flex;gap:10px;align-items:center}
-.ticks i{display:block;width:40px;height:2px;background:var(--sand-400);
-  position:relative;overflow:hidden}
-.ticks i::after{content:'';position:absolute;inset:0;background:var(--clay-500);
-  transform:scaleX(0);transform-origin:left;transition:transform 220ms linear}
-.ticks i[data-fill="true"]::after{transform:scaleX(1)}
+.ticks{display:flex;gap:14px;align-items:center}
+/* Dots, not bars: the rail, the wordmark and the field above all mark position
+   with a disc, so the stage marks speak the same language. The fill grows from
+   the centre, the way the surviving dot itself does. */
+.ticks i{display:block;width:9px;height:9px;border-radius:50%;
+  background:var(--sand-400);position:relative}
+.ticks i::after{content:'';position:absolute;inset:0;border-radius:50%;
+  background:var(--clay-500);transform:scale(0);
+  transition:transform 260ms var(--ease-out)}
+.ticks i[data-fill="true"]::after{transform:scale(1)}
 .counter{font-family:var(--display);font-size:13px;font-weight:600;color:var(--ink-3);
   min-width:112px;text-align:right;font-variant-numeric:tabular-nums}
 

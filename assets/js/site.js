@@ -192,18 +192,31 @@
 
     if(reduce){ measureScale(); render(1); return; }
 
-    var t=false;
+    /* The scene chases the scroll instead of being pinned to it. A mouse wheel
+       moves in notches, and a field rendered straight from scrollY moves in the
+       same notches -- forty dots teleporting a few units at a time. Easing the
+       drawn progress toward the target each frame turns those steps into one
+       continuous motion, short enough (about a quarter second to close a gap)
+       that it reads as weight rather than lag. Trackpads and touch, already
+       smooth, pass through almost unchanged. */
+    var shown=0, aim=0, running=false;
+    function target(){
+      var total=scene.offsetHeight-pin.offsetHeight;
+      return total>0?clamp(-scene.getBoundingClientRect().top/total):0;
+    }
+    function tick(){
+      shown += (aim-shown)*0.16;
+      if(Math.abs(aim-shown)<0.0004){ shown=aim; render(shown); running=false; return; }
+      render(shown);
+      requestAnimationFrame(tick);
+    }
     function sieveScroll(){
-      if(t) return; t=true;
-      requestAnimationFrame(function(){
-        var total=scene.offsetHeight-pin.offsetHeight;
-        var p=total>0?clamp(-scene.getBoundingClientRect().top/total):0;
-        render(p); t=false;
-      });
+      aim=target();
+      if(!running){ running=true; requestAnimationFrame(tick); }
     }
     addEventListener('scroll',sieveScroll,{passive:true});
     addEventListener('resize',function(){measureScale();sieveScroll();},{passive:true});
-    measureScale(); render(0); sieveScroll();
+    measureScale(); shown=aim=target(); render(shown);
   })();
 
   var revealTargets = document.querySelectorAll('.rev,.step,.asset');
