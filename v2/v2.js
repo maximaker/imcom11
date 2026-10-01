@@ -249,6 +249,17 @@
   })();
 
   /* ── Doubts: tap or keyboard turns the thought into the answer ── */
+  /* Deliverables: each one opens in place, one at a time. */
+  document.querySelectorAll('.asset button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var a = b.closest('.asset'), on = a.getAttribute('data-open') === 'true';
+      document.querySelectorAll('.asset').forEach(function (x) {
+        x.setAttribute('data-open', 'false'); x.querySelector('button').setAttribute('aria-expanded', 'false');
+      });
+      a.setAttribute('data-open', String(!on)); b.setAttribute('aria-expanded', String(!on));
+    });
+  });
+
   document.querySelectorAll('.doubt').forEach(function (b) {
     b.addEventListener('click', function () {
       var on = b.getAttribute('aria-expanded') === 'true';
@@ -261,7 +272,7 @@
 
   /* ── Hero entrance ── */
   var tl = G.timeline({ defaults: { ease: 'expo.out' } });
-  tl.to('.hero__title .line > span', { y: 0, duration: 1.3, stagger: .12 }, .15)
+  tl.to('.hero__title .line > span, .open .rise > span', { y: 0, duration: 1.3, stagger: .12 }, .15)
     .to('[data-hero]', { opacity: 1, y: 0, duration: 1.1, stagger: .08 }, .45);
   document.querySelectorAll('[data-count]').forEach(function (el) {
     var o = { n: 0 }, to = +el.dataset.count;
@@ -269,7 +280,7 @@
   });
 
   /* ── Generic reveals, batched so neighbours arrive as a phrase ── */
-  ST.batch('[data-reveal]', { start: 'top 88%', once: true, onEnter: function (els) {
+  ST.batch('[data-reveal], .page .rev', { start: 'top 88%', once: true, onEnter: function (els) {
     els.forEach(function (e) { e.classList.add('is-in'); });
     G.to(els, { opacity: 1, y: 0, duration: 1, ease: 'power3.out', stagger: .09 });
   } });
@@ -297,6 +308,7 @@
   var mm = G.matchMedia();
   mm.add('(min-width: 900px)', function () {
     var track = document.getElementById('methodTrack'), fillEl = document.getElementById('stepFill');
+    if (!track) return;
     var pips = [].slice.call(document.querySelectorAll('.steprail b'));
     function dist() { return Math.max(0, track.scrollWidth - innerWidth + parseFloat(getComputedStyle(track).marginLeft) * 0); }
     G.to(track, { x: function () { return -dist(); }, ease: 'none',

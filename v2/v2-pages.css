@@ -1,0 +1,197 @@
+/* v2 inner pages. The content arrives in the live site's markup (built from
+   build.py); this restyles each of its components in the v2 language: labels
+   above, more room, larger type, hairlines, one clay accent per idea. */
+
+.page .doc{max-width:var(--wrap);margin:0 auto;padding:0 var(--gut)}
+.page .tinted{background:var(--paper-2)}
+.page .band{padding:clamp(88px,12vw,150px) 0;display:block}
+.page .band>div:not(.margin){max-width:980px}
+
+/* The margin note becomes the v2 label: number, name, line. */
+.page .margin{display:grid;grid-template-columns:auto 1fr;column-gap:16px;row-gap:6px;align-items:baseline;
+  font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2);margin-bottom:clamp(26px,3.6vw,44px)}
+.page .margin b{font-weight:600;color:var(--clay);letter-spacing:.1em}
+.page .margin em{grid-column:2;font-family:var(--sans);font-style:normal;text-transform:none;letter-spacing:0;font-size:15px;color:var(--ink-3)}
+
+/* ── Hero ── */
+.page .open{position:relative;min-height:88svh;display:flex;align-items:center;padding:150px 0 80px;overflow:hidden}
+.page .open .inner{position:relative;z-index:1;width:100%;max-width:var(--wrap);margin:0 auto;padding:0 var(--gut)}
+.page .open h1{font-size:clamp(2.8rem,7.6vw,6.8rem);line-height:.98;letter-spacing:-.045em;font-weight:180;margin:6px 0 30px;max-width:13ch}
+.page .open h1 strong{font-weight:640}
+.page .rise{display:block;overflow:hidden;padding-bottom:.06em;margin-bottom:-.06em}
+.page .rise>span{display:block}
+.page .deck{font-size:clamp(1.12rem,1.8vw,1.42rem);line-height:1.55;color:var(--ink-2);max-width:40ch}
+.page .deck b{font-weight:600;color:var(--ink);background:linear-gradient(transparent 62%,var(--wash) 62%)}
+.page .hero-cta{margin-top:40px}
+.page .act-note{margin-top:16px;font-size:14px;color:var(--ink-3)}
+
+/* ── Type inside bands ── */
+.page .band h2{font-size:clamp(2rem,4.4vw,3.4rem);line-height:1.05;letter-spacing:-.03em;font-weight:250;max-width:18ch;margin:0 0 clamp(26px,3.6vw,42px)}
+.page .band h2 strong{font-weight:640}
+.page .band h3{letter-spacing:-.015em}
+.page .lede{margin-bottom:1.1em}
+.page .lede strong{color:var(--ink);font-weight:600}
+.page .band a:not(.act):not(.quiet):not(.btn){color:var(--clay-2);text-underline-offset:3px}
+.page .statement{font-size:clamp(2rem,4.8vw,3.6rem);line-height:1.08;letter-spacing:-.035em;font-weight:250;max-width:20ch;margin:0 0 clamp(26px,3.6vw,42px);color:var(--ink)}
+.page .statement strong{font-weight:640;color:var(--clay)}
+.page [data-words] .w{display:inline-block;opacity:.16}
+.no-motion [data-words] .w{opacity:1!important}
+
+/* ── Buttons and quiet links from the content ── */
+.page .act{display:inline-flex;align-items:center;gap:22px;padding:10px 10px 10px 28px;border-radius:16px;background:var(--clay);color:#fff;
+  text-decoration:none;font-weight:600;font-size:16.5px;box-shadow:0 1px 2px rgba(93,41,18,.2),0 10px 30px -12px rgba(184,75,0,.55);transition:background .3s var(--ease)}
+.page .act:hover{background:var(--clay-2)}
+.page .act .chip{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.18);transition:transform .45s var(--ease)}
+.page .act:hover .chip{transform:translateX(4px)}
+.page .act svg,.page .quiet svg{width:18px;height:18px}
+.page .quiet{display:inline-flex;align-items:center;gap:10px;font-weight:600;color:var(--ink);text-decoration:none;
+  background:linear-gradient(var(--clay),var(--clay)) 0 100%/0 1px no-repeat;padding-bottom:3px;transition:background-size .5s var(--ease)}
+.page .quiet:hover{background-size:100% 1px}
+.page .quiet svg{color:var(--clay);transition:transform .45s var(--ease)}
+.page .quiet:hover svg{transform:translateX(5px)}
+
+/* ── Probe: the questions, as hairline rows with a dot ── */
+.page .probe{list-style:none;margin:8px 0 0;padding:0;border-bottom:1px solid var(--rule)}
+.page .probe li{position:relative;padding:24px 0 24px 36px;border-top:1px solid var(--rule);color:var(--ink-2);font-size:1.02rem;line-height:1.6;max-width:none}
+.page .probe li::before{content:'';position:absolute;left:4px;top:33px;width:9px;height:9px;border-radius:50%;background:var(--dot);transition:background .4s,transform .5s var(--ease)}
+.page .probe li:hover::before{background:var(--clay);transform:scale(1.25)}
+.page .probe strong{display:block;color:var(--ink);font-weight:600;font-size:clamp(1.08rem,1.5vw,1.22rem);letter-spacing:-.01em;margin-bottom:4px}
+
+/* ── Verdicts: go, adjust, stop — one dot that fills less as the answer gets harder ── */
+.page .verdicts{display:grid;gap:18px;margin-top:10px}
+@media (min-width:820px){.page .verdicts{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}}
+.page .verdict{background:var(--white);border:1px solid var(--rule);border-radius:22px;padding:28px 28px 30px;transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
+.page .verdict:hover{transform:translateY(-4px);box-shadow:0 30px 50px -36px rgba(60,40,10,.4)}
+.page .verdict .k{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink);margin-bottom:14px}
+.page .verdict .k::before{content:'';width:12px;height:12px;border-radius:50%;box-sizing:border-box}
+.page .verdict.go .k::before{background:var(--clay)}
+.page .verdict.adjust .k::before{border:2px solid var(--clay);background:linear-gradient(90deg,var(--clay) 50%,transparent 50%)}
+.page .verdict.stop .k::before{border:2px solid var(--ink-3)}
+.page .verdict p:not(.k){color:var(--ink-2);font-size:1rem;line-height:1.6}
+
+/* ── Case blocks: the problem, the change, the kill ── */
+.page .case{display:grid;gap:0;margin-top:8px;border-bottom:1px solid var(--rule)}
+.page .case__block{padding:26px 0;border-top:1px solid var(--rule)}
+@media (min-width:820px){.page .case__block{display:grid;grid-template-columns:260px 1fr;column-gap:48px}}
+.page .case__k{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:0 0 10px;line-height:1.5}
+.page .case__block.change .case__k{color:var(--clay)}
+.page .case__block.kill .case__k{color:var(--clay-3)}
+.page .case__block p{color:var(--ink-2);line-height:1.65}
+
+/* ── Stairs: the case timeline, and the priced staircase on the first-step page ── */
+.page .stairs{display:grid;margin-top:8px;border-bottom:1px solid var(--rule)}
+.page .stair{padding:30px 0;border-top:1px solid var(--rule)}
+@media (min-width:860px){
+  .page .stair{display:grid;grid-template-columns:260px 1fr;column-gap:48px}
+  .page .stair .k{grid-column:1;grid-row:1/span 3}
+  .page .stair h3,.page .stair p:not(.k):not(.price){grid-column:2}
+  .page .stairs--price .stair .k{grid-row:1}
+  .page .stairs--price .stair .price{grid-column:1;grid-row:2/span 2}
+}
+.page .stair .k{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--clay);margin:0 0 12px}
+.page .stair h3{font-size:clamp(1.3rem,2vw,1.6rem);font-weight:640;margin:0 0 10px}
+.page .stair p{color:var(--ink-2);line-height:1.65}
+.page .stair .price{font-size:clamp(2rem,3.4vw,2.8rem);font-weight:200;letter-spacing:-.03em;color:var(--ink-3);line-height:1.05;margin:0 0 14px;white-space:nowrap}
+.page .stair .price span{display:block;font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);margin-top:10px}
+
+/* ── Rows: the trust claims ── */
+.page .rows{display:grid;border-bottom:1px solid var(--rule)}
+.page .rows>div{padding:30px 0;border-top:1px solid var(--rule)}
+@media (min-width:820px){.page .rows>div{display:grid;grid-template-columns:300px 1fr;column-gap:48px}}
+.page .rows h3{font-size:1.2rem;font-weight:640;line-height:1.4;margin:0 0 8px}
+.page .rows p{color:var(--ink-2);line-height:1.65}
+
+/* ── Deliverables: the accordion ── */
+.page .assets{border-bottom:1px solid var(--rule)}
+.page .asset{border-top:1px solid var(--rule)}
+.page .asset button{all:unset;box-sizing:border-box;width:100%;display:grid;grid-template-columns:28px 1fr 24px;gap:18px;align-items:start;padding:28px 0;cursor:pointer}
+@media (min-width:780px){.page .asset button{grid-template-columns:28px 240px 1fr 24px}}
+.page .asset .glyph{width:26px;height:26px;fill:none;stroke:var(--clay);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;margin-top:3px}
+.page .asset .nm{font-size:clamp(1.2rem,1.8vw,1.4rem);font-weight:640;letter-spacing:-.02em;transition:transform .5s var(--ease)}
+.page .asset button:hover .nm{transform:translateX(6px)}
+.page .asset .sm{color:var(--ink-3);font-size:1rem;line-height:1.55}
+@media (max-width:779px){.page .asset .sm{display:none}}
+.page .asset .sign{position:relative;width:18px;height:18px;margin-top:6px;justify-self:end}
+.page .asset .sign::before,.page .asset .sign::after{content:'';position:absolute;background:var(--clay);transition:transform .5s var(--ease)}
+.page .asset .sign::before{left:0;right:0;top:8px;height:2px}
+.page .asset .sign::after{top:0;bottom:0;left:8px;width:2px}
+.page .asset[data-open="true"] .sign::after{transform:scaleY(0)}
+.page .asset .more{display:grid;grid-template-rows:0fr;transition:grid-template-rows .55s var(--ease)}
+.page .asset[data-open="true"] .more{grid-template-rows:1fr}
+.page .asset .more>div{overflow:hidden}
+.page .asset .more p{padding:0 0 28px 46px;color:var(--ink-2);max-width:62ch;line-height:1.65}
+.page .asset button:focus-visible{outline:2px solid var(--clay-2);outline-offset:4px}
+
+/* ── FAQ ── */
+.page .faq{border-bottom:1px solid var(--rule)}
+.page .faq details{border-top:1px solid var(--rule)}
+.page .faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:24px;padding:26px 0;
+  font-size:clamp(1.1rem,1.6vw,1.3rem);font-weight:600;letter-spacing:-.015em;transition:color .3s}
+.page .faq summary::-webkit-details-marker{display:none}
+.page .faq summary:hover{color:var(--clay-2)}
+.page .faq summary i{position:relative;flex:0 0 18px;height:18px}
+.page .faq summary i::before,.page .faq summary i::after{content:'';position:absolute;background:var(--clay);transition:transform .5s var(--ease)}
+.page .faq summary i::before{left:0;right:0;top:8px;height:2px}
+.page .faq summary i::after{top:0;bottom:0;left:8px;width:2px}
+.page .faq details[open] summary i::after{transform:scaleY(0)}
+.page .faq details>div p{padding:0 0 28px;color:var(--ink-2);max-width:64ch;line-height:1.65}
+
+/* ── Checklists ── */
+.page .checklist{list-style:none;margin:0;padding:0;display:grid;gap:16px}
+.page .checklist li{position:relative;padding-left:30px;color:var(--ink-2);line-height:1.6;max-width:62ch}
+.page .checklist li::before{content:'';position:absolute;left:2px;top:.6em;width:9px;height:9px;border-radius:50%;background:var(--clay)}
+.page .checklist--ord{counter-reset:ck;gap:0;border-bottom:1px solid var(--rule)}
+.page .checklist--ord li{counter-increment:ck;padding:26px 0 26px 64px;border-top:1px solid var(--rule);max-width:none}
+.page .checklist--ord li::before{content:counter(ck,decimal-leading-zero);background:none;width:auto;height:auto;left:0;top:24px;
+  font-family:var(--mono);font-size:13px;font-weight:600;color:var(--clay);letter-spacing:.06em}
+.page .checklist li b{display:block;color:var(--ink);font-weight:600;font-size:1.12rem;margin-bottom:4px}
+
+/* ── Stats, quotes, screens: the case study's evidence ── */
+.page .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:8px 0 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.page .stat{padding:28px 24px 28px 0}
+.page .stat+.stat{padding-left:24px;border-left:1px solid var(--rule)}
+.page .stat b{display:block;font-size:clamp(3rem,7vw,5.4rem);font-weight:150;letter-spacing:-.05em;line-height:1;color:var(--ink)}
+.page .stat:last-child b{color:var(--clay)}
+.page .stat span{display:block;margin-top:10px;font-size:14.5px;color:var(--ink-3);max-width:24ch}
+@media (max-width:640px){.page .stats{grid-template-columns:1fr}.page .stat,.page .stat+.stat{padding:22px 0;border-left:0}.page .stat+.stat{border-top:1px solid var(--rule)}}
+.page .quotes{display:grid;gap:18px;margin-top:36px}
+@media (min-width:820px){.page .quotes{grid-template-columns:1fr 1fr}}
+.page .quote{margin:0;background:var(--white);border:1px solid var(--rule);border-radius:22px;padding:30px}
+.page .quote p{font-family:var(--hand);font-weight:600;font-size:clamp(1.6rem,2.4vw,2rem);line-height:1.2;color:var(--ink)}
+.page .quote footer{margin-top:16px;font-size:13.5px;color:var(--ink-3)}
+.page .shots{display:grid;gap:24px;margin-top:36px}
+@media (min-width:760px){.page .shots{grid-template-columns:repeat(3,1fr)}}
+.page .shot{margin:0;transition:transform .6s var(--ease)}
+.page .shot:hover{transform:translateY(-6px)}
+.page .shot figcaption{margin-top:14px;font-size:13.5px;line-height:1.55;color:var(--ink-3)}
+.page .screen{width:100%;height:auto;overflow:visible;filter:drop-shadow(0 30px 40px rgba(60,40,10,.14))}
+.page .screen .fr{fill:#fff;stroke:var(--rule-2);stroke-width:1.5}
+.page .screen text{font-family:var(--sans);fill:var(--ink)}
+.page .screen .t{font-size:21px;font-weight:640;letter-spacing:-.02em}
+.page .screen .s{font-size:13.5px;fill:var(--ink-3)}
+.page .screen .mid{text-anchor:middle}
+.page .screen .d{font-size:11.5px;font-weight:600;letter-spacing:2.2px;fill:var(--ink-3)}
+.page .screen .pill{fill:none;stroke:var(--rule-2);stroke-width:1.2}
+.page .screen .pill.on{fill:var(--wash);stroke:var(--clay)}
+.page .screen .p{font-size:14.5px;text-anchor:middle}
+.page .screen .card{fill:none;stroke:var(--rule-2);stroke-width:1.2}
+.page .screen .rule{stroke:var(--rule-2);stroke-width:1.5;fill:none;stroke-linecap:round}
+.page .screen .btn{fill:var(--clay);box-shadow:none;padding:0}
+.page .screen .btnt{font-size:15.5px;font-weight:600;fill:#fff;text-anchor:middle}
+.page .screen .ring{fill:var(--wash);stroke:none}
+.page .screen .tick{stroke:var(--clay);stroke-width:2.6;fill:none;stroke-linecap:round;stroke-linejoin:round}
+
+/* ── Deliberate blanks ── */
+.page .blank{border:1.5px dashed var(--dot);border-radius:20px;padding:22px 26px;margin-top:22px}
+.page .blank b{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;color:var(--clay);margin-bottom:10px}
+.page .blank p{color:var(--ink-3);font-size:.96rem;line-height:1.6}
+.page .blankrow{display:flex;gap:22px;flex-wrap:wrap;margin-top:30px;align-items:stretch}
+.page .blankrow .blank{margin-top:0;flex:1 1 260px}
+.page .blank--portrait{flex:0 0 220px!important;aspect-ratio:4/5;display:flex;flex-direction:column;justify-content:center;text-align:center}
+
+/* ── Entrance states for the content's own reveal marks ── */
+.js .page .rev{opacity:0;transform:translateY(24px)}
+.js .page .open .rise>span{transform:translateY(105%)}
+.no-motion .page .rev{opacity:1!important;transform:none!important}
+.no-motion .page .open .rise>span{transform:none!important}
+@media (prefers-reduced-motion:reduce){.js .page .rev{opacity:1;transform:none}.js .page .open .rise>span{transform:none}}
