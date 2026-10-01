@@ -18,6 +18,7 @@
 /* The hero lives inside the content container, but its field belongs to the
    whole screen: without this it ended in a hard vertical edge on wide displays. */
 .page .open .hero__field{left:50%;right:auto;width:100vw;margin-left:-50vw}
+.page .open.hero{overflow:visible}
 .page .open .inner{position:relative;z-index:1;width:100%;max-width:var(--wrap);margin:0 auto;padding:0 var(--gut)}
 .page .open h1{font-size:clamp(2.8rem,7.6vw,6.8rem);line-height:.98;letter-spacing:-.045em;font-weight:180;margin:6px 0 30px;max-width:13ch}
 .page .open h1 strong{font-weight:640}
