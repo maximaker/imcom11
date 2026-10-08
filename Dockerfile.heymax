@@ -1,0 +1,17 @@
+# oneflowfirst.heymax.im: the v2 redesign at the root.
+# Vercel ignores this file and keeps serving the repository as it is.
+#
+#   /          v2 (the v2 folder, flattened to the root)
+#   /assets/   the shared fonts both versions load
+#   /v1/       the current site, kept because v2's buttons open its intake
+FROM nginx:alpine
+WORKDIR /usr/share/nginx/html
+RUN rm -rf ./*
+COPY . ./v1/
+RUN rm -rf v1/.git v1/.claude v1/v2 v1/Dockerfile.heymax \
+ && cp -r v1/assets ./assets
+COPY v2/ ./
+# From the root, v2's "../start.html#intake" would land on v2's own start page,
+# which has no intake. Point it at the page that does.
+RUN rm -f build_v2.py \
+ && sed -i 's|\.\./start\.html#intake|/v1/start.html#intake|g' ./*.html
